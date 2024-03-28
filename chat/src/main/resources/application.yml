@@ -1,0 +1,37 @@
+micronaut:
+  application:
+    name: 'alpha-chat-adapter.${MN_ENVIRONMENT:local}'
+  server:
+    cors:
+      enabled: true
+      configuration:
+        allowed-origins:
+          - http://localhost:4200
+        allowed-methods:
+          - GET
+          - POST
+        allowed-headers:
+          - Content-Type
+    port: 8080
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
+      design:
+        paths: "classpath:design"
+        mapping: /design/**
+  openapi:
+    views:
+      spec: "swagger-ui.enabled=true,swagger-ui.theme=flattop"
+
+kafka:
+  enabled: false
+
+application:
+  version: 1.0
+  tag: local
+
