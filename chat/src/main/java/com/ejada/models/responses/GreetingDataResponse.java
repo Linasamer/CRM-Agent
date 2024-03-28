@@ -2,6 +2,7 @@ package com.ejada.models.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Introspected;
+import io.micronaut.serde.annotation.SerdeImport;
 import io.micronaut.serde.annotation.Serdeable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Introspected
-@Serdeable.Serializable
+@SerdeImport
 public class GreetingDataResponse {
 
     @JsonProperty("CICNumber")

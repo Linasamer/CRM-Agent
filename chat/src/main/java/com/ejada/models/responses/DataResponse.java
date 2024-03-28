@@ -20,7 +20,9 @@ import javax.validation.constraints.NotNull;
 public class DataResponse {
 
     @JsonProperty("Text")
-    @NotNull
     private String text;
+
+    @JsonProperty("Base46")
+    private String base46;
 
 }

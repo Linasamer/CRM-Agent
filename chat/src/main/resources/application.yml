@@ -35,3 +35,9 @@ application:
   version: 1.0
   tag: local
 
+logger:
+  levels:
+    io.micronaut.http.client: ${LOG_LEVEL_MN_HTTP_CLIENT:WARN}
+    io.micronaut.kubernetes: ${LOG_LEVEL_MN_KUBE:WARN}
+    io.micronaut.security: ${LOG_LEVEL_MN_SECURITY:WARN}
+    io.lettuce.core: ${LOG_LEVEL_REDIS:WARN}

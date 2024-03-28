@@ -127,7 +127,7 @@ public class ChatController {
     public HttpResponse<DataResponse> textToText(
             @NotNull @Body DataRequest text
     ) {
-        return HttpResponse.ok(DataResponse.builder().text("Hello Customer Name").build());
+        return HttpResponse.ok(customerService.getDataResponse(text));
     }
 
 
@@ -143,10 +143,10 @@ public class ChatController {
             @ApiResponse(responseCode = "502", description = "Generic bad gateway error")
     })
     @ExecuteOn(TaskExecutors.IO)
-    public HttpResponse<String> textToVoice(
-            @NotNull @Body DataRequest text
+    public HttpResponse<DataResponse> textToVoice(
+            @NotNull @Body DataRequest dataRequest
     ) throws IOException {
-        return HttpResponse.ok(customerService.getBase46(text.getText()));
+        return HttpResponse.ok(customerService.getBase46(dataRequest));
     }
 
     @Post(value = "/voiceToVoice", consumes = APPLICATION_JSON,
@@ -162,11 +162,9 @@ public class ChatController {
     })
     @ExecuteOn(TaskExecutors.IO)
     public HttpResponse<DataResponse> voiceToVoice(
-            @NotNull @Body DataRequest text
+            @NotNull @Body DataRequest dataRequest
     ) throws IOException {
-        return HttpResponse.ok(DataResponse.builder()
-                .text(customerService.getBase46(text.getText()))
-                .build());
+        return HttpResponse.ok(customerService.getBase46(dataRequest));
     }
 
     @Post(value = "/voiceToText", consumes = APPLICATION_JSON,

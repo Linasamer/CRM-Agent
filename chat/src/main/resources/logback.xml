@@ -7,7 +7,11 @@
             <pattern>%cyan(%d{HH:mm:ss.SSS}) %gray([%thread]) %highlight(%-5level) %magenta(%logger{36}) - %msg%n</pattern>
         </encoder>
     </appender>
-
+    <logger name="io.micronaut.http.client" level="TRACE"/>
+    <logger name="org.apache.kafka.clients.NetworkClient" level="ERROR"/>
+    <logger name="io.micronaut.retry.intercept.RecoveryInterceptor" level="OFF"/>
+    <logger name="io.micronaut.security" level="INFO"/>
+    <logger name='io.micronaut.data.query' level="INFO"/>
     <root level="info">
         <appender-ref ref="STDOUT" />
     </root>

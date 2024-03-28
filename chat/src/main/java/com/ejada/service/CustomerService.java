@@ -3,6 +3,7 @@ package com.ejada.service;
 import com.ejada.models.requests.AccountTransactionRequest;
 import com.ejada.models.requests.CardTransactionRequest;
 import com.ejada.models.requests.CustomerDataRequest;
+import com.ejada.models.requests.DataRequest;
 import com.ejada.models.requests.GreetingDataRequest;
 import com.ejada.models.responses.AccountResponse;
 import com.ejada.models.responses.AccountTransactionResponse;
@@ -11,6 +12,7 @@ import com.ejada.models.responses.CardTransactionResponse;
 import com.ejada.models.responses.CreditCard;
 import com.ejada.models.responses.CreditCardLst;
 import com.ejada.models.responses.CustomerDataResponse;
+import com.ejada.models.responses.DataResponse;
 import com.ejada.models.responses.GreetingDataResponse;
 import com.ejada.models.responses.MarketingMessage;
 import com.ejada.models.responses.Notification;
@@ -28,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -74,16 +77,19 @@ public class CustomerService {
     }
 
     public GreetingDataResponse getGreetingMessage(GreetingDataRequest body) {
-        return buildGreetingDataResponse();
+        return buildGreetingDataResponse(body);
     }
 
     public CustomerDataResponse getCustomerData(CustomerDataRequest body) {
         return buildCustomerDataResponse();
     }
 
-    private GreetingDataResponse buildGreetingDataResponse(){
-        return GreetingDataResponse.builder()
-                .cicNumber("1000000625")
+
+
+    private  GreetingDataResponse buildGreetingDataResponse(GreetingDataRequest body){
+        HashMap<String, GreetingDataResponse> greetingDataResponseHashMap = new HashMap<>();
+        GreetingDataResponse firstCustomer = GreetingDataResponse.builder()
+                .cicNumber("123456789")
                 .firstNameEn("Ahmed")
                 .secondNameEn("mohamed")
                 .thirdNameEn("mahmoud")
@@ -100,7 +106,32 @@ public class CustomerService {
                 .birthDate("1989-02-13")
                 .gender("M")
                 .build();
+
+        GreetingDataResponse secondCustomer =GreetingDataResponse.builder()
+                .cicNumber("987654321")
+                .firstNameEn("Ali")
+                .secondNameEn("Khaled")
+                .thirdNameEn("Samer")
+                .lastNameEn("ali")
+                .firstNameAr("علي")
+                .secondNameAr("خالد")
+                .thirdNameAr("سامر")
+                .lastNameAr("علي")
+                .custSinceDt("2018-03-26")
+                .idNumber("2449029186")
+                .idType("2")
+                .custStatus("ACTIVE")
+                .idIssueDate("1439-05-21")
+                .birthDate("1989-02-13")
+                .gender("M")
+                .build();
+
+        greetingDataResponseHashMap.put(firstCustomer.getCicNumber(), firstCustomer);
+        greetingDataResponseHashMap.put(secondCustomer.getCicNumber(), secondCustomer);
+
+        return greetingDataResponseHashMap.get(body.getCicNumber());
     }
+
 
     private CustomerDataResponse buildCustomerDataResponse(){
         RecPgCtrlOutResponse recPgCtrlOutResponse = RecPgCtrlOutResponse.builder()
@@ -196,10 +227,30 @@ public class CustomerService {
                 .trxnLstList(trxnLstList).build();
     }
 
-    public String getBase46(String text) throws IOException {
+    public DataResponse getBase46(DataRequest dataRequest) throws IOException {
+        DataResponse dataResponse = getDataResponse(dataRequest);
+        if(dataRequest.getLanguage().equals("en-US"))
+        {
         Path fileName = Path.of( "src/main/resources/base46File.xml");
-        String base64 = Files.readString(fileName);
-        return base64;
+        dataResponse.setBase46(Files.readString(fileName));
+        }
+        else {
+            Path fileName = Path.of( "src/main/resources/base46FileArabic.xml");
+            dataResponse.setBase46(Files.readString(fileName));
+        }
+        return dataResponse;
     }
+
+    public DataResponse getDataResponse(DataRequest dataRequest)  {
+        DataResponse dataResponse = new DataResponse();
+        if(dataRequest.getLanguage().equals("en-US")){
+            dataResponse.setText( "I am glad I can help");
+        }
+        else {
+            dataResponse.setText( "أنا سعيد لأنني أستطيع المساعدة");
+        }
+        return dataResponse;
+    }
+
 
 }

@@ -22,4 +22,8 @@ public class DataRequest {
     @NotNull
     private String text;
 
+    @JsonProperty("Language")
+    @NotNull
+    private String language;
+
 }
