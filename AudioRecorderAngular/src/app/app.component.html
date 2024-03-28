@@ -1,0 +1,83 @@
+<!-- <div class="content" role="main">
+
+  <div class="row justify-content-center pt-2 pb-2">
+    <button title="Click here to start recording action" class="btn-mic w-auto" (click)="startRecording()"
+      *ngIf="!isRecording" style="margin-right: 3px;">
+      <img src="../../assets/mic.png" />
+    </button>
+    <button title="Click here to stop recording" class="btn-stop w-auto" (click)="stopRecording()" *ngIf="isRecording"
+      style="margin-right: 3px;">
+      <img src="../../assets/stop.png" />
+    </button>
+  </div>
+  <audio #audioPlayer controls style="margin: 10px;"></audio>
+  <a *ngIf="audioURL" [href]="audioURL" download="recorded_audio.wav">Download last reecorded Audio</a>
+</div> -->
+
+<!-- chat box -->
+
+
+<!-- ------------------------------------------------------------------------------------------- -->
+
+  <div *ngIf="selectedCustomer">
+    <div id="frame">
+      <div class="contact-profile">
+        <img [src]="bankImage" alt="bankLogo" />
+        <p>alrajhi bank</p>
+        <div class="social-media">
+          <i class="fa-brands fa-facebook fa-2x"></i>
+          <i class="fa-brands fa-twitter fa-2x"></i>
+          <i class="fa-brands fa-instagram fa-2x"></i>
+          <i><p-dropdown [options]="languages" [(ngModel)]="selectedLanguage" optionLabel="name" [showClear]="true"  placeholder="Select Language"></p-dropdown>
+          </i>   
+        </div>
+      </div>
+      <div class="messages" #scrollMe>
+        <ul>
+        
+          <li [class]="msg.type" *ngFor="let msg of messages">
+            <img [src]="msg.type === 'bank' ? bankImage : userImage" alt="" />
+            <p >{{msg?.content || ''}}</p>
+            <audio *ngIf="msg.voiceNote" controls>
+              <source [src]="msg.voiceContent">
+            </audio>
+          </li>
+        </ul>
+      </div>
+      <div class="message-input">
+        <div class="wrap">
+          <input type="text" #msgInput placeholder="Write your message..." (keyup.enter)="addNewMessage(msgInput)" />
+          <button class="submit" (click)="addNewMessage(msgInput)">
+            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+          </button>
+          <button title="Click here to start recording action" (click)="startRecording()"
+          *ngIf="!isRecording">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
+        <button title="Click here to stop recording" (click)="stopRecording()" *ngIf="isRecording">
+          <i class="fa-solid fa-stop"></i>
+        </button>
+       </div>
+      </div>
+    </div>
+      
+   
+  </div>
+  <div *ngIf="!selectedCustomer">
+    <div id="frame">
+      <div class="contact-profile">
+        <img [src]="bankImage" alt="bankLogo" />
+        <p>alrajhi bank</p>
+        <div class="social-media">
+          <i class="fa-brands fa-facebook fa-2x"></i>
+          <i class="fa-brands fa-twitter fa-2x"></i>
+          <i class="fa-brands fa-instagram fa-2x"></i>  
+        </div>
+      </div>
+    <div class="card flex justify-content-center" style=" margin: auto;
+    padding: 233px;">
+      <p-dropdown [options]="Customers" [(ngModel)]="selectedCustomer" optionLabel="CICNumber" 
+      [showClear]="true" placeholder="Select a Customer" (onChange)="onCustomerChange($event)"></p-dropdown>
+    </div>
+    </div>
+  </div>

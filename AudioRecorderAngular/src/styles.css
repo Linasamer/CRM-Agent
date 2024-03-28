@@ -1,0 +1,177 @@
+/* You can add global styles to this file, and also import other style files */
+/* Add application styles & imports to this file! */
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #c0c2c0;
+  font-family: "proxima-nova", "Source Sans Pro", sans-serif;
+  font-size: 1em;
+  letter-spacing: 0.1px;
+  color: #32465a;
+  text-rendering: optimizeLegibility;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+  -webkit-font-smoothing: antialiased;
+}
+#frame{
+  background: #f5f5f5;
+  width: 80rem;
+  height: 35rem;
+  /* border: #32465a solid 3px; */
+}
+
+#frame .contact-profile{
+  width: 100%;
+  height: 10%;
+  background-color: #fff;
+  float: left;
+}
+
+#frame .contact-profile img {
+  width: 10%;
+  border-radius: 5%;
+  float: left;
+  margin-left: 3%;
+  margin-top: 5px;
+}
+#frame .contact-profile p {
+  float: left;
+  margin-top: 1.5%;
+  margin-left: 1.5%;
+  font-weight: bolder;
+}
+#frame .contact-profile .social-media {
+  float: right;
+  margin-top: 1.5%;
+}
+#frame .contact-profile .social-media i {
+  margin-left: 24px;
+  cursor: pointer;
+}
+#frame .contact-profile .social-media i:nth-last-child(1) {
+  margin-right: 20px;
+}
+#frame .contact-profile .social-media i:hover {
+  color: #435f7a;
+}
+#frame .messages {
+  height: auto;
+  min-height: calc(100% - 93px);
+  max-height: calc(100% - 93px);
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+@media screen and (max-width: 735px) {
+  #frame .messages {
+    max-height: calc(100% - 105px);
+  }
+}
+#frame .messages::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+#frame .messages::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+#frame .messages ul li {
+  display: inline-block;
+  clear: both;
+  float: left;
+  margin: 15px 15px 5px 15px;
+  width: calc(100% - 25px);
+  font-size: 0.9em;
+}
+#frame .messages ul li:nth-last-child(1) {
+  margin-bottom: 20px;
+}
+#frame .messages ul li.bank img {
+  margin: 6px 8px 0 0;
+}
+#frame .messages ul li.bank p {
+  background: #435f7a;
+  color: #f5f5f5;
+  margin-right: 671px;
+}
+
+#frame .messages ul li.user img {
+  float: right;
+  margin: 4px -0 0 8px;
+  width: 30px;
+}
+#frame .messages ul li.user p {
+  background: #f5f5f5;
+  float: right;
+}
+#frame .messages ul li img {
+  width: 60px;
+  border-radius: 50%;
+  float: left;
+}
+#frame .messages ul li p {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 205px;
+  line-height: 130%;
+}
+@media screen and (min-width: 735px) {
+  #frame .messages ul li p {
+    max-width: 300px;
+  }
+}
+#frame .message-input {
+  /* position: absolute; */
+  bottom: 0;
+  width: 100%;
+  z-index: 99;
+}
+#frame .message-input .wrap {
+  /* position: relative; */
+  display: grid;
+  grid-template-columns: 78.5rem 55px 55px ;
+  width:100%;
+  overflow-x:unset;
+}
+#frame .message-input .wrap input {
+  font-family: "proxima-nova", "Source Sans Pro", sans-serif;
+  float: left;
+  border: none;
+  width: calc(100% - 90px);
+  padding: 11px 32px 10px 8px;
+  font-size: 0.8em;
+  color: #32465a;
+}
+@media screen and (max-width: 735px) {
+  #frame .message-input .wrap input {
+    padding: 15px 32px 16px 8px;
+  }
+}
+#frame .message-input .wrap input:focus {
+  outline: none;
+}
+
+#frame .message-input .wrap button {
+  float: right;
+  border: none;
+  width: 50px;
+  padding: 12px 0;
+  cursor: pointer;
+  background: #32465a;
+  color: #f5f5f5;
+  margin-left: -5rem;
+}
+@media screen and (max-width: 735px) {
+  #frame .message-input .wrap button {
+    padding: 16px 0;
+  }
+}
+#frame .message-input .wrap button:hover {
+  background: #435f7a;
+}
+#frame .message-input .wrap button:focus {
+  outline: none;
+}
+
