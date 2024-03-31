@@ -1,4 +1,4 @@
-package com.ejada.models.requests;
+package com.ejada.models.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Introspected;
@@ -7,8 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
+import lombok.NonNull;
 
 @Data
 @Builder
@@ -16,13 +15,12 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Introspected
 @Serdeable.Deserializable
-public class GreetingDataRequest {
+public class AgentResponse {
 
-    @JsonProperty("CICNumber")
-    @NotNull
-    private String cicNumber;
+    @JsonProperty("AgentText")
+    private String agentText;
 
-    @JsonProperty("SessionId")
-    private String sessionId;
+    @JsonProperty("AgentAudio")
+    private String agentAudio;
 
 }

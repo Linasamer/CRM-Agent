@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import javax.validation.constraints.NotNull;
 
@@ -16,13 +17,21 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Introspected
 @Serdeable.Deserializable
-public class GreetingDataRequest {
+public class AgentRequest {
 
-    @JsonProperty("CICNumber")
-    @NotNull
-    private String cicNumber;
+    @JsonProperty("CustomerCIC")
+    @NonNull
+    private String customerCic;
 
-    @JsonProperty("SessionId")
+    @JsonProperty("SessionID")
+    @NonNull
     private String sessionId;
+
+    @JsonProperty("UserText")
+    private String userText;
+
+    @JsonProperty("UserAudio")
+    private String userAudio;
+
 
 }

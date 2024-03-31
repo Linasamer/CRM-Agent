@@ -26,4 +26,7 @@ public class DataRequest {
     @NotNull
     private String language;
 
+    @JsonProperty("SessionId")
+    private String sessionId;
+
 }

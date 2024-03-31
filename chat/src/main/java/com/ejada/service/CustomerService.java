@@ -8,16 +8,22 @@ import com.ejada.models.requests.GreetingDataRequest;
 import com.ejada.models.responses.AccountResponse;
 import com.ejada.models.responses.AccountTransactionResponse;
 import com.ejada.models.responses.AccountsLstResponse;
+import com.ejada.models.responses.AvailableBalance;
 import com.ejada.models.responses.CardTransactionResponse;
+import com.ejada.models.responses.ConsumedDailyLimit;
 import com.ejada.models.responses.CreditCard;
 import com.ejada.models.responses.CreditCardLst;
 import com.ejada.models.responses.CustomerDataResponse;
+import com.ejada.models.responses.DailyLimit;
 import com.ejada.models.responses.DataResponse;
 import com.ejada.models.responses.GreetingDataResponse;
+import com.ejada.models.responses.LedgerBalance;
 import com.ejada.models.responses.MarketingMessage;
 import com.ejada.models.responses.Notification;
 import com.ejada.models.responses.RecPgCtrlOutResponse;
+import com.ejada.models.responses.RemainingDailyLimit;
 import com.ejada.models.responses.RewardPoints;
+import com.ejada.models.responses.SocialTrxnLimit;
 import com.ejada.models.responses.TotalBal;
 import com.ejada.models.responses.TransactionAmount;
 import com.ejada.models.responses.TransactionDetail;
@@ -80,8 +86,8 @@ public class CustomerService {
         return buildGreetingDataResponse(body);
     }
 
-    public CustomerDataResponse getCustomerData(CustomerDataRequest body) {
-        return buildCustomerDataResponse();
+    public CustomerDataResponse getCustomerData(String customerCic) {
+        return buildCustomerDataResponse(customerCic);
     }
 
 
@@ -133,7 +139,8 @@ public class CustomerService {
     }
 
 
-    private CustomerDataResponse buildCustomerDataResponse(){
+    private CustomerDataResponse buildCustomerDataResponse(String customerCic){
+        HashMap<String, CustomerDataResponse> customerDataResponseHashMap = new HashMap<>();
         RecPgCtrlOutResponse recPgCtrlOutResponse = RecPgCtrlOutResponse.builder()
                 .sentRecs(4)
                 .matchedRecs(5)
@@ -144,8 +151,24 @@ public class CustomerService {
                 .currency("SAR")
                 .build();
         AccountResponse accountResponse = AccountResponse.builder()
-                .accountNumber("126000010006086040000")
+                .accountNumber("126000010006086060000")
                 .accountStatus("ACTIVE")
+                .availableBalance(AvailableBalance.builder().amount(9.1).currency("SAR").build())
+                .ledgerBalance(LedgerBalance.builder().amount(9.1).currency("SAR").build())
+                .showFlag("Y")
+                .iban("SA5280000126608016062787")
+                .atmCardNum("484783******0325")
+                .dailyLimit(DailyLimit.builder().amount(75000).currency("SAR").build())
+                .consumedDailyLimit(ConsumedDailyLimit.builder().amount(0).currency("SAR").build())
+                .remainingDailyLimit(RemainingDailyLimit.builder().amount(75000).currency("SAR").build())
+                .socialTrxnLimit(SocialTrxnLimit.builder().amount(200).currency("SAR").build())
+                .favoriteFlg("N")
+                .acctIconFlg("7")
+                .acctName("AHMED SAID ATTIA ATTIA")
+                .acctOpeningDate("2021-05-10")
+                .acctType("Current Account (CR)")
+                .acctBranch("12600")
+                .acctSubcategory("0001 - C/A  - CR Bal. - Individuals - Local")
                 .build();
         AccountsLstResponse accountsLstResponse = AccountsLstResponse.builder()
                 .Accounts(List.of(accountResponse))
@@ -181,14 +204,121 @@ public class CustomerService {
                 .creditCard(List.of(creditCard))
                 .build();
 
-        return CustomerDataResponse.builder()
+        customerDataResponseHashMap.put("0000000018707728", CustomerDataResponse.builder()
                 .profileNumber("0000000018707728")
                 .accountsLst(accountsLstResponse)
                 .creditCardLst(creditCardLst)
                 .notificationsLst(List.of(notification))
                 .marketingMsgssLst(List.of(marketingMessage))
                 .rewardPoints(List.of(rewardPoints))
+                .build());
+
+        AccountResponse accountResponse2 = AccountResponse.builder()
+                .accountNumber("126000010006086040000")
+                .accountStatus("ACTIVE")
+                .availableBalance(AvailableBalance.builder().amount(950.13).currency("SAR").build())
+                .ledgerBalance(LedgerBalance.builder().amount(950.13).currency("SAR").build())
+                .showFlag("Y")
+                .iban("SA7680000126608016042276")
+                .erNumber("24350888")
+                .atmCardNum("484783******4732")
+                .dailyLimit(DailyLimit.builder().amount(75000).currency("SAR").build())
+                .consumedDailyLimit(ConsumedDailyLimit.builder().amount(0).currency("SAR").build())
+                .remainingDailyLimit(RemainingDailyLimit.builder().amount(75000).currency("SAR").build())
+                .socialTrxnLimit(SocialTrxnLimit.builder().amount(200).currency("SAR").build())
+                .favoriteFlg("N")
+                .acctIconFlg("1")
+                .acctName("AHMED SAID ATTIA ATTIA")
+                .acctOpeningDate("2021-02-21")
+                .acctType("Current Account (CR)")
+                .acctBranch("12600")
+                .acctSubcategory("0001 - C/A  - CR Bal. - Individuals - Local")
                 .build();
+        AccountResponse accountResponse3 = AccountResponse.builder()
+                .accountNumber("126000110006080000000")
+                .availableBalance(AvailableBalance.builder().amount(1000.58).currency("SAR").build())
+                .ledgerBalance(LedgerBalance.builder().amount(1000.58).currency("SAR").build())
+                .showFlag("Y")
+                .iban("SA8780000126608110003844")
+                .accountStatus("ACTIVE")
+                .dailyLimit(DailyLimit.builder().amount(75000).currency("SAR").build())
+                .consumedDailyLimit(ConsumedDailyLimit.builder().amount(0).currency("SAR").build())
+                .remainingDailyLimit(RemainingDailyLimit.builder().amount(75000).currency("SAR").build())
+                .socialTrxnLimit(SocialTrxnLimit.builder().amount(200).currency("SAR").build())
+                .favoriteFlg("N")
+                .acctIconFlg("0")
+                .acctName("AHMED SAID ATTIA ATTIA")
+                .acctOpeningDate("2023-08-17")
+                .acctType("011 - Saving Account")
+                .acctBranch("12600")
+                .acctSubcategory("0170 - Million Saving Account")
+                .build();
+
+        AccountResponse accountResponse4 = AccountResponse.builder()
+                .accountNumber("126000110006084010000")
+                .availableBalance(AvailableBalance.builder().amount(1.25).currency("SAR").build())
+                .ledgerBalance(LedgerBalance.builder().amount(1.25).currency("SAR").build())
+                .showFlag("Y")
+                .iban("SA3580000126608114010589")
+                .accountStatus("ACTIVE")
+                .dailyLimit(DailyLimit.builder().amount(75000).currency("SAR").build())
+                .consumedDailyLimit(ConsumedDailyLimit.builder().amount(0).currency("SAR").build())
+                .remainingDailyLimit(RemainingDailyLimit.builder().amount(75000).currency("SAR").build())
+                .socialTrxnLimit(SocialTrxnLimit.builder().amount(200).currency("SAR").build())
+                .favoriteFlg("N")
+                .acctIconFlg("0")
+                .acctName("AHMED SAID ATTIA ATTIA")
+                .acctOpeningDate("2022-08-01")
+                .acctType("011 - Saving Account")
+                .acctBranch("12600")
+                .acctSubcategory("0160 Hassad Digital account monthly profit  minimum balance in month")
+                .build();
+        AccountsLstResponse accountsLstResponse2 = AccountsLstResponse.builder()
+                .Accounts(List.of(accountResponse2, accountResponse))
+                .recPgCtrlOut(recPgCtrlOutResponse)
+                .totalBal(totalBal)
+                .build();
+
+        AccountsLstResponse accountsLstResponse3 = AccountsLstResponse.builder()
+                .Accounts(List.of(accountResponse2, accountResponse, accountResponse3))
+                .recPgCtrlOut(recPgCtrlOutResponse)
+                .totalBal(totalBal)
+                .build();
+
+        AccountsLstResponse accountsLstResponse4 = AccountsLstResponse.builder()
+                .Accounts(List.of(accountResponse2, accountResponse,accountResponse3, accountResponse4))
+                .recPgCtrlOut(recPgCtrlOutResponse)
+                .totalBal(totalBal)
+                .build();
+
+        customerDataResponseHashMap.put("123456789", CustomerDataResponse.builder()
+                .profileNumber("123456789")
+                .accountsLst(accountsLstResponse3)
+                .creditCardLst(creditCardLst)
+                .notificationsLst(List.of(notification))
+                .marketingMsgssLst(List.of(marketingMessage))
+                .rewardPoints(List.of(rewardPoints))
+                .build());
+
+        customerDataResponseHashMap.put("987654321", CustomerDataResponse.builder()
+                .profileNumber("987654321")
+                .accountsLst(accountsLstResponse4)
+                .creditCardLst(creditCardLst)
+                .notificationsLst(List.of(notification))
+                .marketingMsgssLst(List.of(marketingMessage))
+                .rewardPoints(List.of(rewardPoints))
+                .build());
+
+        customerDataResponseHashMap.put("000022224444", CustomerDataResponse.builder()
+                .profileNumber("000022224444")
+                .accountsLst(accountsLstResponse2)
+                .creditCardLst(creditCardLst)
+                .notificationsLst(List.of(notification))
+                .marketingMsgssLst(List.of(marketingMessage))
+                .rewardPoints(List.of(rewardPoints))
+                .build());
+
+        return customerDataResponseHashMap.get(customerCic);
     }
 
     public AccountTransactionResponse getAccountInfo(AccountTransactionRequest accountTransactionRequest) {
@@ -216,7 +346,7 @@ public class CustomerService {
                         .build()
         );
 
-        trxnLstList.add( TrxnLst.builder()
+        trxnLstList.add(TrxnLst.builder()
                 .availableBalance(1020.3)
                 .cicNumber(accountTransactionRequest.getCicNumber())
                 .unclearedBalance(100.2)
@@ -244,10 +374,10 @@ public class CustomerService {
     public DataResponse getDataResponse(DataRequest dataRequest)  {
         DataResponse dataResponse = new DataResponse();
         if(dataRequest.getLanguage().equals("en-US")){
-            dataResponse.setText( "I am glad I can help");
+            dataResponse.setText( "Good Morning Customer");
         }
         else {
-            dataResponse.setText( "أنا سعيد لأنني أستطيع المساعدة");
+            dataResponse.setText( "و عليكم السلام");
         }
         return dataResponse;
     }

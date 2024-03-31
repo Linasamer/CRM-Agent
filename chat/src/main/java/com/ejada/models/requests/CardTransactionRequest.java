@@ -26,5 +26,8 @@ public class CardTransactionRequest {
     @NotNull
     private String cardSequence;
 
+    @JsonProperty("SessionId")
+    private String sessionId;
+
 
 }

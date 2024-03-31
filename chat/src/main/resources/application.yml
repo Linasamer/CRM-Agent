@@ -2,6 +2,7 @@ micronaut:
   application:
     name: 'alpha-chat-adapter.${MN_ENVIRONMENT:local}'
   server:
+    context-path: /ivr-demo
     cors:
       enabled: true
       configuration:
@@ -27,6 +28,7 @@ micronaut:
   openapi:
     views:
       spec: "swagger-ui.enabled=true,swagger-ui.theme=flattop"
+
 
 kafka:
   enabled: false

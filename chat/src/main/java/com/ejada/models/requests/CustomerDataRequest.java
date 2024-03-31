@@ -21,5 +21,8 @@ public class CustomerDataRequest {
     @JsonProperty("CICNumber")
     @NotNull
     private String cicNumber;
+    @JsonProperty("SessionId")
+    private String sessionId;
+
 
 }

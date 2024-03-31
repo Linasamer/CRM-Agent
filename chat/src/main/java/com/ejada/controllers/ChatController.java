@@ -15,7 +15,9 @@ import com.ejada.service.CustomerService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
+import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
 import io.swagger.v3.oas.annotations.Operation;
@@ -74,7 +76,7 @@ public class ChatController {
         return HttpResponse.ok(greetingData);
     }
 
-    @Post(value = "/getCustomerData", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
+    @Get(value = "/getCustomerData", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
     @Operation(description = "Retrieve Customer Data")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Customer data retrieved successfully"),
@@ -85,8 +87,8 @@ public class ChatController {
             @ApiResponse(responseCode = "502", description = "Generic bad gateway error")
     })
     @ExecuteOn(TaskExecutors.IO)
-    public HttpResponse<CustomerDataResponse> getCustomerData(@Body CustomerDataRequest body) {
-        CustomerDataResponse customerData = customerService.getCustomerData(body);
+    public HttpResponse<CustomerDataResponse> getCustomerData(@QueryValue String customerCIC) {
+        CustomerDataResponse customerData = customerService.getCustomerData(customerCIC);
         return HttpResponse.ok(customerData);
     }
 
@@ -183,5 +185,23 @@ public class ChatController {
             @NotNull @Body DataRequest text
     ) {
         return HttpResponse.ok("Hello Customer");
+    }
+
+
+    ///////////////////////////////////////////////////////////////////
+    @Post(value = "/getCustomerDataString", consumes = APPLICATION_JSON, produces = APPLICATION_JSON)
+    @Operation(description = "Retrieve Customer Data")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Customer data retrieved successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error"),
+            @ApiResponse(responseCode = "503", description = "Service Unavailable"),
+            @ApiResponse(responseCode = "502", description = "Generic bad gateway error")
+    })
+    @ExecuteOn(TaskExecutors.IO)
+    public HttpResponse<String> getCustomerDataString(@Body String  customerCIC) {
+        CustomerDataResponse customerData = customerService.getCustomerData(customerCIC);
+        return HttpResponse.ok(customerData.toString());
     }
 }

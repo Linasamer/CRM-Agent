@@ -26,4 +26,8 @@ public class AccountTransactionRequest {
     @NotNull
     private String accountNumber;
 
+    @JsonProperty("SessionId")
+    private String sessionId;
+
+
 }
