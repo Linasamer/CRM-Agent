@@ -50,6 +50,8 @@ export class AppComponent implements OnInit {
     ];
     this.Customers = [
       {CICNumber: '123456789'},
+      {CICNumber: '0000000018707728'},  
+      {CICNumber: '000022224444'},
       {CICNumber: '987654321'}
 
   ];
