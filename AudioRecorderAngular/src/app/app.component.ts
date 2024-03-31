@@ -163,7 +163,13 @@ export class AppComponent implements OnInit {
     this.aiEngineIntegrationService.getGreetingData(dataRequest).subscribe(
       (response: GreetingResponse) => {
         console.log(response);
-        this.messages.push({type: 'bank', content: 'Hello ' + response.FirstNameEN + ' How can I help you?', voiceNote: false, voiceContent: ''});
+        if(this.selectedLanguage.code== 'en-US'){
+          this.messages.push({type: 'bank', content: 'Hello ' + response.FirstNameEN + ' How can I help you?',
+           voiceNote: false, voiceContent: ''});
+        }else{
+          this.messages.push({type: 'bank', content: 'مرحبا ' + response.FirstNameAR + ' كيف يمكنني مساعدتك؟',
+          voiceNote: false, voiceContent: ''});
+        }
       },
       (error) => {
         console.log(error);

@@ -28,13 +28,14 @@
           <i class="fa-brands fa-facebook fa-2x"></i>
           <i class="fa-brands fa-twitter fa-2x"></i>
           <i class="fa-brands fa-instagram fa-2x"></i>
-          <i><p-dropdown [options]="languages" [(ngModel)]="selectedLanguage" optionLabel="name" [showClear]="true"  placeholder="Select Language"></p-dropdown>
+          <i><p-dropdown [options]="languages" [(ngModel)]="selectedLanguage" optionLabel="name" 
+            [showClear]="false" [style]="{'width':'130px','margin-top':'-15px','height':'40px',
+            'font-style':'normal'}"></p-dropdown>
           </i>   
         </div>
       </div>
       <div class="messages" #scrollMe>
         <ul>
-        
           <li [class]="msg.type" *ngFor="let msg of messages">
             <img [src]="msg.type === 'bank' ? bankImage : userImage" alt="" />
             <p >{{msg?.content || ''}}</p>
@@ -74,10 +75,22 @@
           <i class="fa-brands fa-instagram fa-2x"></i>  
         </div>
       </div>
-    <div class="card flex justify-content-center" style=" margin: auto;
-    padding: 233px;">
-      <p-dropdown [options]="Customers" [(ngModel)]="selectedCustomer" optionLabel="CICNumber" 
-      [showClear]="true" placeholder="Select a Customer" (onChange)="onCustomerChange($event)"></p-dropdown>
+    <div class="card flex justify-content-center" id="welcome">
+      <div class="cardHeader"><h1>WELCOME TO OUR SMART CHAT</h1></div>
+      <div class="cardTitle"><p>try to inisiate a call</p></div>
+      <div class="cardSelection">
+        <div>
+          <label>select a customer:</label>
+          <p-dropdown [options]="Customers" [(ngModel)]="selectedCustomer" optionLabel="CICNumber" 
+        [showClear]="true" placeholder="Select a Customer" (onChange)="onCustomerChange($event)"></p-dropdown>
+        </div>
+        <div>
+          <label>select your preferrd language:</label>
+          <p-dropdown [options]="languages" [(ngModel)]="selectedLanguage" optionLabel="name" 
+              [showClear]="false"></p-dropdown>
+        </div>
+      </div>
+      
     </div>
     </div>
   </div>
