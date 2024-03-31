@@ -132,8 +132,48 @@ public class CustomerService {
                 .gender("M")
                 .build();
 
+        GreetingDataResponse Customer3 =GreetingDataResponse.builder()
+                .cicNumber("000022224444")
+                .firstNameEn("Munira")
+                .secondNameEn("Khaled")
+                .thirdNameEn("Samer")
+                .lastNameEn("ali")
+                .firstNameAr("منيره")
+                .secondNameAr("خالد")
+                .thirdNameAr("سامر")
+                .lastNameAr("علي")
+                .custSinceDt("2018-03-26")
+                .idNumber("2449029186")
+                .idType("2")
+                .custStatus("ACTIVE")
+                .idIssueDate("1439-05-21")
+                .birthDate("1989-02-13")
+                .gender("M")
+                .build();
+
+        GreetingDataResponse Customer4 =GreetingDataResponse.builder()
+                .cicNumber("0000000018707728")
+                .firstNameEn("Omer")
+                .secondNameEn("Khaled")
+                .thirdNameEn("Samer")
+                .lastNameEn("ali")
+                .firstNameAr("عمر")
+                .secondNameAr("خالد")
+                .thirdNameAr("سامر")
+                .lastNameAr("علي")
+                .custSinceDt("2018-03-26")
+                .idNumber("2449029186")
+                .idType("2")
+                .custStatus("ACTIVE")
+                .idIssueDate("1439-05-21")
+                .birthDate("1989-02-13")
+                .gender("M")
+                .build();
+
         greetingDataResponseHashMap.put(firstCustomer.getCicNumber(), firstCustomer);
         greetingDataResponseHashMap.put(secondCustomer.getCicNumber(), secondCustomer);
+        greetingDataResponseHashMap.put(Customer3.getCicNumber(), Customer3);
+        greetingDataResponseHashMap.put(Customer4.getCicNumber(), Customer4);
 
         return greetingDataResponseHashMap.get(body.getCicNumber());
     }
@@ -377,7 +417,7 @@ public class CustomerService {
             dataResponse.setText( "Good Morning Customer");
         }
         else {
-            dataResponse.setText( "و عليكم السلام");
+            dataResponse.setText( "و عليكم السلام كيف يمكنني مساعدتك؟");
         }
         return dataResponse;
     }
