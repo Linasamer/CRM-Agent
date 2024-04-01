@@ -49,10 +49,10 @@ export class AIEngineIntegrationService  {
       );
   }
 
-  getGreetingData(body: any): Observable<GreetingResponse> {
-    return this.httpClient.post<GreetingResponse>(RestEndpoints.POST_GET_CUSTOMER_GREETING_DATA, body)
+  getGreetingData(body: any): Observable<DataResponseModel> {
+    return this.httpClient.post<DataResponseModel>(RestEndpoints.POST_GET_CUSTOMER_GREETING_DATA, body)
       .pipe(
-        map((res: GreetingResponse) => res),
+        map((res: DataResponseModel) => res),
         catchError(error => {
           console.log(error);
           return throwError(error);

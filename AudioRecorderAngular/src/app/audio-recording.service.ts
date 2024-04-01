@@ -10,6 +10,7 @@ export class AudioRecordingService {
   private mediaRecorder: any;
   private audioContext: AudioContext = new AudioContext();
   private audioBlobSubject = new Subject<Blob>();
+  
 
   audioBlob$ = this.audioBlobSubject.asObservable();
 
@@ -24,17 +25,28 @@ export class AudioRecordingService {
     this.mediaRecorder.start();
   }
 
-  async stopRecording() {
-    if (this.mediaRecorder) {
-      this.mediaRecorder.onstop = async () => {
-        const audioData = await new Blob(this.chunks).arrayBuffer();
-        const audioBuffer = await this.audioContext.decodeAudioData(audioData);
-        const wavBlob = bufferToWave(audioBuffer, audioBuffer.length);
-        this.audioBlobSubject.next(wavBlob);
-        this.chunks = [];
-      };
-  
-      this.mediaRecorder.stop();
-    }
+  async stopRecording(): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+        let base64String;
+        if (this.mediaRecorder) {
+            this.mediaRecorder.onstop = async () => {
+                try {
+                    const audioData = await new Blob(this.chunks).arrayBuffer();
+                    base64String = btoa(String.fromCharCode(...new Uint8Array(audioData)));
+                    const audioBuffer = await this.audioContext.decodeAudioData(audioData);
+                    const wavBlob = bufferToWave(audioBuffer, audioBuffer.length);
+                    this.audioBlobSubject.next(wavBlob);
+                    this.chunks = [];
+                    resolve(base64String);
+                } catch (error) {
+                    reject(error);
+                }
+            };
+
+            this.mediaRecorder.stop();
+        } else {
+            reject(new Error("MediaRecorder not initialized."));
+        }
+    });
   }
 }

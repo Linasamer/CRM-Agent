@@ -6,7 +6,7 @@ import { DataRequestModel } from './model/data-request.model';
 import { DataResponseModel } from './model/data-response.model';
 import { Language } from './model/language.model';
 import { CustomerData } from './model/customer-data-request.model';
-import { GreetingResponse } from './model/greetingResponse.model';
+import { CustomerDatalList } from './model/customer-data-list.model';
 import { Message } from './model/messages.model';
 declare var webkitSpeechRecognition: any;
 
@@ -23,25 +23,26 @@ export class AppComponent implements OnInit {
   recordedMessage: string = '';
   languages: Language[] = [];
   selectedLanguage: Language = { name: 'English', code: 'en-US' };
-  Customers: CustomerData[] = [];
-  selectedCustomer!: CustomerData ;
+  Customers: CustomerDatalList[] = [];
+  selectedCustomer!: CustomerData;
   voiceBlob: any;
   audioMessage: Boolean = false;
-   name : string = '';
+  name: string = '';
+  base46audio: any;
 
   bankImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb_HeXq0uLKUHF1Hyynl-zXTfBADq8RuPxzgAvnhhG0A&s"
-  userImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQnO7QLbgqxCIswhJPOO0750lzSDeSD4k5L_2ahBU9ew&s" 
-  messages : Message[] = [];
+  userImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQnO7QLbgqxCIswhJPOO0750lzSDeSD4k5L_2ahBU9ew&s"
+  messages: Message[] = [];
   @ViewChild('audioPlayer') audioPlayer!: ElementRef<HTMLAudioElement>;
   @ViewChild('msgInput') messageInput!: ElementRef<HTMLInputElement>;
   cardTransactionRequest!: CardTransactionRequest;
 
 
-  constructor(private audioRecordingService: AudioRecordingService, private cd: ChangeDetectorRef, 
+  constructor(private audioRecordingService: AudioRecordingService, private cd: ChangeDetectorRef,
     private aiEngineIntegrationService: AIEngineIntegrationService) {
-  
 
-     }
+
+  }
 
   ngOnInit() {
     this.languages = [
@@ -49,18 +50,18 @@ export class AppComponent implements OnInit {
       { name: 'Arabic', code: 'ar-EG' }
     ];
     this.Customers = [
-      {CICNumber: '123456789'},
-      {CICNumber: '0000000018707728'},  
-      {CICNumber: '000022224444'},
-      {CICNumber: '987654321'}
+      { CICNumber: '123456789',  },
+      { CICNumber: '0000000018707728' },
+      { CICNumber: '000022224444' },
+      { CICNumber: '987654321' }
 
-  ];
+    ];
     this.audioRecordingService.audioBlob$.subscribe(blob => {
       this.audioURL = window.URL.createObjectURL(blob);
       this.voiceBlob = this.audioURL;
       this.audioPlayer.nativeElement.src = this.audioURL;
       this.cd.detectChanges();
-    
+
     });
   }
 
@@ -78,7 +79,7 @@ export class AppComponent implements OnInit {
         // voiceHandler.value = e?.results[0][0]?.transcript;
         this.results = e.results[0][0].transcript;
         this.messageInput.nativeElement.value = this.results;
-      
+
 
       };
     } else {
@@ -86,9 +87,9 @@ export class AppComponent implements OnInit {
     }
   }
 
-  stopRecording() {
+  async stopRecording() {
     this.isRecording = false;
-    this.audioRecordingService.stopRecording();
+   this.base46audio = await this.audioRecordingService.stopRecording();
     if ('webkitSpeechRecognition' in window) {
       console.log(this.results);
 
@@ -101,12 +102,11 @@ export class AppComponent implements OnInit {
   addNewMessage(inputField: any) {
     const val = inputField.value?.trim()
     if (val.length) {
-      if(this.audioMessage){
-        this.messages.push({type: 'user', content: val, voiceNote: true, voiceContent: this.voiceBlob})
-        const base64String = btoa(String.fromCharCode(...new Uint8Array(this.voiceBlob)));
-        console.log("my base64: ", base64String)
+      if (this.audioMessage) {
+        this.messages.push({ type: 'user', content: val, voiceNote: true, voiceContent: this.voiceBlob })
+        console.log("my base64: ", this.base46audio)
         var result = '';
-        const dataRequest = new DataRequestModel(base64String, this.selectedLanguage.code);
+        const dataRequest = new DataRequestModel(this.base46audio, this.checkLanguage(), this.selectedCustomer.CICNumber);
         this.aiEngineIntegrationService.voiceToVoice(dataRequest).subscribe(
           (response: DataResponseModel) => {
             console.log(response);
@@ -115,28 +115,29 @@ export class AppComponent implements OnInit {
           (error) => {
             console.log(error);
           }
-        );      
+        );
         console.log(this.messages)
-      }else{
-        this.messages.push({type: 'user', content: val, voiceNote: false, voiceContent: ''})
-        const dataRequest = new DataRequestModel(val, this.selectedLanguage.code);
-         this.aiEngineIntegrationService.textToText(dataRequest).subscribe(
+      } else {
+        this.messages.push({ type: 'user', content: val, voiceNote: false, voiceContent: '' })
+        const dataRequest = new DataRequestModel(val, this.checkLanguage(), this.selectedCustomer.CICNumber);
+        this.aiEngineIntegrationService.textToText(dataRequest).subscribe(
           (response: DataResponseModel) => {
             console.log(response);
-            this.messages.push({type: 'bank', content: response.Text, voiceNote: false, voiceContent: ''});
+            this.messages.push({ type: 'bank', content: response.Text, voiceNote: false, voiceContent: '' });
           },
           (error) => {
             console.log(error);
           }
         );
-       
+
       }
     }
     inputField.value = '';
     this.audioMessage = false
   }
 
-  private base64toBlob(base64Data:any, text: any, contentType:any){
+  private base64toBlob(base64Data: any, text: any, contentType: any) {
+    if (!(base64Data == null || base64Data == '')){
     contentType = contentType || '';
     const sliceSize = 1024;
     const byteCharacters = atob(base64Data);
@@ -156,32 +157,40 @@ export class AppComponent implements OnInit {
     }
     var myBlob = new Blob(byteArrays, { type: contentType });
     var blobURL = window.URL.createObjectURL(myBlob);
-    this.messages.push({type: 'bank', content: text, voiceNote: true, voiceContent: blobURL})
+    this.messages.push({ type: 'bank', content: text, voiceNote: true, voiceContent: blobURL });
+  }
+  else{
+    this.messages.push({ type: 'bank', content: text, voiceNote: false, voiceContent: '' });
+
+  }
   }
 
   onCustomerChange(event: any) {
     console.log('Selected Customer:', this.selectedCustomer);
-    const dataRequest = new CustomerData(this.selectedCustomer.CICNumber);
+    const dataRequest = new CustomerData(this.selectedCustomer.CICNumber,this.checkLanguage());
     this.aiEngineIntegrationService.getGreetingData(dataRequest).subscribe(
-      (response: GreetingResponse) => {
+      (response: DataResponseModel) => {
         console.log(response);
-        if(this.selectedLanguage.code== 'en-US'){
-          this.messages.push({type: 'bank', content: 'Hello ' + response.FirstNameEN + ' How can I help you?',
-           voiceNote: false, voiceContent: ''});
-        }else{
-          this.messages.push({type: 'bank', content: 'مرحبا ' + response.FirstNameAR + ' كيف يمكنني مساعدتك؟',
-          voiceNote: false, voiceContent: ''});
-        }
+        this.base64toBlob(response.Base46, response.Text , 'application/x-www-form-urlencoded' )
       },
       (error) => {
         console.log(error);
       }
     );
-   
- 
+
+
 
   }
+   
+  checkLanguage(){
+    var lang 
+    if (this.selectedLanguage.code == 'en-US') {
+      lang = 'EN'
+  } else{
+    lang = "AR"
+  }
+
+  return lang
 
 }
-
-
+}
