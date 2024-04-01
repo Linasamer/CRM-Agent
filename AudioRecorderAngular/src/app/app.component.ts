@@ -38,6 +38,7 @@ export class AppComponent implements OnInit {
   messages: Message[] = [];
   @ViewChild('audioPlayer') audioPlayer!: ElementRef<HTMLAudioElement>;
   @ViewChild('msgInput') messageInput!: ElementRef<HTMLInputElement>;
+
   cardTransactionRequest!: CardTransactionRequest;
 
 
@@ -81,9 +82,7 @@ export class AppComponent implements OnInit {
         console.log(e);
         // voiceHandler.value = e?.results[0][0]?.transcript;
         this.results = e.results[0][0].transcript;
-        this.messageInput.nativeElement.value = this.results;
-
-
+        // this.audioMessageInput.nativeElement.value = this.results;
       };
     } else {
       alert('Your browser does not support voice recognition!');
@@ -98,8 +97,27 @@ export class AppComponent implements OnInit {
 
       this.vSearch.stop();
     }
+    this.addRecordMessage();
   }
 
+  addRecordMessage() {
+      if (this.audioMessage) {
+        this.messages.push({ type: 'user', content: '', voiceNote: true, voiceContent: this.voiceBlob })
+        console.log("my base64: ", this.base46audio)
+        const dataRequest = new DataRequestModel(this.base46audio, this.checkLanguage(), this.selectedCustomer.CICNumber);
+        this.aiEngineIntegrationService.voiceToVoice(dataRequest).subscribe(
+          (response: DataResponseModel) => {
+            console.log(response);
+            this.base64toBlob(response.Base46, response.Text, 'application/x-www-form-urlencoded')
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+        console.log(this.messages)
+      } 
+      this.audioMessage = false
+  }
 
 
   addNewMessage(inputField: any) {

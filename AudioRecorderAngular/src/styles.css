@@ -114,6 +114,12 @@ body {
   background: #f5f5f5;
   float: right;
 }
+
+#frame .messages ul li.user audio {
+  background: #f5f5f5;
+  float: right;
+}
+
 #frame .messages ul li img {
   width: 60px;
   border-radius: 50%;
