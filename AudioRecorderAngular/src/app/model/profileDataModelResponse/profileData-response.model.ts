@@ -4,9 +4,9 @@ import { RewardPoints } from "./rewardPoints-response.model";
 
 export interface ProfileData {
   ProfileNumber: string;
-  AccountsLst: AccountsList[];
-  CreditCardLst: CreditCardList[];
+  AccountsLst: AccountsList;
+  CreditCardLst: CreditCardList;
   NotificationsLst: Notification[];
   MarketingMsgsLst: Notification[];
-  RewardPoints: RewardPoints;
+  RewardPoints: RewardPoints[];
 }

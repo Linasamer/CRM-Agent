@@ -19,7 +19,7 @@
 
 <!-- ------------------------------------------------------------------------------------------- -->
 
-  <div *ngIf="selectedCustomer">
+  <div *ngIf="startFlag">
     <div id="frame">
       <div class="contact-profile">
         <img [src]="bankImage" alt="bankLogo" />
@@ -64,7 +64,7 @@
       
    
   </div>
-  <div *ngIf="!selectedCustomer">
+  <div id="infoPart" *ngIf="!startFlag">
     <div id="frame">
       <div class="contact-profile">
         <img [src]="bankImage" alt="bankLogo" />
@@ -90,6 +90,81 @@
               [showClear]="false"></p-dropdown>
         </div>
       </div>
+
+      <p-tabView styleClass="tabview-custom" *ngIf="userInfo">
+        <p-tabPanel>
+            <ng-template pTemplate="header">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Basic Info</span>
+            </ng-template>
+            <div class="surface-section">
+              <ul class="list-none p-0 m-0">
+                  <li>
+                      <label><span style="font-weight: bold;">Name: </span> 
+                        <span>{{userInfo.AccountsLst.Accounts[0].AcctName}}</span></label>
+                  </li>
+                  <li>
+                    <label><span style="font-weight: bold;">Email: </span> 
+                      <span>{{userInfo.RewardPoints[0].Email}}</span></label>
+                </li>
+              </ul>
+          </div>
+        </p-tabPanel>
+        <p-tabPanel header="Header II">
+            <ng-template pTemplate="header">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <span>Account Info</span>
+            </ng-template>
+            <div class="surface-section">
+              <ul class="list-none p-0 m-0">
+                <li>
+                  <label><span style="font-weight: bold;">Account No: </span> 
+                    <span>{{userInfo.AccountsLst.Accounts[0].AccountNumber}}</span></label>
+                </li>
+                <li>
+                  <label><span style="font-weight: bold;">Avaliable Balance: </span>
+                     <span>{{userInfo.AccountsLst.Accounts[0].AvailableBalance.Amount}}
+                      {{userInfo.AccountsLst.Accounts[0].AvailableBalance.Currency}}</span></label>
+                </li>
+              <li>
+                <label><span style="font-weight: bold;">Account Status: </span>
+                   <span>{{userInfo.AccountsLst.Accounts[0].AccountStatus}}</span></label>
+              </li>
+              <li>
+                <label><span style="font-weight: bold;">Account Type: </span> 
+                  <span>{{userInfo.AccountsLst.Accounts[0].AcctType}}</span></label>
+              </li>
+              </ul>
+          </div>
+        </p-tabPanel>
+        <p-tabPanel header="Header III">
+            <ng-template pTemplate="header">
+              <i class="fa-solid fa-credit-card"></i>
+                <span>Card Info</span>
+                <i class="pi pi-cog"></i>
+            </ng-template>
+            <div class="surface-section">
+              <ul class="list-none p-0 m-0">
+                <li>
+                  <label><span style="font-weight: bold;">Card No: </span> 
+                    <span>{{userInfo.CreditCardLst.CreditCards[0].CardNumber}}</span></label>
+                </li>
+                <li>
+                  <label><span style="font-weight: bold;">Avaliable Cash: </span> 
+                    <span>100.2 SAR</span></label>
+                </li>
+                <li>
+                  <label><span style="font-weight: bold;">Card Expiry Date: </span> 
+                    <span>2024-12-31</span></label>
+                </li>
+              </ul>
+          </div>
+        </p-tabPanel>
+    </p-tabView>
+    <div style="margin: auto;" *ngIf="userInfo">
+      <p-button label="Start" (click)="onStartChat()"></p-button>
+    </div>
+    
       
     </div>
     </div>

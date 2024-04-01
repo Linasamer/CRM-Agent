@@ -32,6 +32,8 @@ export class AppComponent implements OnInit {
   audioMessage: Boolean = false;
   name: string = '';
   base46audio: any;
+  startFlag:boolean = false;
+  userInfo !: ProfileData;
 
   bankImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb_HeXq0uLKUHF1Hyynl-zXTfBADq8RuPxzgAvnhhG0A&s"
   userImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQnO7QLbgqxCIswhJPOO0750lzSDeSD4k5L_2ahBU9ew&s"
@@ -82,7 +84,11 @@ export class AppComponent implements OnInit {
         console.log(e);
         // voiceHandler.value = e?.results[0][0]?.transcript;
         this.results = e.results[0][0].transcript;
+<<<<<<< .mine
         // this.audioMessageInput.nativeElement.value = this.results;
+=======
+        this.messageInput.nativeElement.value = this.results;
+>>>>>>> .theirs
       };
     } else {
       alert('Your browser does not support voice recognition!');
@@ -187,6 +193,19 @@ export class AppComponent implements OnInit {
   }
 
   onCustomerChange(event: any) {
+      this.aiEngineIntegrationService.getCustomerData(this.selectedCustomer.CICNumber).subscribe(
+        (response: ProfileData) => {
+          console.log(response);
+          this.userInfo = response;
+          console.log("my infooo", this.userInfo)
+        },
+        (error) => {
+          console.log(error);
+        });
+
+  }
+  onStartChat(){
+    this.startFlag=true;
     console.log('Selected Customer:', this.selectedCustomer);
     const dataRequest = new CustomerData(this.selectedCustomer.CICNumber,this.checkLanguage());
     this.aiEngineIntegrationService.getGreetingData(dataRequest).subscribe(
@@ -197,15 +216,6 @@ export class AppComponent implements OnInit {
       (error) => {
         console.log(error);
       });
-
-      this.aiEngineIntegrationService.getCustomerData(this.selectedCustomer.CICNumber).subscribe(
-        (response: ProfileData) => {
-          console.log(response);
-        },
-        (error) => {
-          console.log(error);
-        });
-
   }
    
   checkLanguage(){
