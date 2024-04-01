@@ -7,6 +7,9 @@ import { AIEngineIntegrationService } from './AIEngineIntegration.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TabViewModule } from 'primeng/tabview';
+import { ChipModule } from 'primeng/chip';
+import { ButtonModule } from 'primeng/button';
 
 
 
@@ -20,10 +23,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     DropdownModule,
     FormsModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule
-    
-    
-    
+    BrowserAnimationsModule,
+    TabViewModule,
+    ChipModule,
+    ButtonModule
   ],
   providers: [AIEngineIntegrationService   ],
   bootstrap: [AppComponent]
