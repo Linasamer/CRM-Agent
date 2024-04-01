@@ -8,7 +8,10 @@ import { Language } from './model/language.model';
 import { CustomerData } from './model/customer-data-request.model';
 import { CustomerDatalList } from './model/customer-data-list.model';
 import { Message } from './model/messages.model';
+import { ProfileData } from './model/profileDataModelResponse/profileData-response.model';
+
 declare var webkitSpeechRecognition: any;
+
 
 @Component({
   selector: 'app-root',
@@ -175,10 +178,15 @@ export class AppComponent implements OnInit {
       },
       (error) => {
         console.log(error);
-      }
-    );
+      });
 
-
+      this.aiEngineIntegrationService.getCustomerData(this.selectedCustomer.CICNumber).subscribe(
+        (response: ProfileData) => {
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        });
 
   }
    

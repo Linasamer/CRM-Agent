@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { RestEndpoints } from './eunms/RestEndpoints';
 import { DataResponseModel } from './model/data-response.model';
-import { GreetingResponse } from './model/greetingResponse.model';
+import { ProfileData } from './model/profileDataModelResponse/profileData-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,24 +19,12 @@ export class AIEngineIntegrationService  {
       map((res: DataResponseModel) => res),
       catchError(error => {
         console.log(error);
-        return throwError(error); // Re-throwing error to be caught by the caller
+        return throwError(error);
       })
     );
 }
   
 
-  voiceToText(body: any) {
-    return this.httpClient.post(RestEndpoints.POST_VOICE_TO_TEXT, body).subscribe(
-      (res) => {console.log(res)},
-      (error) =>{console.log(error)}
-    );
-  }
-  textToVoice(body: any) {
-    return this.httpClient.post(RestEndpoints.POST_TEXT_TO_VOICE, body).subscribe(
-      (res) => { console.log(res)},
-      (error) =>{console.log(error)}
-    );
-  }
 
   textToText(body: any): Observable<DataResponseModel> {
     return this.httpClient.post<DataResponseModel>(RestEndpoints.POST_TEXT_TO_TEXT, body)
@@ -53,6 +41,17 @@ export class AIEngineIntegrationService  {
     return this.httpClient.post<DataResponseModel>(RestEndpoints.POST_GET_CUSTOMER_GREETING_DATA, body)
       .pipe(
         map((res: DataResponseModel) => res),
+        catchError(error => {
+          console.log(error);
+          return throwError(error);
+        })
+      );
+  }
+
+  getCustomerData(body: any): Observable<ProfileData> {
+    return this.httpClient.get<ProfileData>(RestEndpoints.POST_GET_CUSTOMER_DATA_PROFILE + '?customerCIC=' + body)
+      .pipe(
+        map((res: ProfileData) => res),
         catchError(error => {
           console.log(error);
           return throwError(error);
