@@ -32,7 +32,11 @@ export class AudioRecordingService {
             this.mediaRecorder.onstop = async () => {
                 try {
                     const audioData = await new Blob(this.chunks).arrayBuffer();
-                    base64String = btoa(String.fromCharCode(...new Uint8Array(audioData)));
+                    
+                    // Convert ArrayBuffer to Base64 string
+                    const uintArray = new Uint8Array(audioData);
+                    const binary = Array.from(uintArray).map(byte => String.fromCharCode(byte)).join('');
+                    base64String = btoa(binary);
                     const audioBuffer = await this.audioContext.decodeAudioData(audioData);
                     const wavBlob = bufferToWave(audioBuffer, audioBuffer.length);
                     this.audioBlobSubject.next(wavBlob);
@@ -48,5 +52,5 @@ export class AudioRecordingService {
             reject(new Error("MediaRecorder not initialized."));
         }
     });
-  }
+}
 }
