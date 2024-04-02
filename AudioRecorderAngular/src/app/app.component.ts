@@ -84,7 +84,6 @@ export class AppComponent implements OnInit {
         console.log(e);
         // voiceHandler.value = e?.results[0][0]?.transcript;
         this.results = e.results[0][0].transcript;
-        // this.audioMessageInput.nativeElement.value = this.results;
       };
     } else {
       alert('Your browser does not support voice recognition!');

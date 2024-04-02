@@ -113,28 +113,33 @@
         <p-tabPanel header="Header II">
             <ng-template pTemplate="header">
                 <i class="fa-solid fa-file-invoice-dollar"></i>
-                <span>Account Info</span>
+                <span>Account Info ({{userInfo.AccountsLst.Accounts.length}})</span>
             </ng-template>
             <div class="surface-section">
-              <ul class="list-none p-0 m-0">
-                <li>
-                  <label><span style="font-weight: bold;">Account No: </span> 
-                    <span>{{userInfo.AccountsLst.Accounts[0].AccountNumber}}</span></label>
-                </li>
-                <li>
-                  <label><span style="font-weight: bold;">Avaliable Balance: </span>
-                     <span>{{userInfo.AccountsLst.Accounts[0].AvailableBalance.Amount}}
-                      {{userInfo.AccountsLst.Accounts[0].AvailableBalance.Currency}}</span></label>
-                </li>
-              <li>
-                <label><span style="font-weight: bold;">Account Status: </span>
-                   <span>{{userInfo.AccountsLst.Accounts[0].AccountStatus}}</span></label>
-              </li>
-              <li>
-                <label><span style="font-weight: bold;">Account Type: </span> 
-                  <span>{{userInfo.AccountsLst.Accounts[0].AcctType}}</span></label>
-              </li>
-              </ul>
+              <p-scrollPanel [style]="{ width: '100%', height: '130px' }" styleClass="custombar2">
+              <div *ngFor="let account of userInfo.AccountsLst.Accounts">
+                  <ul class="list-none p-0 m-0">
+                    <li>
+                      <label><span style="font-weight: bold;">Account No: </span> 
+                        <span>{{account.AccountNumber}}</span></label>
+                    </li>
+                    <li>
+                      <label><span style="font-weight: bold;">Avaliable Balance: </span>
+                         <span>{{account.AvailableBalance.Amount}}
+                          {{account.AvailableBalance.Currency}}</span></label>
+                    </li>
+                  <li>
+                    <label><span style="font-weight: bold;">Account Status: </span>
+                       <span>{{account.AccountStatus}}</span></label>
+                  </li>
+                  <li>
+                    <label><span style="font-weight: bold;">Account Type: </span> 
+                      <span>{{account.AcctType}}</span></label>
+                    </li>
+                      <hr *ngIf="userInfo.AccountsLst.Accounts.length > 1"  size="8" width="90%" color="black">  
+                  </ul>
+              </div> 
+            </p-scrollPanel>
           </div>
         </p-tabPanel>
         <p-tabPanel header="Header III">

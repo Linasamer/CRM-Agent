@@ -10,6 +10,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TabViewModule } from 'primeng/tabview';
 import { ChipModule } from 'primeng/chip';
 import { ButtonModule } from 'primeng/button';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+
 
 
 
@@ -26,7 +28,8 @@ import { ButtonModule } from 'primeng/button';
     BrowserAnimationsModule,
     TabViewModule,
     ChipModule,
-    ButtonModule
+    ButtonModule,
+    ScrollPanelModule
   ],
   providers: [AIEngineIntegrationService   ],
   bootstrap: [AppComponent]
