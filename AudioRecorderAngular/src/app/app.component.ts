@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
   base46audio: any;
   startFlag:boolean = false;
   userInfo !: ProfileData;
+  sessionId!: string;
 
   bankImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb_HeXq0uLKUHF1Hyynl-zXTfBADq8RuPxzgAvnhhG0A&s"
   userImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQnO7QLbgqxCIswhJPOO0750lzSDeSD4k5L_2ahBU9ew&s"
@@ -105,7 +106,7 @@ export class AppComponent implements OnInit {
       if (this.audioMessage) {
         this.messages.push({ type: 'user', content: '', voiceNote: true, voiceContent: this.voiceBlob })
         console.log("my base64: ", this.base46audio)
-        const dataRequest = new DataRequestModel(this.base46audio, this.checkLanguage(), this.selectedCustomer.CICNumber);
+        const dataRequest = new DataRequestModel(this.base46audio, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
         this.aiEngineIntegrationService.voiceToVoice(dataRequest).subscribe(
           (response: DataResponseModel) => {
             console.log(response);
@@ -128,7 +129,7 @@ export class AppComponent implements OnInit {
         this.messages.push({ type: 'user', content: val, voiceNote: true, voiceContent: this.voiceBlob })
         console.log("my base64: ", this.base46audio)
         var result = '';
-        const dataRequest = new DataRequestModel(this.base46audio, this.checkLanguage(), this.selectedCustomer.CICNumber);
+        const dataRequest = new DataRequestModel(this.base46audio, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
         this.aiEngineIntegrationService.voiceToVoice(dataRequest).subscribe(
           (response: DataResponseModel) => {
             console.log(response);
@@ -141,12 +142,12 @@ export class AppComponent implements OnInit {
         console.log(this.messages)
       } else {
         this.messages.push({ type: 'user', content: val, voiceNote: false, voiceContent: '' })
-        const dataRequest = new DataRequestModel(val, this.checkLanguage(), this.selectedCustomer.CICNumber);
+        const dataRequest = new DataRequestModel(val, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
         this.aiEngineIntegrationService.textToText(dataRequest).subscribe(
           (response: DataResponseModel) => {
             console.log(response);
-            this.messages.push({ type: 'bank', content: response.Text, voiceNote: false, voiceContent: '' });
-          },
+            this.base64toBlob(response.Base46, response.Text, 'application/x-www-form-urlencoded')
+            },
           (error) => {
             console.log(error);
           }
@@ -206,6 +207,7 @@ export class AppComponent implements OnInit {
     this.aiEngineIntegrationService.getGreetingData(dataRequest).subscribe(
       (response: DataResponseModel) => {
         console.log(response);
+        this.sessionId = response.SessionId;
         this.base64toBlob(response.Base46, response.Text , 'application/x-www-form-urlencoded' )
       },
       (error) => {
