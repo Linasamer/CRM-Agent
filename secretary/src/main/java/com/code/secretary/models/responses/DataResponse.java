@@ -18,5 +18,8 @@ public class DataResponse {
 
     @JsonProperty("Base46")
     private String base46;
+    
+    @JsonProperty("SessionId")
+    private String sessionId;
 
 }

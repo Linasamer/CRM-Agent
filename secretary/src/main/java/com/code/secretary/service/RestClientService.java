@@ -44,7 +44,7 @@ public class RestClientService {
 	        headers.set("Accept-Language", lang);
 	        HttpEntity<AgentRequest> requestEntity = new HttpEntity<>(request, headers);
 			RestTemplate restTemplate = new RestTemplate();
-	        ResponseEntity<AgentResponse> responseEntity = restTemplate.postForEntity("http://41.33.183.2:4012/v1/ai_agent/agent_response", requestEntity, AgentResponse.class);
+	        ResponseEntity<AgentResponse> responseEntity = restTemplate.postForEntity("http://41.33.183.2:4010/v1/ai_agent/agent_response", requestEntity, AgentResponse.class);
 
 
 			if (responseEntity.getStatusCodeValue() != HttpStatus.OK.value())

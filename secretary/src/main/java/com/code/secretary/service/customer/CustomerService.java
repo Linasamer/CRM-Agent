@@ -53,7 +53,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerService {
 
-
+		private String sessionId;
 
     public CardTransactionResponse getCardInfo(CardTransactionRequest  cardTransactionRequest) {
         List<TrxnLst> trxnLstList = new ArrayList<>();
@@ -96,13 +96,15 @@ public class CustomerService {
 
     	GreetingDataResponse greetingDataResponse = buildGreetingDataResponse(body);
     	   AgentRequest request = new AgentRequest();
-           request.setSessionId(greetingDataResponse.getCicNumber()+ UUID.randomUUID().toString());
+    	   
+           request.setSessionId(getSessionId(body.getCicNumber()));
            request.setCustomerCic(greetingDataResponse.getCicNumber());
            request.setUserText(toJsonProperty(greetingDataResponse));
            
            AgentResponse response = RestClientService.getPostObject(request, body.getLanguage());
            dataResponse.setText(response.getAgentText());
            dataResponse.setBase46(response.getAgentAudio());
+           dataResponse.setSessionId(request.getSessionId());
         return dataResponse;
     }
 
@@ -288,7 +290,7 @@ public class CustomerService {
                 .socialTrxnLimit(SocialTrxnLimit.builder().amount(200).currency("SAR").build())
                 .favoriteFlg("N")
                 .acctIconFlg("1")
-                .acctName("AHMED SAID ATTIA ATTIA")
+                .acctName("AHMED SAID ATTIA  ATTIA")
                 .acctOpeningDate("2021-02-21")
                 .acctType("Current Account (CR)")
                 .acctBranch("12600")
@@ -421,9 +423,9 @@ public class CustomerService {
         DataResponse dataResponse = new DataResponse();
         
         AgentRequest request = new AgentRequest();
-        request.setSessionId(dataRequest.getCustomerCiC()+ UUID.randomUUID().toString());
+        request.setSessionId(dataRequest.getSessionId());
         request.setCustomerCic(dataRequest.getCustomerCiC());
-        request.setUserAudio(dataRequest.getText()	);
+        request.setUserAudio( "data:audio/mp3;base64," +dataRequest.getText());
         
         AgentResponse response = RestClientService.getPostObject(request, dataRequest.getLanguage());
         dataResponse.setText(response.getAgentText());
@@ -436,7 +438,7 @@ public class CustomerService {
     	 DataResponse dataResponse = new DataResponse();
         
     	   AgentRequest request = new AgentRequest();
-           request.setSessionId(dataRequest.getCustomerCiC()+ UUID.randomUUID().toString());
+           request.setSessionId(dataRequest.getSessionId());
            request.setCustomerCic(dataRequest.getCustomerCiC());
            request.setUserText(dataRequest.getText());
            AgentResponse response = RestClientService.getPostObject(request, dataRequest.getLanguage());
@@ -453,5 +455,9 @@ public class CustomerService {
 
     }
 
+    		private String getSessionId(String cic)   {
+    			sessionId = cic + UUID.randomUUID().toString();
+    			return sessionId ;
+        }
 
 }
