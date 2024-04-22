@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.code.secretary.exceptions.ExceptionsHandlerService;
 import com.code.secretary.exceptions.custom.BusinessException;
 import com.code.secretary.models.requests.AgentRequest;
 import com.code.secretary.models.responses.AgentResponse;
@@ -37,9 +36,6 @@ public class RestClientService {
 			headers.set("Accept-Language", lang);
 			HttpEntity<AgentRequest> requestEntity = new HttpEntity<>(request, headers);
 			RestTemplate restTemplate = new RestTemplate();
-			int timeout = 10000; // For example, 10 seconds
-			restTemplate.getRestTemplate().getHttpClient().setConnectTimeout(timeout);
-			restTemplate.getRestTemplate().getHttpClient().setReadTimeout(timeout);
 			ResponseEntity<AgentResponse> responseEntity = restTemplate.postForEntity("http://41.33.183.2:4010/v1/ai_agent/agent_response",
 					requestEntity, AgentResponse.class);
 
@@ -48,7 +44,7 @@ public class RestClientService {
 
 			return responseEntity.getBody();
 		} catch (Exception e) {
-			throw ExceptionsHandlerService.handleException(e, "error_webserviceFailed");
+			throw e;
 		}
 	}
 

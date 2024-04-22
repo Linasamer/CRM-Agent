@@ -1,5 +1,8 @@
 package com.code.secretary.models.responses;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,72 +12,73 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionDetail {
 
-    @JsonProperty("TrxnRefNum")
-    private long transactionReferenceNumber;
-    @JsonProperty("AcctNum")
-    private long accountNumber;
+	@JsonProperty("TrxnRefNum")
+	private long transactionReferenceNumber;
 
-    @JsonProperty("TrxnID")
-    private long transactionId;
+	@JsonProperty("AcctNum")
+	private String accountNumber;
 
-    @JsonProperty("TrxnCode")
-    private int transactionCode;
+	@JsonProperty("TrxnID")
+	private long transactionId;
 
-    @JsonProperty("TrxnDateG")
-    private String transactionDateGregorian;
+	@JsonProperty("TrxnCode")
+	private int transactionCode;
 
-    @JsonProperty("TrxnDateH")
-    private String transactionDateHijri;
+	@JsonProperty("TrxnDateG")
+	private String transactionDateGregorian;
 
-    @JsonProperty("TrxnTime")
-    private String transactionTime;
+	@JsonProperty("TrxnDateH")
+	private String transactionDateHijri;
 
-    @JsonProperty("TrxnAmt")
-    private TransactionAmount transactionAmount;
-    @JsonProperty("AuthAmt")
-    private TransactionAmount authAmount;
-    @JsonProperty("SetlAmt")
-    private TransactionAmount setlAmount;
-    @JsonProperty("TrxnBalAmt")
-    private TransactionAmount transactionBalanceAmount;
+	@JsonProperty("TrxnTime")
+	private String transactionTime;
 
-    @JsonProperty("BillingAmt")
-    private TransactionAmount billingAmount;
+	@JsonProperty("TrxnAmt")
+	private TransactionAmount transactionAmount;
+	@JsonProperty("AuthAmt")
+	private TransactionAmount authAmount;
+	@JsonProperty("SetlAmt")
+	private TransactionAmount settlementAmount;
+	@JsonProperty("TrxnBalAmt")
+	private TransactionAmount transactionBalanceAmount;
 
-    @JsonProperty("TrxnDesc")
-    private String transactionDescription;
+	@JsonProperty("BillingAmt")
+	private TransactionAmount billingAmount;
 
-    @JsonProperty("TrxnChID")
-    private String transactionChannelId;
+	@JsonProperty("TrxnDesc")
+	private String transactionDescription;
 
-    @JsonProperty("MerchantName")
-    private String merchantName;
+	@JsonProperty("TrxnChID")
+	private String transactionChannelId;
 
-    @JsonProperty("MerchantCity")
-    private String merchantCity;
+	@JsonProperty("MerchantName")
+	private String merchantName;
 
+	@JsonProperty("MerchantCountry")
+	private String merchantCountry;
 
-    @JsonProperty("TrxnRemarks")
-    private String transactionRemarks;
+	@JsonProperty("TrxnRemarks")
+	private String transactionRemarks;
 
-    @JsonProperty("TrxnAuthStatus")
-    private String transactionAuthStatus;
-    @JsonProperty("AppliedExRate")
-    private int appliedExchangeRate;
+	@JsonProperty("TrxnAuthStatus")
+	private String transactionAuthStatus;
+	@JsonProperty("AppliedExRate")
+	private int appliedExchangeRate;
 
-    @JsonProperty("BeneficiaryDtls")
-    private BeneficiaryDetails beneficiaryDetails;
+	@JsonProperty("BeneficiaryDtls")
+	private BeneficiaryDetails beneficiaryDetails;
 
-    @JsonProperty("TrxnBranchCode")
-    private int transactionBranchCode;
+	@JsonProperty("TrxnBranchCode")
+	private int transactionBranchCode;
 
-    @JsonProperty("LoadDate")
-    private String LoadDate;
-    @JsonProperty("SetlDate")
-    private String seltDate;
-    @JsonProperty("BillDate")
-    private String billDate;
+	@JsonProperty("LoadDate")
+	private String loadDate;
+	@JsonProperty("SetlDate")
+	private String settlementDate;
+	@JsonProperty("BillDate")
+	private String billDate;
 
 }
