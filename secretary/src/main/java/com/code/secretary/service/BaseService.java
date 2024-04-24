@@ -1,22 +1,22 @@
-//package com.code.secretary.service;
+// package com.code.secretary.service;
 //
-//import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.beans.factory.annotation.Autowired;
 //
-//import com.code.secretary.entity.dto.setup.Employee;
-//import com.code.secretary.security.service.AuthenticationService;
+// import com.code.secretary.entity.dto.setup.Employee;
+// import com.code.secretary.security.service.AuthenticationService;
 //
-//public abstract class BaseService {
-//	private AuthenticationService authenticationService;
+// public abstract class BaseService {
+// private AuthenticationService authenticationService;
 //
-//	public BaseService() {
-//	}
+// public BaseService() {
+// }
 //
-//	@Autowired
-//	public void setAuthenticationService(AuthenticationService authenticationService) {
-//		this.authenticationService = authenticationService;
-//	}
+// @Autowired
+// public void setAuthenticationService(AuthenticationService authenticationService) {
+// this.authenticationService = authenticationService;
+// }
 //
-//	protected Employee getCurrentEmployee() {
-//		return this.authenticationService.getLoginEmployee();
-//	}
-//}
+// protected Employee getCurrentEmployee() {
+// return this.authenticationService.getLoginEmployee();
+// }
+// }

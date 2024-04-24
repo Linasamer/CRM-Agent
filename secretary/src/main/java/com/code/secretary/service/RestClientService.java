@@ -38,8 +38,8 @@ public class RestClientService {
 			HttpEntity<AgentRequest> requestEntity = new HttpEntity<>(request, headers);
 			RestTemplate restTemplate = new RestTemplate();
 			int timeout = 10000; // For example, 10 seconds
-			restTemplate.getRestTemplate().getHttpClient().setConnectTimeout(timeout);
-			restTemplate.getRestTemplate().getHttpClient().setReadTimeout(timeout);
+			// restTemplate.getRestTemplate().getHttpClient().setConnectTimeout(timeout);
+			// restTemplate.getRestTemplate().getHttpClient().setReadTimeout(timeout);
 			ResponseEntity<AgentResponse> responseEntity = restTemplate.postForEntity("http://41.33.183.2:4010/v1/ai_agent/agent_response",
 					requestEntity, AgentResponse.class);
 

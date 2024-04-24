@@ -2,11 +2,8 @@ package com.code.secretary.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
- 
 import org.springframework.stereotype.Component;
 
 import com.code.secretary.enums.FlagsEnum;
@@ -60,6 +57,5 @@ public class QueryUtilities {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return date == null ? null : dateTimeFormat.parse(dateFormat.format(date) + (fromDateFlag ? " 00:00:00" : " 23:59:59"));
 	}
- 
- 
+
 }

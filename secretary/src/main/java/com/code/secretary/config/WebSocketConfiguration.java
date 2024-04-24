@@ -19,9 +19,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry registry) {
-		// registry.enableSimpleBroker("/topic");
-		registry.enableSimpleBroker("/user");
+		registry.enableSimpleBroker("/topic");
 		registry.setApplicationDestinationPrefixes("/app");
-		// registry.setUserDestinationPrefix("/user"); // The Spring default value is "/user/".
 	}
 }
