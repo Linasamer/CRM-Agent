@@ -61,9 +61,11 @@
        </div>
       </div>
     </div>
-      
-   
   </div>
+
+<!-- second part -->
+
+
   <div id="infoPart" *ngIf="!startFlag">
     <div id="frame">
       <div class="contact-profile">
@@ -168,9 +170,52 @@
     </p-tabView>
     <div style="margin: auto;" *ngIf="userInfo">
       <p-button label="Start" (click)="onStartChat()"></p-button>
-    </div>
-    
-      
+    </div> 
     </div>
     </div>
   </div>
+
+
+  <!-- third part -->
+  <div id="main-content" class="container">
+
+    <!-- <div class="row">
+        <div class="col-md-12">
+           {{ greeting }}
+        </div>
+    </div> -->
+    
+  <div class="row">
+      <div class="col-md-6">
+          <form class="form-inline">
+              <div class="form-group">
+                  <label for="connect">WebSocket connection:</label>
+                  <button (click)="connect()" class="btn btn-default" type="submit">Connect</button>
+                  <button (click)="disconnect()" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+                  </button>
+              </div>
+          </form>
+      </div>
+      <div class="col-md-6">
+          <form class="form-inline">
+              <div class="form-group">
+                  <label for="name">What is your name?</label>
+                  <input type="text" [(ngModel)]="nameMessage" class="form-control" name="name"> <br>
+              </div>
+              <button (click)="sendMessage()" class="btn btn-default" type="submit">Send</button>
+          </form>
+      </div>
+
+      <p> {{greeting}} </p>
+      <audio controls autoplay>
+        <source [src]="greetingVoice">
+      </audio>
+
+      <div>
+        <button (click)="startStream()">Start Stream</button>
+        <audio #audioPlayer2 controls></audio>
+    </div>
+    
+  </div>
+ 
+</div>

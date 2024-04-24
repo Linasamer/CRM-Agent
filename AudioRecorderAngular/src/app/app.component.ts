@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { AudioRecordingService } from './audio-recording.service';
 import { AIEngineIntegrationService } from './AIEngineIntegration.service';
 import { CardTransactionRequest } from './model/card-transaction-request.model';
@@ -9,6 +9,9 @@ import { CustomerData } from './model/customer-data-request.model';
 import { CustomerDatalList } from './model/customer-data-list.model';
 import { Message } from './model/messages.model';
 import { ProfileData } from './model/profileDataModelResponse/profileData-response.model';
+import { WebSocketService } from './websocket.service';
+import { PushNotification } from "./model/push-notification.model";
+import { WebRTCService } from './webrtc.service';
 
 declare var webkitSpeechRecognition: any;
 
@@ -36,6 +39,10 @@ export class AppComponent implements OnInit {
   userInfo !: ProfileData;
   sessionId!: string;
 
+  greeting!: string;
+  nameMessage !:string;
+  greetingVoice !:String;
+
   bankImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb_HeXq0uLKUHF1Hyynl-zXTfBADq8RuPxzgAvnhhG0A&s"
   userImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQnO7QLbgqxCIswhJPOO0750lzSDeSD4k5L_2ahBU9ew&s"
   messages: Message[] = [];
@@ -45,13 +52,29 @@ export class AppComponent implements OnInit {
   cardTransactionRequest!: CardTransactionRequest;
 
 
-  constructor(private audioRecordingService: AudioRecordingService, private cd: ChangeDetectorRef,
-    private aiEngineIntegrationService: AIEngineIntegrationService) {
 
 
+  @ViewChild('audioPlayer2') audioPlayer2 !: any;
+
+  constructor(private webSocketAPI: WebSocketService,private audioRecordingService: AudioRecordingService,
+     private cd: ChangeDetectorRef, private aiEngineIntegrationService: AIEngineIntegrationService) {
   }
 
+  
+
   ngOnInit() {
+  this.webSocketAPI.getTitle().subscribe(value => {
+    this.greeting = value;
+  });
+  this.webSocketAPI.getAudio().subscribe(value => {
+    this.greetingVoice = value;
+    console.log("my greetingVoice", this.greetingVoice)
+  });
+
+//   this.webrtcService.onRemoteStream((stream) => {
+//     this.audioPlayer2.nativeElement.srcObject = stream;
+// });
+
     this.languages = [
       { name: 'English', code: 'en-US' },
       { name: 'Arabic', code: 'ar-EG' }
@@ -63,19 +86,21 @@ export class AppComponent implements OnInit {
       { CICNumber: '987654321' }
 
     ];
-    this.audioRecordingService.audioBlob$.subscribe(blob => {
-      this.audioURL = window.URL.createObjectURL(blob);
-      this.voiceBlob = this.audioURL;
-      this.audioPlayer.nativeElement.src = this.audioURL;
-      this.cd.detectChanges();
+      this.audioRecordingService.audioBlob$.subscribe(blob => {
+        this.audioURL = window.URL.createObjectURL(blob);
+        this.voiceBlob = this.audioURL;
+        this.audioPlayer.nativeElement.src = this.audioURL;
+        if(this.cd != null){
+          this.cd.detectChanges();
+        }
 
-    });
+      });
   }
 
   startRecording() {
     this.isRecording = true;
     this.audioMessage = true;
-    this.audioRecordingService.startRecording();
+      this.audioRecordingService.startRecording();
     if ('webkitSpeechRecognition' in window) {
       this.vSearch.continuous = true;
       this.vSearch.interimresults = false;
@@ -93,7 +118,7 @@ export class AppComponent implements OnInit {
 
   async stopRecording() {
     this.isRecording = false;
-   this.base46audio = await this.audioRecordingService.stopRecording();
+      this.base46audio = await this.audioRecordingService.stopRecording();
     if ('webkitSpeechRecognition' in window) {
       console.log(this.results);
 
@@ -107,15 +132,15 @@ export class AppComponent implements OnInit {
         this.messages.push({ type: 'user', content: '', voiceNote: true, voiceContent: this.voiceBlob })
         console.log("my base64: ", this.base46audio)
         const dataRequest = new DataRequestModel(this.base46audio, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
-        this.aiEngineIntegrationService.voiceToVoice(dataRequest).subscribe(
-          (response: DataResponseModel) => {
-            console.log(response);
-            this.base64toBlob(response.Base46, response.Text, 'application/x-www-form-urlencoded')
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+          this.aiEngineIntegrationService.voiceToVoice(dataRequest).subscribe(
+            (response: DataResponseModel) => {
+              console.log(response);
+              this.base64toBlob(response.Base46, response.Text, 'application/x-www-form-urlencoded')
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
         console.log(this.messages)
       } 
       this.audioMessage = false
@@ -130,28 +155,29 @@ export class AppComponent implements OnInit {
         console.log("my base64: ", this.base46audio)
         var result = '';
         const dataRequest = new DataRequestModel(this.base46audio, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
-        this.aiEngineIntegrationService.voiceToVoice(dataRequest).subscribe(
-          (response: DataResponseModel) => {
-            console.log(response);
-            this.base64toBlob(response.Base46, response.Text, 'application/x-www-form-urlencoded')
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+          this.aiEngineIntegrationService.voiceToVoice(dataRequest).subscribe(
+            (response: DataResponseModel) => {
+              console.log(response);
+              this.base64toBlob(response.Base46, response.Text, 'application/x-www-form-urlencoded')
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
+
         console.log(this.messages)
       } else {
         this.messages.push({ type: 'user', content: val, voiceNote: false, voiceContent: '' })
         const dataRequest = new DataRequestModel(val, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
-        this.aiEngineIntegrationService.textToText(dataRequest).subscribe(
-          (response: DataResponseModel) => {
-            console.log(response);
-            this.base64toBlob(response.Base46, response.Text, 'application/x-www-form-urlencoded')
-            },
-          (error) => {
-            console.log(error);
-          }
-        );
+          this.aiEngineIntegrationService.textToText(dataRequest).subscribe(
+            (response: DataResponseModel) => {
+              console.log(response);
+              this.base64toBlob(response.Base46, response.Text, 'application/x-www-form-urlencoded')
+              },
+            (error) => {
+              console.log(error);
+            }
+          );
 
       }
     }
@@ -198,20 +224,20 @@ export class AppComponent implements OnInit {
         (error) => {
           console.log(error);
         });
-
   }
+
   onStartChat(){
     this.startFlag=true;
     console.log('Selected Customer:', this.selectedCustomer);
     const dataRequest = new CustomerData(this.selectedCustomer.CICNumber,this.checkLanguage());
     this.aiEngineIntegrationService.getGreetingData(dataRequest).subscribe(
-      (response: DataResponseModel) => {
-        console.log(response);
-        this.sessionId = response.SessionId;
-        this.base64toBlob(response.Base46, response.Text , 'application/x-www-form-urlencoded' )
-      },
-      (error) => {
-        console.log(error);
+        (response: DataResponseModel) => {
+          console.log(response);
+          this.sessionId = response.SessionId;
+          this.base64toBlob(response.Base46, response.Text , 'application/x-www-form-urlencoded' )
+        },
+        (error) => {
+          console.log(error);
       });
   }
    
@@ -226,4 +252,32 @@ export class AppComponent implements OnInit {
   return lang
 
 }
+
+
+connect(){
+  this.webSocketAPI.connect();
+}
+
+disconnect(){
+  this.webSocketAPI.disconnect();
+}
+
+sendMessage(){
+  let pushMessage = new PushNotification();
+  pushMessage.message = this.nameMessage;
+  this.webSocketAPI.send(pushMessage);
+}
+
+handleMessage(message: any){
+  console.log("inside hndle:",message);
+}
+
+startStream(): void {
+  const roomName = '/topic/sending'; // Replace with your room name
+  // this.webrtcService.startStream(roomName);
+}
+
+
+
+
 }
