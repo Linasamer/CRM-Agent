@@ -63,20 +63,20 @@ public class CustomerService {
 				.custSinceDt("2018-03-26").idNumber("2449029186").idType("2").custStatus("ACTIVE").idIssueDate("1439-05-21").birthDate("1989-02-13")
 				.gender("M").build();
 
-		GreetingDataResponse secondCustomer = GreetingDataResponse.builder().cicNumber("123456789").firstNameEn("Ali").secondNameEn("Khaled")
-				.thirdNameEn("Samer").lastNameEn("ali").firstNameAr("علي").secondNameAr("خالد").thirdNameAr("سامر").lastNameAr("علي")
+		GreetingDataResponse secondCustomer = GreetingDataResponse.builder().cicNumber("123456789").firstNameEn("Walid").secondNameEn("Samer")
+				.thirdNameEn("Saied").lastNameEn("Youssef").firstNameAr("وليد").secondNameAr("سامر").thirdNameAr("سعيد").lastNameAr("يوسف")
 				.custSinceDt("2018-03-26").idNumber("2449029186").idType("2").custStatus("ACTIVE").idIssueDate("1439-05-21").birthDate("1989-02-13")
 				.gender("M").build();
 
-		GreetingDataResponse customer3 = GreetingDataResponse.builder().cicNumber("987654321").firstNameEn("Munira").secondNameEn("Khaled")
-				.thirdNameEn("Samer").lastNameEn("ali").firstNameAr("منيره").secondNameAr("خالد").thirdNameAr("سامر").lastNameAr("علي")
+		GreetingDataResponse customer3 = GreetingDataResponse.builder().cicNumber("987654321").firstNameEn("Munira").secondNameEn("Nassr")
+				.thirdNameEn("Fouad").lastNameEn("Hassanin").firstNameAr("منيره").secondNameAr("ناصر").thirdNameAr("فادء").lastNameAr("حسنين")
 				.custSinceDt("2018-03-26").idNumber("2449029186").idType("2").custStatus("ACTIVE").idIssueDate("1439-05-21").birthDate("1989-02-13")
-				.gender("M").build();
+				.gender("F").build();
 
-		GreetingDataResponse customer4 = GreetingDataResponse.builder().cicNumber("000022224444").firstNameEn("Omer").secondNameEn("Khaled")
-				.thirdNameEn("Samer").lastNameEn("ali").firstNameAr("عمر").secondNameAr("خالد").thirdNameAr("سامر").lastNameAr("علي")
+		GreetingDataResponse customer4 = GreetingDataResponse.builder().cicNumber("000022224444").firstNameEn("Sarah").secondNameEn("Mahmed")
+				.thirdNameEn("Ashraf").lastNameEn("Gaber").firstNameAr("ساره").secondNameAr("محمد").thirdNameAr("اشرف").lastNameAr("جابر")
 				.custSinceDt("2018-03-26").idNumber("2449029186").idType("2").custStatus("ACTIVE").idIssueDate("1439-05-21").birthDate("1989-02-13")
-				.gender("M").build();
+				.gender("F").build();
 
 		GREETING_DATA_RESPONSE_MAP.put(firstCustomer.getCicNumber(), firstCustomer);
 		GREETING_DATA_RESPONSE_MAP.put(secondCustomer.getCicNumber(), secondCustomer);
@@ -91,7 +91,14 @@ public class CustomerService {
 		MarketingMessage marketingMessage = MarketingMessage.builder().notificationId(1).notificationDate("2024-04-21").notificationType("ID Expiry")
 				.build();
 
-		RewardPoints rewardPoints = RewardPoints.builder().availableBalance(175).email("Ahmed.Saeed.Atya@gmail.com").expiredPoints(0).build();
+		RewardPoints rewardPoints = RewardPoints.builder().availableBalance(10).email("Ahmed.Saeed.Atya@gmail.com").expiredPoints(10).expiryPeriod(2)
+				.build();
+		RewardPoints rewardPoints1 = RewardPoints.builder().availableBalance(106).email("Wailed.Samer.Saied@gmail.com").expiredPoints(22)
+				.expiryPeriod(3).build();
+		RewardPoints rewardPoints2 = RewardPoints.builder().availableBalance(255).email("Sarah.Mohamed.Ashraf@gmail.com").expiredPoints(25)
+				.expiryPeriod(9).build();
+		RewardPoints rewardPoints3 = RewardPoints.builder().availableBalance(175).email("Munira.Nasser.Hussnin@gmail.com").expiredPoints(236)
+				.expiryPeriod(1).build();
 
 		CreditCard creditCard1 = CreditCard.builder().cardSeqNumber(123).cardNumber("4458271234560990").prodDesc("VISA VIRTUAL").build();
 		CreditCard creditCard2 = CreditCard.builder().cardSeqNumber(456).cardNumber("4458271234560991").prodDesc("VISA VIRTUAL").build();
@@ -131,17 +138,17 @@ public class CustomerService {
 		CUSTOMER_DATA_RESPONSE_MAP.put("000022224444",
 				CustomerDataResponse.builder().profileNumber("000022224444").accountsLst(accountsLstResponse2).creditCardLst(creditCardLst2)
 						.notificationsLst(Arrays.asList(notification)).marketingMsgssLst(Arrays.asList(marketingMessage))
-						.rewardPoints(Arrays.asList(rewardPoints)).build());
+						.rewardPoints(Arrays.asList(rewardPoints2)).build());
 
 		CUSTOMER_DATA_RESPONSE_MAP.put("123456789",
 				CustomerDataResponse.builder().profileNumber("123456789").accountsLst(accountsLstResponse3).creditCardLst(creditCardLst3)
 						.notificationsLst(Arrays.asList(notification)).marketingMsgssLst(Arrays.asList(marketingMessage))
-						.rewardPoints(Arrays.asList(rewardPoints)).build());
+						.rewardPoints(Arrays.asList(rewardPoints1)).build());
 
 		CUSTOMER_DATA_RESPONSE_MAP.put("987654321",
 				CustomerDataResponse.builder().profileNumber("987654321").accountsLst(accountsLstResponse4).creditCardLst(creditCardLst4)
 						.notificationsLst(Arrays.asList(notification)).marketingMsgssLst(Arrays.asList(marketingMessage))
-						.rewardPoints(Arrays.asList(rewardPoints)).build());
+						.rewardPoints(Arrays.asList(rewardPoints3)).build());
 
 		//////////////////////////////////////////////// Card Transaction Data Static Response///////////////////////////////////////////////////////\
 		List<TrxnLst> trxnLstList = new ArrayList<>();
@@ -153,7 +160,7 @@ public class CustomerService {
 				.billingAmount(TransactionAmount.builder().amount(-150).currency("SAR").build()).merchantName("ANNUAL FEE").merchantCountry("SAU")
 				.loadDate("2024-02-24").settlementAmount(TransactionAmount.builder().amount(-150).currency("SAR").build())
 				.transactionRemarks("ANNUAL FEE").settlementDate("2263-08-31").billDate("2024-02-24").build());
-		trxnLstList.add(TrxnLst.builder().availableBalance(1020.3).cicNumber("123456789").unclearedBalance(100.2)
+		trxnLstList.add(TrxnLst.builder().availableBalance(10020).cicNumber("123456789").unclearedBalance(100.2)
 				.transactionDetails(transactionDetails).build());
 
 		List<TrxnLst> trxnLstList1 = new ArrayList<>();
@@ -165,7 +172,7 @@ public class CustomerService {
 				.billingAmount(TransactionAmount.builder().amount(-75).currency("SAR").build()).merchantName("ONLINE STORE").merchantCountry("USA")
 				.loadDate("2024-03-01").settlementAmount(TransactionAmount.builder().amount(-75).currency("SAR").build())
 				.transactionRemarks("Online purchase").settlementDate("2024-03-02").billDate("2024-03-01").build());
-		trxnLstList1.add(TrxnLst.builder().availableBalance(1020.3).cicNumber("987654321").unclearedBalance(100.2)
+		trxnLstList1.add(TrxnLst.builder().availableBalance(52.3).cicNumber("987654321").unclearedBalance(100.2)
 				.transactionDetails(transactionDetails1).build());
 		List<TrxnLst> trxnLstList2 = new ArrayList<>();
 		List<TransactionDetail> transactionDetails2 = new ArrayList<>();
@@ -176,7 +183,7 @@ public class CustomerService {
 				.billingAmount(TransactionAmount.builder().amount(-200).currency("SAR").build()).merchantName("CASH WITHDRAWAL")
 				.merchantCountry("SAU").loadDate("2024-03-05").settlementAmount(TransactionAmount.builder().amount(-200).currency("SAR").build())
 				.transactionRemarks("ATM cash withdrawal").settlementDate("2024-03-05").billDate("2024-03-05").build());
-		trxnLstList2.add(TrxnLst.builder().availableBalance(1020.3).cicNumber("000022224444").unclearedBalance(100.2)
+		trxnLstList2.add(TrxnLst.builder().availableBalance(700.3).cicNumber("000022224444").unclearedBalance(100.2)
 				.transactionDetails(transactionDetails2).build());
 		List<TrxnLst> trxnLstList3 = new ArrayList<>();
 		List<TransactionDetail> transactionDetails3 = new ArrayList<>();
@@ -187,7 +194,7 @@ public class CustomerService {
 				.billingAmount(TransactionAmount.builder().amount(-50).currency("SAR").build()).merchantName("SUPERMARKET").merchantCountry("SAU")
 				.loadDate("2024-03-07").settlementAmount(TransactionAmount.builder().amount(-50).currency("SAR").build())
 				.transactionRemarks("Grocery purchase").settlementDate("2024-03-07").billDate("2024-03-07").build());
-		trxnLstList3.add(TrxnLst.builder().availableBalance(1020.3).cicNumber("0000000018707728").unclearedBalance(100.2)
+		trxnLstList3.add(TrxnLst.builder().availableBalance(500.3).cicNumber("0000000018707728").unclearedBalance(100.2)
 				.transactionDetails(transactionDetails3).build());
 		CARD_TRANSACTION_RESPONSE_MAP.put("123456789:789", CardTransactionResponse.builder().transactionList(trxnLstList).build());
 		CARD_TRANSACTION_RESPONSE_MAP.put("987654321:321", CardTransactionResponse.builder().transactionList(trxnLstList1).build());
@@ -290,14 +297,18 @@ public class CustomerService {
 	private static AccountResponse buildAccountResponse(String accountNumber, String customerCIC) {
 		GreetingDataResponse dataResponse = getGreetingDataResponse(customerCIC);
 		String[] accountTypes = { "Saving Account", "Current Account" };
+		Integer[] accountnumber = { 100, 700, 2000, 16820, 5000, 280, 900, 41 };
 		String randomAccountType = accountTypes[new Random().nextInt(accountTypes.length)];
 		return AccountResponse.builder().accountNumber(accountNumber)
-				.availableBalance(AvailableBalance.builder().amount(1.25).currency("SAR").build())
-				.ledgerBalance(LedgerBalance.builder().amount(1.25).currency("SAR").build()).showFlag("Y").iban("SA3580000126608114010589")
-				.accountStatus("ACTIVE").dailyLimit(DailyLimit.builder().amount(75000).currency("SAR").build())
+				.availableBalance(
+						AvailableBalance.builder().amount(accountnumber[new Random().nextInt(accountnumber.length)]).currency("SAR").build())
+				.ledgerBalance(LedgerBalance.builder().amount(accountnumber[new Random().nextInt(accountnumber.length)]).currency("SAR").build())
+				.showFlag("Y").iban("SA3580000126608114010589").accountStatus("ACTIVE")
+				.dailyLimit(DailyLimit.builder().amount(75000).currency("SAR").build())
 				.consumedDailyLimit(ConsumedDailyLimit.builder().amount(0).currency("SAR").build())
 				.remainingDailyLimit(RemainingDailyLimit.builder().amount(75000).currency("SAR").build())
-				.socialTrxnLimit(SocialTrxnLimit.builder().amount(200).currency("SAR").build()).favoriteFlg("N").acctIconFlg("0")
+				.socialTrxnLimit(SocialTrxnLimit.builder().amount(accountnumber[new Random().nextInt(accountnumber.length)]).currency("SAR").build())
+				.favoriteFlg("N").acctIconFlg("0")
 				.acctName(dataResponse.getFirstNameEn() + " " + dataResponse.getSecondNameEn() + " " + dataResponse.getThirdNameEn())
 				.acctOpeningDate("2022-08-01").acctType(randomAccountType).acctBranch("12600")
 				.acctSubcategory("0160 Hassad Digital account monthly profit  minimum balance in month").build();

@@ -1,9 +1,10 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { RestEndpoints } from './eunms/RestEndpoints';
 import { DataResponseModel } from './model/data-response.model';
 import { ProfileData } from './model/profileDataModelResponse/profileData-response.model';
+import { TransactionResponse } from './model/TransactionsResponse/TransactionResponse.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,11 @@ export class AIEngineIntegrationService  {
 
   constructor(private httpClient: HttpClient) {
   }
+
+  headers = new HttpHeaders({
+    'x-correlation-id': '123',
+    'Accept-Language': 'EN'
+  });
   
   voiceToVoice(body: any) {
     return this.httpClient.post<DataResponseModel>(RestEndpoints.POST_VOICE_TO_VOICE, body)
@@ -58,6 +64,29 @@ export class AIEngineIntegrationService  {
         })
       );
   }
+
+  getAccountTransactions(customerCic: any, accountNumber:any): Observable<TransactionResponse> {
+    return this.httpClient.get<TransactionResponse>(RestEndpoints.GET_ACCOUNT_TRANSACTIONS + '?CustomerCIC=' + customerCic +
+     '&AccountNumber=' + accountNumber, { headers: this.headers })
+      .pipe(
+        map((res: TransactionResponse) => res),
+        catchError(error => {
+          console.log(error);
+          return throwError(error);
+        })
+      );
   }
 
+  getCardTransactions(customerCic: any, cardSeq: any): Observable<TransactionResponse> {
+    return this.httpClient.get<TransactionResponse>(RestEndpoints.GET_CARD_TRANSACTIONS + '?CustomerCIC=' +
+     customerCic + '&CardSequence=' + cardSeq, { headers: this.headers })
+      .pipe(
+        map((res: TransactionResponse) => res),
+        catchError(error => {
+          console.log(error);
+          return throwError(error);
+        })
+      );
+  }
 
+  }

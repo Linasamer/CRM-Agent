@@ -9,6 +9,10 @@ import { CustomerData } from './model/customer-data-request.model';
 import { CustomerDatalList } from './model/customer-data-list.model';
 import { Message } from './model/messages.model';
 import { ProfileData } from './model/profileDataModelResponse/profileData-response.model';
+import { WebSocketService } from './Service/webSocketService.service';
+import { Subscription } from 'rxjs';
+import { TransactionResponse } from './model/TransactionsResponse/TransactionResponse.model';
+import { staticMap } from './model/static-map-object.model';
 
 declare var webkitSpeechRecognition: any;
 
@@ -35,6 +39,9 @@ export class AppComponent implements OnInit {
   startFlag:boolean = false;
   userInfo !: ProfileData;
   sessionId!: string;
+  accountTransaction !: TransactionResponse;
+  cardTransaction !: TransactionResponse;
+  staticMapData = new Map<string, staticMap>();
 
   bankImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb_HeXq0uLKUHF1Hyynl-zXTfBADq8RuPxzgAvnhhG0A&s"
   userImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQnO7QLbgqxCIswhJPOO0750lzSDeSD4k5L_2ahBU9ew&s"
@@ -43,10 +50,17 @@ export class AppComponent implements OnInit {
   @ViewChild('msgInput') messageInput!: ElementRef<HTMLInputElement>;
 
   cardTransactionRequest!: CardTransactionRequest;
+  isStreaming = false;
+  @ViewChild('audioPlayer2') audioPlayer2!: ElementRef<HTMLAudioElement>;
+  audioSubscription!: Subscription;
+
+
 
 
   constructor(private audioRecordingService: AudioRecordingService, private cd: ChangeDetectorRef,
-    private aiEngineIntegrationService: AIEngineIntegrationService) {
+    private aiEngineIntegrationService: AIEngineIntegrationService
+    , private webSocketService: WebSocketService
+  ) {
 
 
   }
@@ -70,6 +84,19 @@ export class AppComponent implements OnInit {
       this.cd.detectChanges();
 
     });
+
+    this.audioSubscription = this.webSocketService.audioStream.subscribe((audioChunk: Uint8Array) => {
+      // If there is audio data, play it
+      if (audioChunk) {
+        this.playAudioChunk(audioChunk);
+      }
+    });
+
+    this.staticMapData.set( '123456789', { accountNumber: '126000110006080000000', cardNumber: '789' })
+      this.staticMapData.set( '987654321', { accountNumber: '126000110006080000001', cardNumber: '321' })
+      this.staticMapData.set( '0000000018707728',{ accountNumber: '126000110006080000003', cardNumber: '728' })
+      this.staticMapData.set(  '000022224444' ,{ accountNumber: '126000110006080000002', cardNumber: '444' })
+   
   }
 
   startRecording() {
@@ -189,17 +216,32 @@ export class AppComponent implements OnInit {
   }
 
   onCustomerChange(event: any) {
-      this.aiEngineIntegrationService.getCustomerData(this.selectedCustomer.CICNumber).subscribe(
-        (response: ProfileData) => {
-          console.log(response);
-          this.userInfo = response;
-          console.log("my infooo", this.userInfo)
-        },
-        (error) => {
-          console.log(error);
-        });
+    this.aiEngineIntegrationService.getCustomerData(this.selectedCustomer.CICNumber).subscribe(
+      (response: ProfileData) => {
+        console.log(response);
+        this.userInfo = response;
+        console.log("my infooo", this.userInfo)
 
-  }
+        this.aiEngineIntegrationService.getAccountTransactions(this.selectedCustomer.CICNumber,
+          this.staticMapData.get(this.selectedCustomer.CICNumber)?.accountNumber).subscribe(
+            (accTranx: TransactionResponse) => {
+              // console.log("acouuuuuunt", accTranx)
+              this.accountTransaction = accTranx
+            }
+           )
+
+           this.aiEngineIntegrationService.getCardTransactions(this.selectedCustomer.CICNumber,
+            this.staticMapData.get(this.selectedCustomer.CICNumber)?.cardNumber).subscribe(
+             (cardTranx: TransactionResponse) => {
+              // console.log("carrrrrrrrd", cardTranx)
+               this.cardTransaction = cardTranx
+             }
+            )
+      },
+      (error) => {
+        console.log(error);
+      });
+}
   onStartChat(){
     this.startFlag=true;
     console.log('Selected Customer:', this.selectedCustomer);
@@ -226,4 +268,36 @@ export class AppComponent implements OnInit {
   return lang
 
 }
+startStream(): void {
+  this.webSocketService.connect();
+  this.isStreaming = true;
+}
+
+// Method to stop the audio stream
+stopStream(): void {
+  this.webSocketService.disconnect();
+  this.isStreaming = false;
+}
+
+
+
+sendMessage(){
+  this.webSocketService.sendMessage();
+
+}
+
+playAudioChunk(audioChunk: Uint8Array): void {
+  this.webSocketService.audioContext.decodeAudioData(audioChunk.buffer).then((audioBuffer) => {
+    const source = this.webSocketService.audioContext.createBufferSource();
+    source.buffer = audioBuffer;
+
+    source.connect(this.webSocketService.audioContext.destination);
+
+    source.start();
+  }).catch((error) => {
+    console.error('Error decoding audio data:', error);
+  });
+}
+
+
 }

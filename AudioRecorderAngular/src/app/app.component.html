@@ -66,6 +66,16 @@
   </div>
   <div id="infoPart" *ngIf="!startFlag">
     <div id="frame">
+      <!-- <div>
+        <h1>Audio Stream</h1>
+        <p>The audio stream will start or stop when you press the button.</p>
+        <button (click)="isStreaming ? stopStream() : startStream()">
+          {{ isStreaming ? 'Stop Stream' : 'Start Stream' }}
+        </button>
+        <audio #audioPlayer2 controls></audio>
+
+        <button (click)="sendMessage()" class="btn btn-default" type="submit">Send</button>
+      </div> -->
       <div class="contact-profile">
         <img [src]="bankImage" alt="bankLogo" />
         <p>alrajhi bank</p>
@@ -136,7 +146,7 @@
                     <label><span style="font-weight: bold;">Account Type: </span> 
                       <span>{{account.AcctType}}</span></label>
                     </li>
-                      <hr *ngIf="userInfo.AccountsLst.Accounts.length > 1"  size="8" width="90%" color="black">  
+                      <hr *ngIf="userInfo.AccountsLst.Accounts.length > 1"   size="4" width="90%" color="blue">  
                   </ul>
               </div> 
             </p-scrollPanel>
@@ -165,6 +175,79 @@
               </ul>
           </div>
         </p-tabPanel>
+        <p-tabPanel header="Header IV">
+          <ng-template pTemplate="header">
+            <i class="fa-solid fa-award"></i>
+              <span>Rewords Points</span>
+              <i class="pi pi-cog"></i>
+          </ng-template>
+          <div class="surface-section">
+            <ul class="list-none p-0 m-0">
+              <li>
+                <label><span style="font-weight: bold;">Available Balance: </span>
+                  <span>{{userInfo.RewardPoints[0].AvailableBalance}}</span></label>
+              </li>
+              <li>
+                <label><span style="font-weight: bold;">Expired Points: </span>
+                  <span>{{userInfo.RewardPoints[0].ExpiredPoints}}</span></label>
+              </li>
+              <li>
+                <label><span style="font-weight: bold;">Expiry Period: </span>
+                  <span>{{userInfo.RewardPoints[0].ExpiryPeriod}}</span></label>
+              </li>
+            </ul>
+        </div>
+      </p-tabPanel>
+      <p-tabPanel header="Header V">
+        <ng-template pTemplate="header">
+          <i class="fa-solid fa-money-bill-transfer"></i>
+            <span>Transactions</span>
+            <i class="pi pi-cog"></i>
+        </ng-template>
+        <div class="surface-section">
+          <label style="font-weight: bold;">Account Transaction:</label>
+          <ul class="list-none p-0 m-0">
+            <li>
+              <label><span style="font-weight: bold;">Account Number: </span>
+                <span>{{accountTransaction.TrxnsLst[0].TrxnDtls[0].AcctNum}}</span></label>
+            </li>
+            <li>
+              <label><span style="font-weight: bold;">Bill Amount: </span>
+                <span>{{accountTransaction.TrxnsLst[0].TrxnDtls[0].TrxnBalAmt.Amount}}
+                  {{accountTransaction.TrxnsLst[0].TrxnDtls[0].TrxnBalAmt.Currency}}</span></label>
+            </li>
+            <li>
+              <label><span style="font-weight: bold;">Transaction Date: </span>
+                <span>{{accountTransaction.TrxnsLst[0].TrxnDtls[0].TrxnDateG}}</span></label>
+            </li>
+            <li>
+              <label><span style="font-weight: bold;">Uncleared Balance: </span>
+                <span>{{accountTransaction.TrxnsLst[0].UnclearedBal}}</span></label>
+            </li>
+          </ul>
+          <hr  size="4" width="90%" color="blue">
+          <label style="font-weight: bold;">Card Transactions:</label>
+          <ul>
+            <li>
+              <label><span style="font-weight: bold;">Transaction Ref Number: </span>
+                <span>{{cardTransaction.TrxnsLst[0].TrxnDtls[0].TrxnRefNum}}</span></label>
+            </li>
+            <li>
+              <label><span style="font-weight: bold;">Bill Amount: </span>
+                <span>{{cardTransaction.TrxnsLst[0].TrxnDtls[0].BillingAmt.Amount}}
+                  {{cardTransaction.TrxnsLst[0].TrxnDtls[0].BillingAmt.Currency}}</span></label>
+            </li>
+            <li>
+              <label><span style="font-weight: bold;">Transaction Date: </span>
+                <span>{{cardTransaction.TrxnsLst[0].TrxnDtls[0].TrxnDateG}}</span></label>
+            </li>
+            <li>
+              <label><span style="font-weight: bold;">Uncleared Balance: </span>
+                <span>{{cardTransaction.TrxnsLst[0].UnclearedBal}}</span></label>
+            </li>
+          </ul>
+      </div>
+    </p-tabPanel>
     </p-tabView>
     <div style="margin: auto;" *ngIf="userInfo">
       <p-button label="Start" (click)="onStartChat()"></p-button>

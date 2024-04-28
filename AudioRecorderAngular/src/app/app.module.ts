@@ -11,6 +11,8 @@ import { TabViewModule } from 'primeng/tabview';
 import { ChipModule } from 'primeng/chip';
 import { ButtonModule } from 'primeng/button';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { AudioRecordingService } from './audio-recording.service';
+import { WebSocketService } from './Service/webSocketService.service';
 
 
 
@@ -31,7 +33,8 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
     ButtonModule,
     ScrollPanelModule
   ],
-  providers: [AIEngineIntegrationService   ],
+  providers: [AIEngineIntegrationService , AudioRecordingService, WebSocketService],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }
