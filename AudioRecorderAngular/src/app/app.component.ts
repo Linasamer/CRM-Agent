@@ -92,10 +92,10 @@ export class AppComponent implements OnInit {
       }
     });
 
-    this.staticMapData.set( '123456789', { accountNumber: '126000110006080000000', cardNumber: '789' })
-      this.staticMapData.set( '987654321', { accountNumber: '126000110006080000001', cardNumber: '321' })
-      this.staticMapData.set( '0000000018707728',{ accountNumber: '126000110006080000003', cardNumber: '728' })
-      this.staticMapData.set(  '000022224444' ,{ accountNumber: '126000110006080000002', cardNumber: '444' })
+    this.staticMapData.set( '123456789', { accountNumber: '126000110006080000000', cardNumber: '2321' })
+      this.staticMapData.set( '987654321', { accountNumber: '126000110006080000001', cardNumber: '2789' })
+      this.staticMapData.set( '0000000018707728',{ accountNumber: '126000110006080000003', cardNumber: '2728' })
+      this.staticMapData.set(  '000022224444' ,{ accountNumber: '126000110006080000002', cardNumber: '2444' })
    
   }
 
@@ -225,7 +225,7 @@ export class AppComponent implements OnInit {
         this.aiEngineIntegrationService.getAccountTransactions(this.selectedCustomer.CICNumber,
           this.staticMapData.get(this.selectedCustomer.CICNumber)?.accountNumber).subscribe(
             (accTranx: TransactionResponse) => {
-              // console.log("acouuuuuunt", accTranx)
+              console.log("acouuuuuunt", accTranx)
               this.accountTransaction = accTranx
             }
            )
@@ -233,7 +233,7 @@ export class AppComponent implements OnInit {
            this.aiEngineIntegrationService.getCardTransactions(this.selectedCustomer.CICNumber,
             this.staticMapData.get(this.selectedCustomer.CICNumber)?.cardNumber).subscribe(
              (cardTranx: TransactionResponse) => {
-              // console.log("carrrrrrrrd", cardTranx)
+              console.log("carrrrrrrrd", cardTranx)
                this.cardTransaction = cardTranx
              }
             )

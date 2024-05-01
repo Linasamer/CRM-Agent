@@ -1,6 +1,4 @@
-package com.code.secretary.models.responses;
-
-import java.util.List;
+package com.code.secretary.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -13,8 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountTransactionResponse {
+public class AudioChunksResponse {
 
-	@JsonProperty("TrxnsLst")
-	private List<TrxnLst> trxnLstList;
+	@JsonProperty("Chunk")
+	private byte[] chunk;
+
 }

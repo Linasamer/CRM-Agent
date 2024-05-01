@@ -111,10 +111,10 @@ public class CustomerService {
 
 		TotalBal totalBal = TotalBal.builder().amount(1961.06).currency("SAR").build();
 
-		AccountResponse accountResponse = buildAccountResponse("126000110006080000000", "0000000018707728");
-		AccountResponse accountResponse2 = buildAccountResponse("126000110006080000001", "000022224444");
-		AccountResponse accountResponse3 = buildAccountResponse("126000110006080000002", "123456789");
-		AccountResponse accountResponse4 = buildAccountResponse("126000110006080000003", "987654321");
+		AccountResponse accountResponse = buildAccountResponse("126000110006080000000", "0000000018707728", "484783******2728");
+		AccountResponse accountResponse2 = buildAccountResponse("126000110006080000001", "000022224444", "484783******2444");
+		AccountResponse accountResponse3 = buildAccountResponse("126000110006080000002", "123456789", "484783******2321");
+		AccountResponse accountResponse4 = buildAccountResponse("126000110006080000003", "987654321", "484783******2789");
 
 		AccountsLstResponse accountsLstResponse = AccountsLstResponse.builder().Accounts(Arrays.asList(accountResponse))
 				.recPgCtrlOut(recPgCtrlOutResponse).totalBal(totalBal).build();
@@ -196,10 +196,10 @@ public class CustomerService {
 				.transactionRemarks("Grocery purchase").settlementDate("2024-03-07").billDate("2024-03-07").build());
 		trxnLstList3.add(TrxnLst.builder().availableBalance(500.3).cicNumber("0000000018707728").unclearedBalance(100.2)
 				.transactionDetails(transactionDetails3).build());
-		CARD_TRANSACTION_RESPONSE_MAP.put("123456789:789", CardTransactionResponse.builder().transactionList(trxnLstList).build());
-		CARD_TRANSACTION_RESPONSE_MAP.put("987654321:321", CardTransactionResponse.builder().transactionList(trxnLstList1).build());
-		CARD_TRANSACTION_RESPONSE_MAP.put("000022224444:444", CardTransactionResponse.builder().transactionList(trxnLstList2).build());
-		CARD_TRANSACTION_RESPONSE_MAP.put("0000000018707728:728", CardTransactionResponse.builder().transactionList(trxnLstList3).build());
+		CARD_TRANSACTION_RESPONSE_MAP.put("123456789:2321", CardTransactionResponse.builder().transactionList(trxnLstList).build());
+		CARD_TRANSACTION_RESPONSE_MAP.put("987654321:2789", CardTransactionResponse.builder().transactionList(trxnLstList1).build());
+		CARD_TRANSACTION_RESPONSE_MAP.put("000022224444:2444", CardTransactionResponse.builder().transactionList(trxnLstList2).build());
+		CARD_TRANSACTION_RESPONSE_MAP.put("0000000018707728:2728", CardTransactionResponse.builder().transactionList(trxnLstList3).build());
 
 		//////////////////////////////////////////////// Account Transaction Data Static Response///////////////////////////////////////////////////////
 
@@ -294,7 +294,7 @@ public class CustomerService {
 		return ACCOUNT_TRANSACTION_RESPONSE_MAP.get(customerCIC + ":" + accountNumber);
 	}
 
-	private static AccountResponse buildAccountResponse(String accountNumber, String customerCIC) {
+	private static AccountResponse buildAccountResponse(String accountNumber, String customerCIC, String atmCardNum) {
 		GreetingDataResponse dataResponse = getGreetingDataResponse(customerCIC);
 		String[] accountTypes = { "Saving Account", "Current Account" };
 		Integer[] accountnumber = { 100, 700, 2000, 16820, 5000, 280, 900, 41 };
@@ -303,7 +303,7 @@ public class CustomerService {
 				.availableBalance(
 						AvailableBalance.builder().amount(accountnumber[new Random().nextInt(accountnumber.length)]).currency("SAR").build())
 				.ledgerBalance(LedgerBalance.builder().amount(accountnumber[new Random().nextInt(accountnumber.length)]).currency("SAR").build())
-				.showFlag("Y").iban("SA3580000126608114010589").accountStatus("ACTIVE")
+				.showFlag("Y").iban("SA3580000126608114010589").accountStatus("ACTIVE").atmCardNum(atmCardNum)
 				.dailyLimit(DailyLimit.builder().amount(75000).currency("SAR").build())
 				.consumedDailyLimit(ConsumedDailyLimit.builder().amount(0).currency("SAR").build())
 				.remainingDailyLimit(RemainingDailyLimit.builder().amount(75000).currency("SAR").build())

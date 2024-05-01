@@ -87,7 +87,7 @@
       </div>
     <div class="card flex justify-content-center" id="welcome">
       <div class="cardHeader"><h1>WELCOME TO OUR SMART CHAT</h1></div>
-      <div class="cardTitle"><p>try to inisiate a call</p></div>
+      <div class="cardTitle"><p>try to initiate a call</p></div>
       <div class="cardSelection">
         <div>
           <label>select a customer:</label>
@@ -145,6 +145,10 @@
                   <li>
                     <label><span style="font-weight: bold;">Account Type: </span> 
                       <span>{{account.AcctType}}</span></label>
+                    </li>
+                    <li>
+                      <label><span style="font-weight: bold;">ATM Card Number: </span> 
+                        <span>{{account.ATMCardNum}}</span></label>
                     </li>
                       <hr *ngIf="userInfo.AccountsLst.Accounts.length > 1"   size="4" width="90%" color="blue">  
                   </ul>
