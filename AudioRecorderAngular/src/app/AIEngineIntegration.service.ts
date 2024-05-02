@@ -5,6 +5,7 @@ import { RestEndpoints } from './eunms/RestEndpoints';
 import { DataResponseModel } from './model/data-response.model';
 import { ProfileData } from './model/profileDataModelResponse/profileData-response.model';
 import { TransactionResponse } from './model/TransactionsResponse/TransactionResponse.model';
+import { AccountTransactionResponse } from './model/TransactionsResponse/AccountTransactionResponse.model';
 
 @Injectable({
   providedIn: 'root'
@@ -65,11 +66,11 @@ export class AIEngineIntegrationService  {
       );
   }
 
-  getAccountTransactions(customerCic: any, accountNumber:any): Observable<TransactionResponse> {
-    return this.httpClient.get<TransactionResponse>(RestEndpoints.GET_ACCOUNT_TRANSACTIONS + '?CustomerCIC=' + customerCic +
+  getAccountTransactions(customerCic: any, accountNumber:any): Observable<AccountTransactionResponse> {
+    return this.httpClient.get<AccountTransactionResponse>(RestEndpoints.GET_ACCOUNT_TRANSACTIONS + '?CustomerCIC=' + customerCic +
      '&AccountNumber=' + accountNumber, { headers: this.headers })
       .pipe(
-        map((res: TransactionResponse) => res),
+        map((res: AccountTransactionResponse) => res),
         catchError(error => {
           console.log(error);
           return throwError(error);

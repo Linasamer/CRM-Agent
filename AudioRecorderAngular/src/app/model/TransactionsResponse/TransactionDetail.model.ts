@@ -9,6 +9,8 @@ export interface TransactionDetail {
   TrxnCode: number;
   TrxnDateG: string;
   TrxnDateH: string;
+  TrxnDateHG: string;
+  TrxnDate: string;
   TrxnTime: string;
   TrxnAmt: TransactionAmount;
   AuthAmt: TransactionAmount;
@@ -17,8 +19,9 @@ export interface TransactionDetail {
   BillingAmt: TransactionAmount;
   TrxnDesc: string;
   TrxnChID: string;
+  ChID: string;
   MerchantName: string;
-  MerchantCountry: string;
+  MerchantCtry: string;
   TrxnRemarks: string;
   TrxnAuthStatus: string;
   AppliedExRate: number;

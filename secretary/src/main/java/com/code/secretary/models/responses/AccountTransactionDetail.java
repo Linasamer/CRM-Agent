@@ -13,15 +13,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TransactionDetail {
+public class AccountTransactionDetail {
 
-	@JsonProperty("TrxnRefNum")
-	private long transactionReferenceNumber;
+	@JsonProperty("AcctNum")
+	private String accountNumber;
 
-	@JsonProperty("TrxnDate")
+	@JsonProperty("TrxnID")
+	private long transactionId;
+
+	@JsonProperty("TrxnCode")
+	private int transactionCode;
+
+	@JsonProperty("TrxnDateG")
 	private String transactionDateGregorian;
 
-	@JsonProperty("TrxnDateHG")
+	@JsonProperty("TrxnDateH")
 	private String transactionDateHijri;
 
 	@JsonProperty("TrxnTime")
@@ -42,13 +48,13 @@ public class TransactionDetail {
 	@JsonProperty("TrxnDesc")
 	private String transactionDescription;
 
-	@JsonProperty("ChID")
+	@JsonProperty("TrxnChID")
 	private String transactionChannelId;
 
 	@JsonProperty("MerchantName")
 	private String merchantName;
 
-	@JsonProperty("MerchantCtry")
+	@JsonProperty("MerchantCountry")
 	private String merchantCountry;
 
 	@JsonProperty("TrxnRemarks")
@@ -56,9 +62,14 @@ public class TransactionDetail {
 
 	@JsonProperty("TrxnAuthStatus")
 	private String transactionAuthStatus;
+	@JsonProperty("AppliedExRate")
+	private int appliedExchangeRate;
 
 	@JsonProperty("BeneficiaryDtls")
 	private BeneficiaryDetails beneficiaryDetails;
+
+	@JsonProperty("TrxnBranchCode")
+	private int transactionBranchCode;
 
 	@JsonProperty("LoadDate")
 	private String loadDate;

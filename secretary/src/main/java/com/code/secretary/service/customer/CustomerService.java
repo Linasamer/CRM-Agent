@@ -17,7 +17,9 @@ import com.code.secretary.models.requests.CardTransactionRequest;
 import com.code.secretary.models.requests.DataRequest;
 import com.code.secretary.models.requests.GreetingDataRequest;
 import com.code.secretary.models.responses.AccountResponse;
+import com.code.secretary.models.responses.AccountTransactionDetail;
 import com.code.secretary.models.responses.AccountTransactionResponse;
+import com.code.secretary.models.responses.AccountTrxnLst;
 import com.code.secretary.models.responses.AccountsLstResponse;
 import com.code.secretary.models.responses.AgentResponse;
 import com.code.secretary.models.responses.AvailableBalance;
@@ -111,10 +113,10 @@ public class CustomerService {
 
 		TotalBal totalBal = TotalBal.builder().amount(1961.06).currency("SAR").build();
 
-		AccountResponse accountResponse = buildAccountResponse("126000110006080000000", "0000000018707728", "484783******2728");
-		AccountResponse accountResponse2 = buildAccountResponse("126000110006080000001", "000022224444", "484783******2444");
-		AccountResponse accountResponse3 = buildAccountResponse("126000110006080000002", "123456789", "484783******2321");
-		AccountResponse accountResponse4 = buildAccountResponse("126000110006080000003", "987654321", "484783******2789");
+		AccountResponse accountResponse = buildAccountResponse("126000110006080000331", "0000000018707728", "484783******2728");
+		AccountResponse accountResponse2 = buildAccountResponse("126000110006080008552", "000022224444", "484783******2444");
+		AccountResponse accountResponse3 = buildAccountResponse("126000110006080006423", "123456789", "484783******2321");
+		AccountResponse accountResponse4 = buildAccountResponse("126000110006080009937", "987654321", "484783******2789");
 
 		AccountsLstResponse accountsLstResponse = AccountsLstResponse.builder().Accounts(Arrays.asList(accountResponse))
 				.recPgCtrlOut(recPgCtrlOutResponse).totalBal(totalBal).build();
@@ -151,7 +153,7 @@ public class CustomerService {
 						.rewardPoints(Arrays.asList(rewardPoints3)).build());
 
 		//////////////////////////////////////////////// Card Transaction Data Static Response///////////////////////////////////////////////////////\
-		List<TrxnLst> trxnLstList = new ArrayList<>();
+		TrxnLst trxnLstList = new TrxnLst();
 		List<TransactionDetail> transactionDetails = new ArrayList<>();
 		transactionDetails.add(TransactionDetail.builder().transactionReferenceNumber(920547953L)
 				.transactionAmount(TransactionAmount.builder().amount(-150).currency("SAR").build()).transactionDateGregorian("2024-02-24")
@@ -160,10 +162,9 @@ public class CustomerService {
 				.billingAmount(TransactionAmount.builder().amount(-150).currency("SAR").build()).merchantName("ANNUAL FEE").merchantCountry("SAU")
 				.loadDate("2024-02-24").settlementAmount(TransactionAmount.builder().amount(-150).currency("SAR").build())
 				.transactionRemarks("ANNUAL FEE").settlementDate("2263-08-31").billDate("2024-02-24").build());
-		trxnLstList.add(TrxnLst.builder().availableBalance(10020).cicNumber("123456789").unclearedBalance(100.2)
-				.transactionDetails(transactionDetails).build());
+		trxnLstList = TrxnLst.builder().transactionDetails(transactionDetails).build();
 
-		List<TrxnLst> trxnLstList1 = new ArrayList<>();
+		TrxnLst trxnLstList1 = new TrxnLst();
 		List<TransactionDetail> transactionDetails1 = new ArrayList<>();
 		transactionDetails1.add(TransactionDetail.builder().transactionReferenceNumber(920547954L)
 				.transactionAmount(TransactionAmount.builder().amount(-75).currency("SAR").build()).transactionDateGregorian("2024-03-01")
@@ -172,9 +173,8 @@ public class CustomerService {
 				.billingAmount(TransactionAmount.builder().amount(-75).currency("SAR").build()).merchantName("ONLINE STORE").merchantCountry("USA")
 				.loadDate("2024-03-01").settlementAmount(TransactionAmount.builder().amount(-75).currency("SAR").build())
 				.transactionRemarks("Online purchase").settlementDate("2024-03-02").billDate("2024-03-01").build());
-		trxnLstList1.add(TrxnLst.builder().availableBalance(52.3).cicNumber("987654321").unclearedBalance(100.2)
-				.transactionDetails(transactionDetails1).build());
-		List<TrxnLst> trxnLstList2 = new ArrayList<>();
+		trxnLstList1 = TrxnLst.builder().transactionDetails(transactionDetails1).build();
+		TrxnLst trxnLstList2 = new TrxnLst();
 		List<TransactionDetail> transactionDetails2 = new ArrayList<>();
 		transactionDetails2.add(TransactionDetail.builder().transactionReferenceNumber(920547955L)
 				.transactionAmount(TransactionAmount.builder().amount(-200).currency("SAR").build()).transactionDateGregorian("2024-03-05")
@@ -183,9 +183,8 @@ public class CustomerService {
 				.billingAmount(TransactionAmount.builder().amount(-200).currency("SAR").build()).merchantName("CASH WITHDRAWAL")
 				.merchantCountry("SAU").loadDate("2024-03-05").settlementAmount(TransactionAmount.builder().amount(-200).currency("SAR").build())
 				.transactionRemarks("ATM cash withdrawal").settlementDate("2024-03-05").billDate("2024-03-05").build());
-		trxnLstList2.add(TrxnLst.builder().availableBalance(700.3).cicNumber("000022224444").unclearedBalance(100.2)
-				.transactionDetails(transactionDetails2).build());
-		List<TrxnLst> trxnLstList3 = new ArrayList<>();
+		trxnLstList2 = TrxnLst.builder().transactionDetails(transactionDetails2).build();
+		TrxnLst trxnLstList3 = new TrxnLst();
 		List<TransactionDetail> transactionDetails3 = new ArrayList<>();
 		transactionDetails3.add(TransactionDetail.builder().transactionReferenceNumber(920547956L)
 				.transactionAmount(TransactionAmount.builder().amount(-50).currency("SAR").build()).transactionDateGregorian("2024-03-07")
@@ -194,8 +193,7 @@ public class CustomerService {
 				.billingAmount(TransactionAmount.builder().amount(-50).currency("SAR").build()).merchantName("SUPERMARKET").merchantCountry("SAU")
 				.loadDate("2024-03-07").settlementAmount(TransactionAmount.builder().amount(-50).currency("SAR").build())
 				.transactionRemarks("Grocery purchase").settlementDate("2024-03-07").billDate("2024-03-07").build());
-		trxnLstList3.add(TrxnLst.builder().availableBalance(500.3).cicNumber("0000000018707728").unclearedBalance(100.2)
-				.transactionDetails(transactionDetails3).build());
+		trxnLstList3 = TrxnLst.builder().transactionDetails(transactionDetails3).build();
 		CARD_TRANSACTION_RESPONSE_MAP.put("123456789:2321", CardTransactionResponse.builder().transactionList(trxnLstList).build());
 		CARD_TRANSACTION_RESPONSE_MAP.put("987654321:2789", CardTransactionResponse.builder().transactionList(trxnLstList1).build());
 		CARD_TRANSACTION_RESPONSE_MAP.put("000022224444:2444", CardTransactionResponse.builder().transactionList(trxnLstList2).build());
@@ -203,8 +201,8 @@ public class CustomerService {
 
 		//////////////////////////////////////////////// Account Transaction Data Static Response///////////////////////////////////////////////////////
 
-		List<TransactionDetail> accountTransactionDetails1 = new ArrayList<>();
-		accountTransactionDetails1.add(TransactionDetail.builder().accountNumber("126000110006080000000").transactionId(9000001).transactionCode(562)
+		List<AccountTransactionDetail> accountTransactionDetails1 = new ArrayList<>();
+		accountTransactionDetails1.add(AccountTransactionDetail.builder().accountNumber("126000110006080000331").transactionId(9000001).transactionCode(562)
 				.transactionDateGregorian("2024-03-15").transactionDateHijri("1445-09-05").transactionTime("11:46:41")
 				.transactionAmount(TransactionAmount.builder().amount(-1000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(1000.58).currency("SAR").build()).transactionDescription("تحويل")
@@ -213,17 +211,17 @@ public class CustomerService {
 						.beneficiaryAmount(BeneficiaryAmount.builder().amount(1000).currency("SAR").build()).build())
 				.transactionBranchCode(12600).build());
 
-		TrxnLst accTrxnLst1 = TrxnLst.builder().availableBalance(1020.3).cicNumber("123456789").unclearedBalance(100.2)
+		AccountTrxnLst accTrxnLst1 = AccountTrxnLst.builder().availableBalance(1020.3).cicNumber("123456789").unclearedBalance(100.2)
 				.transactionDetails(accountTransactionDetails1).build();
 
-		ACCOUNT_TRANSACTION_RESPONSE_MAP.put("123456789:126000110006080000000",
-				AccountTransactionResponse.builder().trxnLstList(Arrays.asList(accTrxnLst1)).build());
+		ACCOUNT_TRANSACTION_RESPONSE_MAP.put("123456789:126000110006080006423",
+				AccountTransactionResponse.builder().trxnLstList(accTrxnLst1).build());
 
 		// Additional Transactions
 		// You can add additional transactions in a similar manner
 
-		List<TransactionDetail> accTransactionDetails2 = new ArrayList<>();
-		accTransactionDetails2.add(TransactionDetail.builder().accountNumber("126000110006080000001").transactionId(9000002).transactionCode(563)
+		List<AccountTransactionDetail> accTransactionDetails2 = new ArrayList<>();
+		accTransactionDetails2.add(AccountTransactionDetail.builder().accountNumber("126000110006080008552").transactionId(9000002).transactionCode(563)
 				.transactionDateGregorian("2024-03-11").transactionDateHijri("1445-09-01").transactionTime("17:33:09")
 				.transactionAmount(TransactionAmount.builder().amount(-1000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(2000.58).currency("SAR").build()).transactionDescription("تحويل")
@@ -233,14 +231,14 @@ public class CustomerService {
 								.beneficiaryAmount(BeneficiaryAmount.builder().amount(1000).currency("SAR").build()).build())
 				.transactionBranchCode(12600).build());
 
-		TrxnLst accTrxnLst2 = TrxnLst.builder().availableBalance(1020.3).cicNumber("987654321").unclearedBalance(100.2)
+		AccountTrxnLst accTrxnLst2 = AccountTrxnLst.builder().availableBalance(1020.3).cicNumber("987654321").unclearedBalance(100.2)
 				.transactionDetails(accTransactionDetails2).build();
 
-		ACCOUNT_TRANSACTION_RESPONSE_MAP.put("987654321:126000110006080000001",
-				AccountTransactionResponse.builder().trxnLstList(Arrays.asList(accTrxnLst2)).build());
+		ACCOUNT_TRANSACTION_RESPONSE_MAP.put("987654321:126000110006080009937",
+				AccountTransactionResponse.builder().trxnLstList(accTrxnLst2).build());
 
-		List<TransactionDetail> accTransactionDetails3 = new ArrayList<>();
-		accTransactionDetails3.add(TransactionDetail.builder().accountNumber("126000110006080000002").transactionId(9000003).transactionCode(564)
+		List<AccountTransactionDetail> accTransactionDetails3 = new ArrayList<>();
+		accTransactionDetails3.add(AccountTransactionDetail.builder().accountNumber("126000110006080006423").transactionId(9000003).transactionCode(564)
 				.transactionDateGregorian("2024-03-05").transactionDateHijri("1445-08-24").transactionTime("13:20:37")
 				.transactionAmount(TransactionAmount.builder().amount(-7000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(3000.58).currency("SAR").build()).transactionDescription("تحويل")
@@ -250,15 +248,15 @@ public class CustomerService {
 								.beneficiaryAmount(BeneficiaryAmount.builder().amount(7000).currency("SAR").build()).build())
 				.transactionBranchCode(12600).build());
 
-		TrxnLst accTrxnLst3 = TrxnLst.builder().availableBalance(1020.3).cicNumber("000022224444").unclearedBalance(100.2)
+		AccountTrxnLst accTrxnLst3 = AccountTrxnLst.builder().availableBalance(1020.3).cicNumber("000022224444").unclearedBalance(100.2)
 				.transactionDetails(accTransactionDetails3).build();
 
-		ACCOUNT_TRANSACTION_RESPONSE_MAP.put("000022224444:126000110006080000002",
-				AccountTransactionResponse.builder().trxnLstList(Arrays.asList(accTrxnLst3)).build());
+		ACCOUNT_TRANSACTION_RESPONSE_MAP.put("000022224444:126000110006080008552",
+				AccountTransactionResponse.builder().trxnLstList(accTrxnLst3).build());
 
 		// Transaction 4
-		List<TransactionDetail> accTransactionDetails4 = new ArrayList<>();
-		accTransactionDetails4.add(TransactionDetail.builder().accountNumber("126000110006080000003").transactionId(9000004).transactionCode(565)
+		List<AccountTransactionDetail> accTransactionDetails4 = new ArrayList<>();
+		accTransactionDetails4.add(AccountTransactionDetail.builder().accountNumber("126000110006080009937").transactionId(9000004).transactionCode(565)
 				.transactionDateGregorian("2024-03-02").transactionDateHijri("1445-08-21").transactionTime("19:07:09")
 				.transactionAmount(TransactionAmount.builder().amount(10000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(10000.58).currency("SAR").build()).transactionDescription("تحويل")
@@ -267,11 +265,11 @@ public class CustomerService {
 						BeneficiaryDetails.builder().beneficiaryAmount(BeneficiaryAmount.builder().amount(0).currency("SAR").build()).build())
 				.transactionBranchCode(12600).build());
 
-		TrxnLst accTrxnLst4 = TrxnLst.builder().availableBalance(1020.3).cicNumber("0000000018707728").unclearedBalance(100.2)
+		AccountTrxnLst accTrxnLst4 = AccountTrxnLst.builder().availableBalance(1020.3).cicNumber("0000000018707728").unclearedBalance(100.2)
 				.transactionDetails(accTransactionDetails4).build();
 
-		ACCOUNT_TRANSACTION_RESPONSE_MAP.put("0000000018707728:126000110006080000003",
-				AccountTransactionResponse.builder().trxnLstList(Arrays.asList(accTrxnLst4)).build());
+		ACCOUNT_TRANSACTION_RESPONSE_MAP.put("0000000018707728:126000110006080000331",
+				AccountTransactionResponse.builder().trxnLstList(accTrxnLst4).build());
 
 	}
 
@@ -376,7 +374,7 @@ public class CustomerService {
 	////////////////////////////////////// Not Important ///////////////////
 
 	public CardTransactionResponse getCardInfo(CardTransactionRequest cardTransactionRequest) {
-		List<TrxnLst> trxnLstList = new ArrayList<>();
+		TrxnLst trxnLstList = new TrxnLst();
 		List<TransactionDetail> transactionDetails = new ArrayList<>();
 
 		transactionDetails.add(TransactionDetail.builder().transactionReferenceNumber(920547953)
@@ -387,17 +385,16 @@ public class CustomerService {
 				.loadDate("2024-02-24").settlementAmount(TransactionAmount.builder().amount(-150).currency("SAR").build())
 				.transactionRemarks("ANNUAL FEE").settlementDate("2263-08-31").billDate("2024-02-24").build());
 
-		trxnLstList.add(TrxnLst.builder().availableBalance(1020.3).cicNumber(cardTransactionRequest.getCicNumber()).unclearedBalance(100.2)
-				.transactionDetails(transactionDetails).build());
+		trxnLstList = TrxnLst.builder().transactionDetails(transactionDetails).build();
 
 		return CardTransactionResponse.builder().transactionList(trxnLstList).build();
 	}
 
 	public AccountTransactionResponse getAccountInfo(AccountTransactionRequest accountTransactionRequest) {
-		List<TrxnLst> trxnLstList = new ArrayList<>();
-		List<TransactionDetail> transactionDetails = new ArrayList<>();
+		AccountTrxnLst trxnLstList = new AccountTrxnLst();
+		List<AccountTransactionDetail> transactionDetails = new ArrayList<>();
 
-		transactionDetails.add(TransactionDetail.builder().transactionReferenceNumber(920547953)
+		transactionDetails.add(AccountTransactionDetail.builder()
 				.transactionAmount(TransactionAmount.builder().amount(-150).currency("SAR").build()).transactionDateGregorian("2024-02-24")
 				.transactionDateHijri("1445-08-14").transactionTime("17:11:42").transactionChannelId("OTHER").transactionAuthStatus("AUTH")
 				.authAmount(TransactionAmount.builder().amount(150).currency("SAR").build())
@@ -405,8 +402,8 @@ public class CustomerService {
 				.loadDate("2024-02-24").settlementAmount(TransactionAmount.builder().amount(-150).currency("SAR").build())
 				.transactionRemarks("ANNUAL FEE").settlementDate("2263-08-31").billDate("2024-02-24").build());
 
-		trxnLstList.add(TrxnLst.builder().availableBalance(1020.3).cicNumber(accountTransactionRequest.getCicNumber()).unclearedBalance(100.2)
-				.transactionDetails(transactionDetails).build());
+		trxnLstList = AccountTrxnLst.builder().availableBalance(1020.3).cicNumber(accountTransactionRequest.getCicNumber()).unclearedBalance(100.2)
+				.transactionDetails(transactionDetails).build();
 
 		return AccountTransactionResponse.builder().trxnLstList(trxnLstList).build();
 	}

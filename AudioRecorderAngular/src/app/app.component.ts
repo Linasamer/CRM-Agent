@@ -13,6 +13,7 @@ import { WebSocketService } from './Service/webSocketService.service';
 import { Subscription } from 'rxjs';
 import { TransactionResponse } from './model/TransactionsResponse/TransactionResponse.model';
 import { staticMap } from './model/static-map-object.model';
+import { AccountTransactionResponse } from './model/TransactionsResponse/AccountTransactionResponse.model';
 
 declare var webkitSpeechRecognition: any;
 
@@ -39,7 +40,7 @@ export class AppComponent implements OnInit {
   startFlag:boolean = false;
   userInfo !: ProfileData;
   sessionId!: string;
-  accountTransaction !: TransactionResponse;
+  accountTransaction !: AccountTransactionResponse;
   cardTransaction !: TransactionResponse;
   staticMapData = new Map<string, staticMap>();
 
@@ -92,10 +93,10 @@ export class AppComponent implements OnInit {
       }
     });
 
-    this.staticMapData.set( '123456789', { accountNumber: '126000110006080000000', cardNumber: '2321' })
-      this.staticMapData.set( '987654321', { accountNumber: '126000110006080000001', cardNumber: '2789' })
-      this.staticMapData.set( '0000000018707728',{ accountNumber: '126000110006080000003', cardNumber: '2728' })
-      this.staticMapData.set(  '000022224444' ,{ accountNumber: '126000110006080000002', cardNumber: '2444' })
+    this.staticMapData.set( '123456789', { accountNumber: '126000110006080006423', cardNumber: '2321' })
+      this.staticMapData.set( '987654321', { accountNumber: '126000110006080009937', cardNumber: '2789' })
+      this.staticMapData.set( '0000000018707728',{ accountNumber: '126000110006080000331', cardNumber: '2728' })
+      this.staticMapData.set(  '000022224444' ,{ accountNumber: '126000110006080008552', cardNumber: '2444' })
    
   }
 
@@ -224,7 +225,7 @@ export class AppComponent implements OnInit {
 
         this.aiEngineIntegrationService.getAccountTransactions(this.selectedCustomer.CICNumber,
           this.staticMapData.get(this.selectedCustomer.CICNumber)?.accountNumber).subscribe(
-            (accTranx: TransactionResponse) => {
+            (accTranx: AccountTransactionResponse) => {
               console.log("acouuuuuunt", accTranx)
               this.accountTransaction = accTranx
             }

@@ -16,7 +16,9 @@ import com.code.secretary.models.requests.CardTransactionRequest;
 import com.code.secretary.models.requests.DataRequest;
 import com.code.secretary.models.requests.GreetingDataRequest;
 import com.code.secretary.models.responses.AccountResponse;
+import com.code.secretary.models.responses.AccountTransactionDetail;
 import com.code.secretary.models.responses.AccountTransactionResponse;
+import com.code.secretary.models.responses.AccountTrxnLst;
 import com.code.secretary.models.responses.AccountsLstResponse;
 import com.code.secretary.models.responses.AgentResponse;
 import com.code.secretary.models.responses.AvailableBalance;
@@ -51,7 +53,7 @@ public class CustomerServicetest {
 	private String sessionId;
 
 	public CardTransactionResponse getCardInfo(CardTransactionRequest cardTransactionRequest) {
-		List<TrxnLst> trxnLstList = new ArrayList<>();
+		TrxnLst trxnLstList = new TrxnLst();
 		List<TransactionDetail> transactionDetails = new ArrayList<>();
 
 		transactionDetails.add(TransactionDetail.builder().transactionReferenceNumber(920547953)
@@ -62,8 +64,7 @@ public class CustomerServicetest {
 				.loadDate("2024-02-24").settlementAmount(TransactionAmount.builder().amount(-150).currency("SAR").build())
 				.transactionRemarks("ANNUAL FEE").settlementDate("2263-08-31").billDate("2024-02-24").build());
 
-		trxnLstList.add(TrxnLst.builder().availableBalance(1020.3).cicNumber(cardTransactionRequest.getCicNumber()).unclearedBalance(100.2)
-				.transactionDetails(transactionDetails).build());
+		trxnLstList = TrxnLst.builder().transactionDetails(transactionDetails).build();
 
 		return CardTransactionResponse.builder().transactionList(trxnLstList).build();
 	}
@@ -213,10 +214,10 @@ public class CustomerServicetest {
 	}
 
 	public AccountTransactionResponse getAccountInfo(AccountTransactionRequest accountTransactionRequest) {
-		List<TrxnLst> trxnLstList = new ArrayList<>();
-		List<TransactionDetail> transactionDetails = new ArrayList<>();
+		AccountTrxnLst trxnLstList = new AccountTrxnLst();
+		List<AccountTransactionDetail> transactionDetails = new ArrayList<>();
 
-		transactionDetails.add(TransactionDetail.builder().transactionReferenceNumber(920547953)
+		transactionDetails.add(AccountTransactionDetail.builder()
 				.transactionAmount(TransactionAmount.builder().amount(-150).currency("SAR").build()).transactionDateGregorian("2024-02-24")
 				.transactionDateHijri("1445-08-14").transactionTime("17:11:42").transactionChannelId("OTHER").transactionAuthStatus("AUTH")
 				.authAmount(TransactionAmount.builder().amount(150).currency("SAR").build())
@@ -224,8 +225,8 @@ public class CustomerServicetest {
 				.loadDate("2024-02-24").settlementAmount(TransactionAmount.builder().amount(-150).currency("SAR").build())
 				.transactionRemarks("ANNUAL FEE").settlementDate("2263-08-31").billDate("2024-02-24").build());
 
-		trxnLstList.add(TrxnLst.builder().availableBalance(1020.3).cicNumber(accountTransactionRequest.getCicNumber()).unclearedBalance(100.2)
-				.transactionDetails(transactionDetails).build());
+		trxnLstList = AccountTrxnLst.builder().availableBalance(1020.3).cicNumber(accountTransactionRequest.getCicNumber()).unclearedBalance(100.2)
+				.transactionDetails(transactionDetails).build();
 
 		return AccountTransactionResponse.builder().trxnLstList(trxnLstList).build();
 	}
@@ -273,118 +274,118 @@ public class CustomerServicetest {
 
 	/////////////////////////////
 
-	public CardTransactionResponse getCustomerCreditCardTransactions(String customerCIC, String lang, String cardSequence) {
-		List<TrxnLst> trxnLstList = new ArrayList<>();
-		List<TrxnLst> trxnLstList1 = new ArrayList<>();
-		List<TrxnLst> trxnLstList2 = new ArrayList<>();
-		List<TrxnLst> trxnLstList3 = new ArrayList<>();
-
-		List<TransactionDetail> transactionDetails = new ArrayList<>();
-		List<TransactionDetail> transactionDetails1 = new ArrayList<>();
-		List<TransactionDetail> transactionDetails2 = new ArrayList<>();
-		List<TransactionDetail> transactionDetails3 = new ArrayList<>();
-		TrxnLst trxnLst = new TrxnLst();
-		TrxnLst trxnLst1 = new TrxnLst();
-		TrxnLst trxnLst2 = new TrxnLst();
-		TrxnLst trxnLst3 = new TrxnLst();
-
-		TransactionDetail transactionDetail = new TransactionDetail();
-		TransactionDetail transactionDetail1 = new TransactionDetail();
-		TransactionDetail transactionDetail2 = new TransactionDetail();
-		TransactionDetail transactionDetail3 = new TransactionDetail();
-
-		Map<String, CardTransactionResponse> cardTransactionResponseMap = new HashMap<>();
-
-		transactionDetail = TransactionDetail.builder().transactionReferenceNumber(920547953L)
-				.transactionAmount(TransactionAmount.builder().amount(-150).currency("SAR").build()).transactionDateGregorian("2024-02-24")
-				.transactionDateHijri("1445-08-14").transactionTime("17:11:42").transactionChannelId("OTHER").transactionAuthStatus("AUTH")
-				.authAmount(TransactionAmount.builder().amount(150).currency("SAR").build())
-				.billingAmount(TransactionAmount.builder().amount(-150).currency("SAR").build()).merchantName("ANNUAL FEE").merchantCountry("SAU")
-				.loadDate("2024-02-24").settlementAmount(TransactionAmount.builder().amount(-150).currency("SAR").build())
-				.transactionRemarks("ANNUAL FEE").settlementDate("2263-08-31").billDate("2024-02-24").build();
-
-		// Additional transactions
-		// Second transaction
-		transactionDetail1 = TransactionDetail.builder().transactionReferenceNumber(920547954L)
-				.transactionAmount(TransactionAmount.builder().amount(-75).currency("SAR").build()).transactionDateGregorian("2024-03-01")
-				.transactionDateHijri("1445-08-20").transactionTime("10:30:15").transactionChannelId("ONLINE").transactionAuthStatus("AUTH")
-				.authAmount(TransactionAmount.builder().amount(75).currency("SAR").build())
-				.billingAmount(TransactionAmount.builder().amount(-75).currency("SAR").build()).merchantName("ONLINE STORE").merchantCountry("USA")
-				.loadDate("2024-03-01").settlementAmount(TransactionAmount.builder().amount(-75).currency("SAR").build())
-				.transactionRemarks("Online purchase").settlementDate("2024-03-02").billDate("2024-03-01").build();
-
-		// Third transaction
-		transactionDetail2 = TransactionDetail.builder().transactionReferenceNumber(920547955L)
-				.transactionAmount(TransactionAmount.builder().amount(-200).currency("SAR").build()).transactionDateGregorian("2024-03-05")
-				.transactionDateHijri("1445-08-24").transactionTime("14:00:00").transactionChannelId("ATM").transactionAuthStatus("AUTHORIZED")
-				.authAmount(TransactionAmount.builder().amount(200).currency("SAR").build())
-				.billingAmount(TransactionAmount.builder().amount(-200).currency("SAR").build()).merchantName("CASH WITHDRAWAL")
-				.merchantCountry("SAU").loadDate("2024-03-05").settlementAmount(TransactionAmount.builder().amount(-200).currency("SAR").build())
-				.transactionRemarks("ATM cash withdrawal").settlementDate("2024-03-05").billDate("2024-03-05").build();
-
-		// Fourth transaction
-		transactionDetail3 = TransactionDetail.builder().transactionReferenceNumber(920547956L)
-				.transactionAmount(TransactionAmount.builder().amount(-50).currency("SAR").build()).transactionDateGregorian("2024-03-07")
-				.transactionDateHijri("1445-08-26").transactionTime("09:15:30").transactionChannelId("POS").transactionAuthStatus("AUTHORIZED")
-				.authAmount(TransactionAmount.builder().amount(50).currency("SAR").build())
-				.billingAmount(TransactionAmount.builder().amount(-50).currency("SAR").build()).merchantName("SUPERMARKET").merchantCountry("SAU")
-				.loadDate("2024-03-07").settlementAmount(TransactionAmount.builder().amount(-50).currency("SAR").build())
-				.transactionRemarks("Grocery purchase").settlementDate("2024-03-07").billDate("2024-03-07").build();
-		transactionDetails.add(transactionDetail);
-		transactionDetails1.add(transactionDetail1);
-		transactionDetails2.add(transactionDetail2);
-		transactionDetails3.add(transactionDetail3);
-
-		// Transaction list
-		trxnLst = TrxnLst.builder().availableBalance(1020.3).cicNumber("123456789").unclearedBalance(100.2).transactionDetails(transactionDetails)
-				.build();
-		trxnLst1 = TrxnLst.builder().availableBalance(1020.3).cicNumber("987654321").unclearedBalance(100.2).transactionDetails(transactionDetails1)
-				.build();
-		trxnLst2 = TrxnLst.builder().availableBalance(1020.3).cicNumber("000022224444").unclearedBalance(100.2)
-				.transactionDetails(transactionDetails2).build();
-		trxnLst3 = TrxnLst.builder().availableBalance(1020.3).cicNumber("0000000018707728").unclearedBalance(100.2)
-				.transactionDetails(transactionDetails3).build();
-		trxnLstList.add(trxnLst);
-		trxnLstList1.add(trxnLst1);
-		trxnLstList2.add(trxnLst2);
-		trxnLstList3.add(trxnLst3);
-
-		cardTransactionResponseMap.put(trxnLstList.get(0).getCicNumber() + ":" + "123",
-				CardTransactionResponse.builder().transactionList(trxnLstList).build());
-		cardTransactionResponseMap.put(trxnLstList1.get(0).getCicNumber() + ":" + "456",
-				CardTransactionResponse.builder().transactionList(trxnLstList1).build());
-		cardTransactionResponseMap.put(trxnLstList2.get(0).getCicNumber() + ":" + "789",
-				CardTransactionResponse.builder().transactionList(trxnLstList2).build());
-		cardTransactionResponseMap.put(trxnLstList3.get(0).getCicNumber() + ":" + "101",
-				CardTransactionResponse.builder().transactionList(trxnLstList3).build());
-
-		return cardTransactionResponseMap.get(customerCIC + ":" + cardSequence);
-	}
+//	public CardTransactionResponse getCustomerCreditCardTransactions(String customerCIC, String lang, String cardSequence) {
+//		TrxnLst trxnLstList = new TrxnLst();
+//		TrxnLst trxnLstList1 = new TrxnLst();
+//		TrxnLst trxnLstList2 = new TrxnLst();
+//		TrxnLst trxnLstList3 = new TrxnLst();
+//
+//		List<TransactionDetail> transactionDetails = new ArrayList<>();
+//		List<TransactionDetail> transactionDetails1 = new ArrayList<>();
+//		List<TransactionDetail> transactionDetails2 = new ArrayList<>();
+//		List<TransactionDetail> transactionDetails3 = new ArrayList<>();
+//		TrxnLst trxnLst = new TrxnLst();
+//		TrxnLst trxnLst1 = new TrxnLst();
+//		TrxnLst trxnLst2 = new TrxnLst();
+//		TrxnLst trxnLst3 = new TrxnLst();
+//
+//		TransactionDetail transactionDetail = new TransactionDetail();
+//		TransactionDetail transactionDetail1 = new TransactionDetail();
+//		TransactionDetail transactionDetail2 = new TransactionDetail();
+//		TransactionDetail transactionDetail3 = new TransactionDetail();
+//
+//		Map<String, CardTransactionResponse> cardTransactionResponseMap = new HashMap<>();
+//
+//		transactionDetail = TransactionDetail.builder().transactionReferenceNumber(920547953L)
+//				.transactionAmount(TransactionAmount.builder().amount(-150).currency("SAR").build()).transactionDateGregorian("2024-02-24")
+//				.transactionDateHijri("1445-08-14").transactionTime("17:11:42").transactionChannelId("OTHER").transactionAuthStatus("AUTH")
+//				.authAmount(TransactionAmount.builder().amount(150).currency("SAR").build())
+//				.billingAmount(TransactionAmount.builder().amount(-150).currency("SAR").build()).merchantName("ANNUAL FEE").merchantCountry("SAU")
+//				.loadDate("2024-02-24").settlementAmount(TransactionAmount.builder().amount(-150).currency("SAR").build())
+//				.transactionRemarks("ANNUAL FEE").settlementDate("2263-08-31").billDate("2024-02-24").build();
+//
+//		// Additional transactions
+//		// Second transaction
+//		transactionDetail1 = TransactionDetail.builder().transactionReferenceNumber(920547954L)
+//				.transactionAmount(TransactionAmount.builder().amount(-75).currency("SAR").build()).transactionDateGregorian("2024-03-01")
+//				.transactionDateHijri("1445-08-20").transactionTime("10:30:15").transactionChannelId("ONLINE").transactionAuthStatus("AUTH")
+//				.authAmount(TransactionAmount.builder().amount(75).currency("SAR").build())
+//				.billingAmount(TransactionAmount.builder().amount(-75).currency("SAR").build()).merchantName("ONLINE STORE").merchantCountry("USA")
+//				.loadDate("2024-03-01").settlementAmount(TransactionAmount.builder().amount(-75).currency("SAR").build())
+//				.transactionRemarks("Online purchase").settlementDate("2024-03-02").billDate("2024-03-01").build();
+//
+//		// Third transaction
+//		transactionDetail2 = TransactionDetail.builder().transactionReferenceNumber(920547955L)
+//				.transactionAmount(TransactionAmount.builder().amount(-200).currency("SAR").build()).transactionDateGregorian("2024-03-05")
+//				.transactionDateHijri("1445-08-24").transactionTime("14:00:00").transactionChannelId("ATM").transactionAuthStatus("AUTHORIZED")
+//				.authAmount(TransactionAmount.builder().amount(200).currency("SAR").build())
+//				.billingAmount(TransactionAmount.builder().amount(-200).currency("SAR").build()).merchantName("CASH WITHDRAWAL")
+//				.merchantCountry("SAU").loadDate("2024-03-05").settlementAmount(TransactionAmount.builder().amount(-200).currency("SAR").build())
+//				.transactionRemarks("ATM cash withdrawal").settlementDate("2024-03-05").billDate("2024-03-05").build();
+//
+//		// Fourth transaction
+//		transactionDetail3 = TransactionDetail.builder().transactionReferenceNumber(920547956L)
+//				.transactionAmount(TransactionAmount.builder().amount(-50).currency("SAR").build()).transactionDateGregorian("2024-03-07")
+//				.transactionDateHijri("1445-08-26").transactionTime("09:15:30").transactionChannelId("POS").transactionAuthStatus("AUTHORIZED")
+//				.authAmount(TransactionAmount.builder().amount(50).currency("SAR").build())
+//				.billingAmount(TransactionAmount.builder().amount(-50).currency("SAR").build()).merchantName("SUPERMARKET").merchantCountry("SAU")
+//				.loadDate("2024-03-07").settlementAmount(TransactionAmount.builder().amount(-50).currency("SAR").build())
+//				.transactionRemarks("Grocery purchase").settlementDate("2024-03-07").billDate("2024-03-07").build();
+//		transactionDetails.add(transactionDetail);
+//		transactionDetails1.add(transactionDetail1);
+//		transactionDetails2.add(transactionDetail2);
+//		transactionDetails3.add(transactionDetail3);
+//
+//		// Transaction list
+//		trxnLst = TrxnLst.builder().availableBalance(1020.3).cicNumber("123456789").unclearedBalance(100.2).transactionDetails(transactionDetails)
+//				.build();
+//		trxnLst1 = TrxnLst.builder().availableBalance(1020.3).cicNumber("987654321").unclearedBalance(100.2).transactionDetails(transactionDetails1)
+//				.build();
+//		trxnLst2 = TrxnLst.builder().availableBalance(1020.3).cicNumber("000022224444").unclearedBalance(100.2)
+//				.transactionDetails(transactionDetails2).build();
+//		trxnLst3 = TrxnLst.builder().availableBalance(1020.3).cicNumber("0000000018707728").unclearedBalance(100.2)
+//				.transactionDetails(transactionDetails3).build();
+//		trxnLstList = trxnLst;
+//		trxnLstList1 = trxnLst1;
+//		trxnLstList2 = trxnLst2;
+//		trxnLstList3 = trxnLst3;
+//
+//		cardTransactionResponseMap.put(trxnLstList.getCicNumber() + ":" + "123",
+//				CardTransactionResponse.builder().transactionList(trxnLstList).build());
+//		cardTransactionResponseMap.put(trxnLstList1.getCicNumber() + ":" + "456",
+//				CardTransactionResponse.builder().transactionList(trxnLstList1).build());
+//		cardTransactionResponseMap.put(trxnLstList2.getCicNumber() + ":" + "789",
+//				CardTransactionResponse.builder().transactionList(trxnLstList2).build());
+//		cardTransactionResponseMap.put(trxnLstList3.getCicNumber() + ":" + "101",
+//				CardTransactionResponse.builder().transactionList(trxnLstList3).build());
+//
+//		return cardTransactionResponseMap.get(customerCIC + ":" + cardSequence);
+//	}
 
 	public AccountTransactionResponse getCustomerAccountTransactions(String customerCIC, String lang, String accountNumber) {
-		List<TrxnLst> trxnLstList = new ArrayList<>();
-		List<TrxnLst> trxnLstList1 = new ArrayList<>();
-		List<TrxnLst> trxnLstList2 = new ArrayList<>();
-		List<TrxnLst> trxnLstList3 = new ArrayList<>();
+		AccountTrxnLst trxnLstList = new AccountTrxnLst();
+		AccountTrxnLst trxnLstList1 = new AccountTrxnLst();
+		AccountTrxnLst trxnLstList2 = new AccountTrxnLst();
+		AccountTrxnLst trxnLstList3 = new AccountTrxnLst();
 
-		List<TransactionDetail> transactionDetails = new ArrayList<>();
-		List<TransactionDetail> transactionDetails1 = new ArrayList<>();
-		List<TransactionDetail> transactionDetails2 = new ArrayList<>();
-		List<TransactionDetail> transactionDetails3 = new ArrayList<>();
-		TrxnLst trxnLst = new TrxnLst();
-		TrxnLst trxnLst1 = new TrxnLst();
-		TrxnLst trxnLst2 = new TrxnLst();
-		TrxnLst trxnLst3 = new TrxnLst();
+		List<AccountTransactionDetail> transactionDetails = new ArrayList<>();
+		List<AccountTransactionDetail> transactionDetails1 = new ArrayList<>();
+		List<AccountTransactionDetail> transactionDetails2 = new ArrayList<>();
+		List<AccountTransactionDetail> transactionDetails3 = new ArrayList<>();
+		AccountTrxnLst trxnLst = new AccountTrxnLst();
+		AccountTrxnLst trxnLst1 = new AccountTrxnLst();
+		AccountTrxnLst trxnLst2 = new AccountTrxnLst();
+		AccountTrxnLst trxnLst3 = new AccountTrxnLst();
 
-		TransactionDetail transactionDetail = new TransactionDetail();
-		TransactionDetail transactionDetail1 = new TransactionDetail();
-		TransactionDetail transactionDetail2 = new TransactionDetail();
-		TransactionDetail transactionDetail3 = new TransactionDetail();
+		AccountTransactionDetail transactionDetail = new AccountTransactionDetail();
+		AccountTransactionDetail transactionDetail1 = new AccountTransactionDetail();
+		AccountTransactionDetail transactionDetail2 = new AccountTransactionDetail();
+		AccountTransactionDetail transactionDetail3 = new AccountTransactionDetail();
 
 		Map<String, AccountTransactionResponse> accountTransactionResponseMap = new HashMap<>();
 
 		// Transaction 1
-		transactionDetail = TransactionDetail.builder().accountNumber("126000110006080000000").transactionId(9000001).transactionCode(562)
+		transactionDetail = AccountTransactionDetail.builder().accountNumber("126000110006080000000").transactionId(9000001).transactionCode(562)
 				.transactionDateGregorian("2024-03-15").transactionDateHijri("1445-09-05").transactionTime("11:46:41")
 				.transactionAmount(TransactionAmount.builder().amount(-1000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(1000.58).currency("SAR").build()).transactionDescription("تحويل")
@@ -396,7 +397,7 @@ public class CustomerServicetest {
 
 		// Repeat the process for other transactions and add them to the list
 		// Transaction 2
-		transactionDetail1 = TransactionDetail.builder().accountNumber("126000110006080000001").transactionId(9000001).transactionCode(562)
+		transactionDetail1 = AccountTransactionDetail.builder().accountNumber("126000110006080000001").transactionId(9000001).transactionCode(562)
 				.transactionDateGregorian("2024-03-11").transactionDateHijri("1445-09-01").transactionTime("17:33:09")
 				.transactionAmount(TransactionAmount.builder().amount(-1000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(2000.58).currency("SAR").build()).transactionDescription("تحويل")
@@ -407,7 +408,7 @@ public class CustomerServicetest {
 				.transactionBranchCode(12600).build();
 
 		// Transaction 3
-		transactionDetail2 = TransactionDetail.builder().accountNumber("126000110006080000002").transactionId(9000001).transactionCode(562)
+		transactionDetail2 = AccountTransactionDetail.builder().accountNumber("126000110006080000002").transactionId(9000001).transactionCode(562)
 				.transactionDateGregorian("2024-03-05").transactionDateHijri("1445-08-24").transactionTime("13:20:37")
 				.transactionAmount(TransactionAmount.builder().amount(-7000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(3000.58).currency("SAR").build()).transactionDescription("تحويل")
@@ -418,7 +419,7 @@ public class CustomerServicetest {
 				.transactionBranchCode(12600).build();
 
 		// Transaction 4
-		transactionDetail3 = TransactionDetail.builder().accountNumber("126000110006080000003").transactionId(9000001).transactionCode(562)
+		transactionDetail3 = AccountTransactionDetail.builder().accountNumber("126000110006080000003").transactionId(9000001).transactionCode(562)
 				.transactionDateGregorian("2024-03-02").transactionDateHijri("1445-08-21").transactionTime("19:07:09")
 				.transactionAmount(TransactionAmount.builder().amount(10000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(10000.58).currency("SAR").build()).transactionDescription("تحويل")
@@ -433,26 +434,26 @@ public class CustomerServicetest {
 		transactionDetails3.add(transactionDetail3);
 
 		// Transaction list
-		trxnLst = TrxnLst.builder().availableBalance(1020.3).cicNumber("123456789").unclearedBalance(100.2).transactionDetails(transactionDetails)
+		trxnLst = AccountTrxnLst.builder().availableBalance(1020.3).cicNumber("123456789").unclearedBalance(100.2).transactionDetails(transactionDetails)
 				.build();
-		trxnLst1 = TrxnLst.builder().availableBalance(1020.3).cicNumber("987654321").unclearedBalance(100.2).transactionDetails(transactionDetails1)
+		trxnLst1 = AccountTrxnLst.builder().availableBalance(1020.3).cicNumber("987654321").unclearedBalance(100.2).transactionDetails(transactionDetails1)
 				.build();
-		trxnLst2 = TrxnLst.builder().availableBalance(1020.3).cicNumber("000022224444").unclearedBalance(100.2)
+		trxnLst2 = AccountTrxnLst.builder().availableBalance(1020.3).cicNumber("000022224444").unclearedBalance(100.2)
 				.transactionDetails(transactionDetails2).build();
-		trxnLst3 = TrxnLst.builder().availableBalance(1020.3).cicNumber("0000000018707728").unclearedBalance(100.2)
+		trxnLst3 = AccountTrxnLst.builder().availableBalance(1020.3).cicNumber("0000000018707728").unclearedBalance(100.2)
 				.transactionDetails(transactionDetails3).build();
-		trxnLstList.add(trxnLst);
-		trxnLstList1.add(trxnLst1);
-		trxnLstList2.add(trxnLst2);
-		trxnLstList3.add(trxnLst3);
+		trxnLstList = trxnLst;
+		trxnLstList1 = trxnLst1;
+		trxnLstList2 = trxnLst2;
+		trxnLstList3 = trxnLst3;
 
-		accountTransactionResponseMap.put(trxnLstList.get(0).getCicNumber() + ":" + "126000110006080000002",
+		accountTransactionResponseMap.put(trxnLstList.getCicNumber() + ":" + "126000110006080000002",
 				AccountTransactionResponse.builder().trxnLstList(trxnLstList).build());
-		accountTransactionResponseMap.put(trxnLstList1.get(0).getCicNumber() + ":" + "126000110006080000003",
+		accountTransactionResponseMap.put(trxnLstList1.getCicNumber() + ":" + "126000110006080000003",
 				AccountTransactionResponse.builder().trxnLstList(trxnLstList1).build());
-		accountTransactionResponseMap.put(trxnLstList2.get(0).getCicNumber() + ":" + "126000110006080000001",
+		accountTransactionResponseMap.put(trxnLstList2.getCicNumber() + ":" + "126000110006080000001",
 				AccountTransactionResponse.builder().trxnLstList(trxnLstList2).build());
-		accountTransactionResponseMap.put(trxnLstList3.get(0).getCicNumber() + ":" + "126000110006080000000",
+		accountTransactionResponseMap.put(trxnLstList3.getCicNumber() + ":" + "126000110006080000000",
 				AccountTransactionResponse.builder().trxnLstList(trxnLstList3).build());
 		return accountTransactionResponseMap.get(customerCIC + ":" + accountNumber);
 	}

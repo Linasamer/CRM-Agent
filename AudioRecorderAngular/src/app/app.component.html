@@ -213,20 +213,20 @@
           <ul class="list-none p-0 m-0">
             <li>
               <label><span style="font-weight: bold;">Account Number: </span>
-                <span>{{accountTransaction.TrxnsLst[0].TrxnDtls[0].AcctNum}}</span></label>
+                <span>{{accountTransaction.TrxnLst.TrxnDtls[0].AcctNum}}</span></label>
             </li>
             <li>
               <label><span style="font-weight: bold;">Bill Amount: </span>
-                <span>{{accountTransaction.TrxnsLst[0].TrxnDtls[0].TrxnBalAmt.Amount}}
-                  {{accountTransaction.TrxnsLst[0].TrxnDtls[0].TrxnBalAmt.Currency}}</span></label>
+                <span>{{accountTransaction.TrxnLst.TrxnDtls[0].TrxnBalAmt.Amount}}
+                  {{accountTransaction.TrxnLst.TrxnDtls[0].TrxnBalAmt.Currency}}</span></label>
             </li>
             <li>
               <label><span style="font-weight: bold;">Transaction Date: </span>
-                <span>{{accountTransaction.TrxnsLst[0].TrxnDtls[0].TrxnDateG}}</span></label>
+                <span>{{accountTransaction.TrxnLst.TrxnDtls[0].TrxnDateG}}</span></label>
             </li>
             <li>
               <label><span style="font-weight: bold;">Uncleared Balance: </span>
-                <span>{{accountTransaction.TrxnsLst[0].UnclearedBal}}</span></label>
+                <span>{{accountTransaction.TrxnLst.UnclearedBal}}</span></label>
             </li>
           </ul>
           <hr  size="4" width="90%" color="blue">
@@ -234,21 +234,21 @@
           <ul>
             <li>
               <label><span style="font-weight: bold;">Transaction Ref Number: </span>
-                <span>{{cardTransaction.TrxnsLst[0].TrxnDtls[0].TrxnRefNum}}</span></label>
+                <span>{{cardTransaction.TrxnsLst.TrxnDtls[0].TrxnRefNum}}</span></label>
             </li>
             <li>
               <label><span style="font-weight: bold;">Bill Amount: </span>
-                <span>{{cardTransaction.TrxnsLst[0].TrxnDtls[0].BillingAmt.Amount}}
-                  {{cardTransaction.TrxnsLst[0].TrxnDtls[0].BillingAmt.Currency}}</span></label>
+                <span>{{cardTransaction.TrxnsLst.TrxnDtls[0].BillingAmt.Amount}}
+                  {{cardTransaction.TrxnsLst.TrxnDtls[0].BillingAmt.Currency}}</span></label>
             </li>
             <li>
               <label><span style="font-weight: bold;">Transaction Date: </span>
-                <span>{{cardTransaction.TrxnsLst[0].TrxnDtls[0].TrxnDateG}}</span></label>
+                <span>{{cardTransaction.TrxnsLst.TrxnDtls[0].TrxnDate}}</span></label>
             </li>
-            <li>
+            <!-- <li>
               <label><span style="font-weight: bold;">Uncleared Balance: </span>
-                <span>{{cardTransaction.TrxnsLst[0].UnclearedBal}}</span></label>
-            </li>
+                <span>{{cardTransaction.TrxnsLst.UnclearedBal}}</span></label>
+            </li> -->
           </ul>
       </div>
     </p-tabPanel>

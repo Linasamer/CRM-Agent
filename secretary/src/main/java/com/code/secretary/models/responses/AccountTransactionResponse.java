@@ -1,6 +1,5 @@
 package com.code.secretary.models.responses;
 
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,6 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AccountTransactionResponse {
 
-	@JsonProperty("TrxnsLst")
-	private List<TrxnLst> trxnLstList;
+	@JsonProperty("TrxnLst")
+	private AccountTrxnLst trxnLstList;
 }

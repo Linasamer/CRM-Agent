@@ -13,11 +13,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TrxnLst {
-	
+public class AccountTrxnLst {
+	@JsonProperty("CICNum")
+	private String cicNumber;
+
+	@JsonProperty("AvailableBal")
+	private double availableBalance;
+
+	@JsonProperty("UnclearedBal")
+	private double unclearedBalance;
+
 	@JsonProperty("RecPgCtrlOut")
 	private RecPgCtrlOutResponse recPgCtrlOutResponse;
-	
+
 	@JsonProperty("TrxnDtls")
-	private List<TransactionDetail> transactionDetails;
+	private List<AccountTransactionDetail> transactionDetails;
 }
