@@ -4,6 +4,7 @@ import * as SockJS from 'sockjs-client';
 import * as Stomp from 'stompjs';
 import { BehaviorSubject } from 'rxjs';
 import { AudioChunks } from '../model/audio-chunk.model';
+import { DataResponseModel } from '../model/data-response.model';
 
 
 @Injectable({
@@ -28,32 +29,16 @@ export class WebSocketService {
       console.log(`Connected: ${frame}`);
       this.stompClient.subscribe(this.topic, (audioData: any) => {
         console.log(audioData.body)
-        let audio : AudioChunks
-        audio = audioData.body
-        // this.audioStream.next(audio.Chunk);
-        this.decodeAndPlayAudioChunk(audio.Chunk);
+        const parsedData = JSON.parse(audioData.body);
+            const dataResponseModel = new DataResponseModel();
+        dataResponseModel.Text = parsedData.Text;
+        dataResponseModel.Base46 = parsedData.Base46;
+        this.audioStream.next(dataResponseModel);
 
       });
     }, this.errorCallback);
   }
-  decodeAndPlayAudioChunk(audioChunk: Uint8Array) {
-    // Decode the audio chunk using the AudioContext
-    this.audioContext.decodeAudioData(audioChunk.buffer)
-      .then((decodedData) => {
-        // Create a new AudioBufferSourceNode
-        const source = this.audioContext.createBufferSource();
-        source.buffer = decodedData;
-
-        // Connect the source to the audio context destination (speakers)
-        source.connect(this.audioContext.destination);
-
-        // Play the audio chunk
-        source.start();
-      })
-      .catch((error) => {
-        console.error('Error decoding audio chunk:', error);
-      });
-  }
+ 
   sendMessage() {
     this.stompClient.send('/app/send', {}, "lina");
   }

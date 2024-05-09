@@ -19,7 +19,7 @@
 
 <!-- ------------------------------------------------------------------------------------------- -->
 
-  <div *ngIf="startFlag">
+  <div *ngIf="startFlag && !startFlagWebSocket">
     <div id="frame">
       <div class="contact-profile">
         <img [src]="bankImage" alt="bankLogo" />
@@ -64,7 +64,7 @@
       
    
   </div>
-  <div id="infoPart" *ngIf="!startFlag">
+  <div id="infoPart" *ngIf="!startFlag && !startFlagWebSocket">
     <div id="frame">
       <!-- <div>
         <h1>Audio Stream</h1>
@@ -256,8 +256,55 @@
     <div style="margin: auto;" *ngIf="userInfo">
       <p-button label="Start" (click)="onStartChat()"></p-button>
     </div>
-    
-      
+    <!-- <div style="margin: auto;" *ngIf="userInfo">
+      <p-button label="Start With WebSocket" (click)="startStream()"></p-button>
+    </div> -->
     </div>
     </div>
   </div>
+
+  <div *ngIf="!startFlag && startFlagWebSocket">
+    <div id="frame">
+      <div class="contact-profile">
+        <img [src]="bankImage" alt="bankLogo" />
+        <p>alrajhi bank</p>
+        <div class="social-media">
+          <i class="fa-brands fa-facebook fa-2x"></i>
+          <i class="fa-brands fa-twitter fa-2x"></i>
+          <i class="fa-brands fa-instagram fa-2x"></i>
+          <i><p-dropdown [options]="languages" [(ngModel)]="selectedLanguage" optionLabel="name" 
+            [showClear]="false" [style]="{'width':'130px','margin-top':'-15px','height':'40px',
+            'font-style':'normal'}"></p-dropdown>
+          </i>   
+        </div>
+      </div>
+      <div class="messages" #scrollMe>
+        <ul>
+          <li [class]="msg.type" *ngFor="let msg of messages">
+            <img [src]="msg.type === 'bank' ? bankImage : userImage" alt="" />
+            <p >{{msg?.content || ''}}</p>
+            <audio *ngIf="msg.voiceNote" controls>
+              <source [src]="msg.voiceContent">
+            </audio>
+          </li>
+        </ul>
+      </div>
+      <div class="message-input">
+        <div class="wrap">
+          <input type="text" #msgInput placeholder="Write your message..." (keyup.enter)="sendMessage()" />
+          <button class="submit" (click)="sendMessage()">
+            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+          </button>
+          <button title="Click here to start recording action" (click)="startRecording()"
+          *ngIf="!isRecording">
+          <i class="fa-solid fa-microphone"></i>
+        </button>
+        <button title="Click here to stop recording" (click)="stopRecording()" *ngIf="isRecording">
+          <i class="fa-solid fa-stop"></i>
+        </button>
+       </div>
+      </div>
+    </div>
+    <audio #audioPlayer2 controls></audio>   
+  </div>
+

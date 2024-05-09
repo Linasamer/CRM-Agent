@@ -60,25 +60,25 @@ public class CustomerService {
 	static {
 		//////////////////////////////////////////////// Greeting Data Static Response///////////////////////////////////////////////////////
 
-		GreetingDataResponse firstCustomer = GreetingDataResponse.builder().cicNumber("0000000018707728").firstNameEn("Ahmed").secondNameEn("mohamed")
-				.thirdNameEn("mahmoud").lastNameEn("ali").firstNameAr("احمد").secondNameAr("محمد").thirdNameAr("محمود").lastNameAr("علي")
-				.custSinceDt("2018-03-26").idNumber("2449029186").idType("2").custStatus("ACTIVE").idIssueDate("1439-05-21").birthDate("1989-02-13")
-				.gender("M").build();
+		GreetingDataResponse firstCustomer = GreetingDataResponse.builder().cicNumber("0000000018707728").title("Mr.").firstNameEn("Ahmed")
+				.secondNameEn("mohamed").thirdNameEn("mahmoud").lastNameEn("ali").firstNameAr("احمد").secondNameAr("محمد").thirdNameAr("محمود")
+				.lastNameAr("علي").custSinceDt("2018-03-26").idNumber("2449029186").idType("2").custStatus("ACTIVE").idIssueDate("1439-05-21")
+				.birthDate("1989-02-13").gender("M").build();
 
-		GreetingDataResponse secondCustomer = GreetingDataResponse.builder().cicNumber("123456789").firstNameEn("Walid").secondNameEn("Samer")
-				.thirdNameEn("Saied").lastNameEn("Youssef").firstNameAr("وليد").secondNameAr("سامر").thirdNameAr("سعيد").lastNameAr("يوسف")
-				.custSinceDt("2018-03-26").idNumber("2449029186").idType("2").custStatus("ACTIVE").idIssueDate("1439-05-21").birthDate("1989-02-13")
-				.gender("M").build();
+		GreetingDataResponse secondCustomer = GreetingDataResponse.builder().cicNumber("123456789").title("Dr.").firstNameEn("Walid")
+				.secondNameEn("Samer").thirdNameEn("Saied").lastNameEn("Youssef").firstNameAr("وليد").secondNameAr("سامر").thirdNameAr("سعيد")
+				.lastNameAr("يوسف").custSinceDt("2018-03-26").idNumber("2449029186").idType("2").custStatus("ACTIVE").idIssueDate("1439-05-21")
+				.birthDate("1989-02-13").gender("M").build();
 
-		GreetingDataResponse customer3 = GreetingDataResponse.builder().cicNumber("987654321").firstNameEn("Munira").secondNameEn("Nassr")
-				.thirdNameEn("Fouad").lastNameEn("Hassanin").firstNameAr("منيره").secondNameAr("ناصر").thirdNameAr("فادء").lastNameAr("حسنين")
-				.custSinceDt("2018-03-26").idNumber("2449029186").idType("2").custStatus("ACTIVE").idIssueDate("1439-05-21").birthDate("1989-02-13")
-				.gender("F").build();
+		GreetingDataResponse customer3 = GreetingDataResponse.builder().cicNumber("987654321").title("Miss.").firstNameEn("Munira")
+				.secondNameEn("Nassr").thirdNameEn("Fouad").lastNameEn("Hassanin").firstNameAr("منيره").secondNameAr("ناصر").thirdNameAr("فادء")
+				.lastNameAr("حسنين").custSinceDt("2018-03-26").idNumber("2449029186").idType("2").custStatus("ACTIVE").idIssueDate("1439-05-21")
+				.birthDate("1989-02-13").gender("F").build();
 
-		GreetingDataResponse customer4 = GreetingDataResponse.builder().cicNumber("000022224444").firstNameEn("Sarah").secondNameEn("Mahmed")
-				.thirdNameEn("Ashraf").lastNameEn("Gaber").firstNameAr("ساره").secondNameAr("محمد").thirdNameAr("اشرف").lastNameAr("جابر")
-				.custSinceDt("2018-03-26").idNumber("2449029186").idType("2").custStatus("ACTIVE").idIssueDate("1439-05-21").birthDate("1989-02-13")
-				.gender("F").build();
+		GreetingDataResponse customer4 = GreetingDataResponse.builder().title("Mrs.").cicNumber("000022224444").firstNameEn("Sarah")
+				.secondNameEn("Mahmed").thirdNameEn("Ashraf").lastNameEn("Gaber").firstNameAr("ساره").secondNameAr("محمد").thirdNameAr("اشرف")
+				.lastNameAr("جابر").custSinceDt("2018-03-26").idNumber("2449029186").idType("2").custStatus("ACTIVE").idIssueDate("1439-05-21")
+				.birthDate("1989-02-13").gender("F").build();
 
 		GREETING_DATA_RESPONSE_MAP.put(firstCustomer.getCicNumber(), firstCustomer);
 		GREETING_DATA_RESPONSE_MAP.put(secondCustomer.getCicNumber(), secondCustomer);
@@ -113,10 +113,10 @@ public class CustomerService {
 
 		TotalBal totalBal = TotalBal.builder().amount(1961.06).currency("SAR").build();
 
-		AccountResponse accountResponse = buildAccountResponse("126000110006080000331", "0000000018707728", "484783******2728");
-		AccountResponse accountResponse2 = buildAccountResponse("126000110006080008552", "000022224444", "484783******2444");
-		AccountResponse accountResponse3 = buildAccountResponse("126000110006080006423", "123456789", "484783******2321");
-		AccountResponse accountResponse4 = buildAccountResponse("126000110006080009937", "987654321", "484783******2789");
+		AccountResponse accountResponse = buildAccountResponse("126000110006080000331", "0000000018707728", "484783******2728", "Current Account");
+		AccountResponse accountResponse2 = buildAccountResponse("126000110006080008552", "000022224444", "484783******2444", "Saving Account");
+		AccountResponse accountResponse3 = buildAccountResponse("126000110006080006423", "123456789", "484783******2321", "Saving Account");
+		AccountResponse accountResponse4 = buildAccountResponse("126000110006080009937", "987654321", "484783******2789", "Current Account");
 
 		AccountsLstResponse accountsLstResponse = AccountsLstResponse.builder().Accounts(Arrays.asList(accountResponse))
 				.recPgCtrlOut(recPgCtrlOutResponse).totalBal(totalBal).build();
@@ -202,8 +202,8 @@ public class CustomerService {
 		//////////////////////////////////////////////// Account Transaction Data Static Response///////////////////////////////////////////////////////
 
 		List<AccountTransactionDetail> accountTransactionDetails1 = new ArrayList<>();
-		accountTransactionDetails1.add(AccountTransactionDetail.builder().accountNumber("126000110006080000331").transactionId(9000001).transactionCode(562)
-				.transactionDateGregorian("2024-03-15").transactionDateHijri("1445-09-05").transactionTime("11:46:41")
+		accountTransactionDetails1.add(AccountTransactionDetail.builder().accountNumber("126000110006080000331").transactionId(9000001)
+				.transactionCode(562).transactionDateGregorian("2024-03-15").transactionDateHijri("1445-09-05").transactionTime("11:46:41")
 				.transactionAmount(TransactionAmount.builder().amount(-1000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(1000.58).currency("SAR").build()).transactionDescription("تحويل")
 				.transactionChannelId("W").transactionRemarks("W-/TOACCT/12600608016042276TOAHMED-").appliedExchangeRate(1)
@@ -221,8 +221,8 @@ public class CustomerService {
 		// You can add additional transactions in a similar manner
 
 		List<AccountTransactionDetail> accTransactionDetails2 = new ArrayList<>();
-		accTransactionDetails2.add(AccountTransactionDetail.builder().accountNumber("126000110006080008552").transactionId(9000002).transactionCode(563)
-				.transactionDateGregorian("2024-03-11").transactionDateHijri("1445-09-01").transactionTime("17:33:09")
+		accTransactionDetails2.add(AccountTransactionDetail.builder().accountNumber("126000110006080008552").transactionId(9000002)
+				.transactionCode(563).transactionDateGregorian("2024-03-11").transactionDateHijri("1445-09-01").transactionTime("17:33:09")
 				.transactionAmount(TransactionAmount.builder().amount(-1000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(2000.58).currency("SAR").build()).transactionDescription("تحويل")
 				.transactionChannelId("W").transactionRemarks("W-/TOACCT/12600608016042276TOAHMED-").appliedExchangeRate(1)
@@ -238,8 +238,8 @@ public class CustomerService {
 				AccountTransactionResponse.builder().trxnLstList(accTrxnLst2).build());
 
 		List<AccountTransactionDetail> accTransactionDetails3 = new ArrayList<>();
-		accTransactionDetails3.add(AccountTransactionDetail.builder().accountNumber("126000110006080006423").transactionId(9000003).transactionCode(564)
-				.transactionDateGregorian("2024-03-05").transactionDateHijri("1445-08-24").transactionTime("13:20:37")
+		accTransactionDetails3.add(AccountTransactionDetail.builder().accountNumber("126000110006080006423").transactionId(9000003)
+				.transactionCode(564).transactionDateGregorian("2024-03-05").transactionDateHijri("1445-08-24").transactionTime("13:20:37")
 				.transactionAmount(TransactionAmount.builder().amount(-7000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(3000.58).currency("SAR").build()).transactionDescription("تحويل")
 				.transactionChannelId("W").transactionRemarks("W-/TOACCT/12600608016042276TOAHMED-").appliedExchangeRate(1)
@@ -256,8 +256,8 @@ public class CustomerService {
 
 		// Transaction 4
 		List<AccountTransactionDetail> accTransactionDetails4 = new ArrayList<>();
-		accTransactionDetails4.add(AccountTransactionDetail.builder().accountNumber("126000110006080009937").transactionId(9000004).transactionCode(565)
-				.transactionDateGregorian("2024-03-02").transactionDateHijri("1445-08-21").transactionTime("19:07:09")
+		accTransactionDetails4.add(AccountTransactionDetail.builder().accountNumber("126000110006080009937").transactionId(9000004)
+				.transactionCode(565).transactionDateGregorian("2024-03-02").transactionDateHijri("1445-08-21").transactionTime("19:07:09")
 				.transactionAmount(TransactionAmount.builder().amount(10000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(10000.58).currency("SAR").build()).transactionDescription("تحويل")
 				.transactionChannelId("W").transactionRemarks("W-/FRACCT/12600608016042276FRAHMED").appliedExchangeRate(1)
@@ -292,11 +292,9 @@ public class CustomerService {
 		return ACCOUNT_TRANSACTION_RESPONSE_MAP.get(customerCIC + ":" + accountNumber);
 	}
 
-	private static AccountResponse buildAccountResponse(String accountNumber, String customerCIC, String atmCardNum) {
+	private static AccountResponse buildAccountResponse(String accountNumber, String customerCIC, String atmCardNum, String accountTypes) {
 		GreetingDataResponse dataResponse = getGreetingDataResponse(customerCIC);
-		String[] accountTypes = { "Saving Account", "Current Account" };
 		Integer[] accountnumber = { 100, 700, 2000, 16820, 5000, 280, 900, 41 };
-		String randomAccountType = accountTypes[new Random().nextInt(accountTypes.length)];
 		return AccountResponse.builder().accountNumber(accountNumber)
 				.availableBalance(
 						AvailableBalance.builder().amount(accountnumber[new Random().nextInt(accountnumber.length)]).currency("SAR").build())
@@ -308,7 +306,7 @@ public class CustomerService {
 				.socialTrxnLimit(SocialTrxnLimit.builder().amount(accountnumber[new Random().nextInt(accountnumber.length)]).currency("SAR").build())
 				.favoriteFlg("N").acctIconFlg("0")
 				.acctName(dataResponse.getFirstNameEn() + " " + dataResponse.getSecondNameEn() + " " + dataResponse.getThirdNameEn())
-				.acctOpeningDate("2022-08-01").acctType(randomAccountType).acctBranch("12600")
+				.acctOpeningDate("2022-08-01").acctType(accountTypes).acctBranch("12600")
 				.acctSubcategory("0160 Hassad Digital account monthly profit  minimum balance in month").build();
 	}
 
@@ -394,10 +392,9 @@ public class CustomerService {
 		AccountTrxnLst trxnLstList = new AccountTrxnLst();
 		List<AccountTransactionDetail> transactionDetails = new ArrayList<>();
 
-		transactionDetails.add(AccountTransactionDetail.builder()
-				.transactionAmount(TransactionAmount.builder().amount(-150).currency("SAR").build()).transactionDateGregorian("2024-02-24")
-				.transactionDateHijri("1445-08-14").transactionTime("17:11:42").transactionChannelId("OTHER").transactionAuthStatus("AUTH")
-				.authAmount(TransactionAmount.builder().amount(150).currency("SAR").build())
+		transactionDetails.add(AccountTransactionDetail.builder().transactionAmount(TransactionAmount.builder().amount(-150).currency("SAR").build())
+				.transactionDateGregorian("2024-02-24").transactionDateHijri("1445-08-14").transactionTime("17:11:42").transactionChannelId("OTHER")
+				.transactionAuthStatus("AUTH").authAmount(TransactionAmount.builder().amount(150).currency("SAR").build())
 				.billingAmount(TransactionAmount.builder().amount(-150).currency("SAR").build()).merchantName("ANNUAL FEE").merchantCountry("SAU")
 				.loadDate("2024-02-24").settlementAmount(TransactionAmount.builder().amount(-150).currency("SAR").build())
 				.transactionRemarks("ANNUAL FEE").settlementDate("2263-08-31").billDate("2024-02-24").build());

@@ -38,6 +38,8 @@ export class AppComponent implements OnInit {
   name: string = '';
   base46audio: any;
   startFlag:boolean = false;
+  startFlagWebSocket:boolean = false;
+
   userInfo !: ProfileData;
   sessionId!: string;
   accountTransaction !: AccountTransactionResponse;
@@ -54,7 +56,7 @@ export class AppComponent implements OnInit {
   isStreaming = false;
   @ViewChild('audioPlayer2') audioPlayer2!: ElementRef<HTMLAudioElement>;
   audioSubscription!: Subscription;
-
+  audioUrl: any;
 
 
 
@@ -85,21 +87,49 @@ export class AppComponent implements OnInit {
       this.cd.detectChanges();
 
     });
-
-    this.audioSubscription = this.webSocketService.audioStream.subscribe((audioChunk: Uint8Array) => {
-      // If there is audio data, play it
-      if (audioChunk) {
-        this.playAudioChunk(audioChunk);
-      }
-    });
-
     this.staticMapData.set( '123456789', { accountNumber: '126000110006080006423', cardNumber: '2321' })
       this.staticMapData.set( '987654321', { accountNumber: '126000110006080009937', cardNumber: '2789' })
       this.staticMapData.set( '0000000018707728',{ accountNumber: '126000110006080000331', cardNumber: '2728' })
       this.staticMapData.set(  '000022224444' ,{ accountNumber: '126000110006080008552', cardNumber: '2444' })
-   
-  }
 
+      this.audioSubscription = this.webSocketService.audioStream.subscribe(
+        (audioData: DataResponseModel) => {
+          console.log('Received audio data:', audioData);
+          let base64Data = audioData.Base46;
+          if (!(base64Data == null || base64Data == '')){
+           let contentType = 'application/x-www-form-urlencoded';
+            const sliceSize = 1024;
+            const byteCharacters = atob(base64Data);
+            const bytesLength = byteCharacters.length;
+            const slicesCount = Math.ceil(bytesLength / sliceSize);
+            const byteArrays = new Array(slicesCount);
+        
+            for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+              const begin = sliceIndex * sliceSize;
+              const end = Math.min(begin + sliceSize, bytesLength);
+        
+              const bytes = new Array(end - begin);
+              for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
+                bytes[i] = byteCharacters[offset].charCodeAt(0);
+              }
+              byteArrays[sliceIndex] = new Uint8Array(bytes);
+            }
+            var myBlob = new Blob(byteArrays, { type: contentType });
+
+            var blobURL = window.URL.createObjectURL(myBlob);
+             this.audioPlayer2.nativeElement.src = blobURL;
+             this.audioPlayer2.nativeElement.play();
+          this.base64toBlob(audioData.Base46, audioData.Text, 'application/x-www-form-urlencoded')
+        } },
+        (error) => {
+          console.error('Error receiving audio data:', error);
+        }
+      );
+
+ 
+}
+   
+  
   startRecording() {
     this.isRecording = true;
     this.audioMessage = true;
@@ -208,6 +238,7 @@ export class AppComponent implements OnInit {
     }
     var myBlob = new Blob(byteArrays, { type: contentType });
     var blobURL = window.URL.createObjectURL(myBlob);
+    console.log("Linaaaaaaaaaaaaaaaaaaaa" , blobURL)
     this.messages.push({ type: 'bank', content: text, voiceNote: true, voiceContent: blobURL });
   }
   else{
@@ -270,35 +301,19 @@ export class AppComponent implements OnInit {
 
 }
 startStream(): void {
+  this.startFlagWebSocket = true
   this.webSocketService.connect();
   this.isStreaming = true;
 }
 
-// Method to stop the audio stream
 stopStream(): void {
+  this.startFlag = false
   this.webSocketService.disconnect();
   this.isStreaming = false;
 }
 
-
-
 sendMessage(){
   this.webSocketService.sendMessage();
-
 }
-
-playAudioChunk(audioChunk: Uint8Array): void {
-  this.webSocketService.audioContext.decodeAudioData(audioChunk.buffer).then((audioBuffer) => {
-    const source = this.webSocketService.audioContext.createBufferSource();
-    source.buffer = audioBuffer;
-
-    source.connect(this.webSocketService.audioContext.destination);
-
-    source.start();
-  }).catch((error) => {
-    console.error('Error decoding audio data:', error);
-  });
-}
-
 
 }

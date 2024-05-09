@@ -1,10 +1,11 @@
 package com.code.secretary.models.responses;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Data
 @Builder
@@ -12,52 +13,55 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GreetingDataResponse {
 
-    @JsonProperty("CICNumber")
-    private String cicNumber;
+	@JsonProperty("CICNumber")
+	private String cicNumber;
 
-    @JsonProperty("FirstNameEN")
-    private String firstNameEn;
+	@JsonProperty("Title")
+	private String title;
 
-    @JsonProperty("SecondNameEN")
-    private String secondNameEn;
+	@JsonProperty("FirstNameEN")
+	private String firstNameEn;
 
-    @JsonProperty("ThirdNameEN")
-    private String thirdNameEn;
+	@JsonProperty("SecondNameEN")
+	private String secondNameEn;
 
-    @JsonProperty("LastNameEN")
-    private String lastNameEn;
+	@JsonProperty("ThirdNameEN")
+	private String thirdNameEn;
 
-    @JsonProperty("FirstNameAR")
-    private String firstNameAr;
+	@JsonProperty("LastNameEN")
+	private String lastNameEn;
 
-    @JsonProperty("SecondNameAR")
-    private String secondNameAr;
+	@JsonProperty("FirstNameAR")
+	private String firstNameAr;
 
-    @JsonProperty("ThirdNameAR")
-    private String thirdNameAr;
+	@JsonProperty("SecondNameAR")
+	private String secondNameAr;
 
-    @JsonProperty("LastNameAR")
-    private String lastNameAr;
+	@JsonProperty("ThirdNameAR")
+	private String thirdNameAr;
 
-    @JsonProperty("CustSinceDt")
-    private String custSinceDt;
+	@JsonProperty("LastNameAR")
+	private String lastNameAr;
 
-    @JsonProperty("IDNumber")
-    private String idNumber;
+	@JsonProperty("CustSinceDt")
+	private String custSinceDt;
 
-    @JsonProperty("IDType")
-    private String idType;
+	@JsonProperty("IDNumber")
+	private String idNumber;
 
-    @JsonProperty("CustStatus")
-    private String custStatus;
+	@JsonProperty("IDType")
+	private String idType;
 
-    @JsonProperty("IDIssueDate")
-    private String idIssueDate;
+	@JsonProperty("CustStatus")
+	private String custStatus;
 
-    @JsonProperty("BirthDate")
-    private String birthDate;
+	@JsonProperty("IDIssueDate")
+	private String idIssueDate;
 
-    @JsonProperty("Gender")
-    private String gender;
+	@JsonProperty("BirthDate")
+	private String birthDate;
+
+	@JsonProperty("Gender")
+	private String gender;
 
 }
