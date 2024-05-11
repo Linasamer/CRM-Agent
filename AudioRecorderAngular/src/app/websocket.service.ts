@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { AppComponent } from "./app.component";
 import { PushNotification } from "./model/push-notification.model";
 import { BehaviorSubject, Observable } from "rxjs";
+import { AudioResponse } from "./model/audio-response.model";
 
 var SockJs = require("sockjs-client");
 var Stomp = require("stompjs");
@@ -26,8 +27,9 @@ export class WebSocketService {
 
     this.stompClient.connect({}, (frame:any) => {
       this.stompClient.subscribe(this.topic, (notification:any) => {
-        notification = notification.body;
-        this.onMessageReceived(notification);
+        // let audioRes : PushNotification;
+        // audioRes = notification.body;
+        this.onMessageReceived(notification.body);
       });
     }, this.errorCallBack);
   }
@@ -56,7 +58,7 @@ export class WebSocketService {
     this.stompClient.send("/app/send", {}, JSON.stringify(message));
   }
 
-  onMessageReceived(message: any) {
+  onMessageReceived(message: string) {
     console.log("Message Recieved from Server :: " + message);
     this.setTitle(message);
     this.base64toBlob(message,null,'application/x-www-form-urlencoded');
@@ -99,6 +101,21 @@ export class WebSocketService {
     var myBlob = new Blob(byteArrays, { type: contentType });
     var blobURL = window.URL.createObjectURL(myBlob);
     this.setAudio(blobURL);
+    // let emptyflag;
+    // this.getAudio().subscribe(value => {
+    //   if(value == "" || null)
+    //     emptyflag = true
+    //   else
+    //     emptyflag = false
+    // })
+    // if(emptyflag)
+    //   this.setAudio(blobURL);
+    // else{
+    //   this.getAudio().subscribe(value => {
+    //     this.setAudio(value + '#' + blobURL);
+    //   })
+    // }
+
   }
 
 }

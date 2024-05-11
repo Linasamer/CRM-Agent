@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.code.secretary.entity.dto.util.PushNotification;
+import com.code.secretary.service.util.AudioFileReader;
 import com.code.secretary.service.util.NotificationService;
 
 import io.swagger.v3.oas.annotations.Hidden;
@@ -26,6 +27,8 @@ public class NotificationController {
 	private NotificationService notificationService;
 	@Autowired
 	private SimpMessagingTemplate template;
+	@Autowired
+	private AudioFileReader audioFileReader;
 
 	public NotificationController(NotificationService notificationService) {
 		this.notificationService = notificationService;
@@ -46,5 +49,10 @@ public class NotificationController {
 		notificationService.parseBase64();
 		// return new PushNotification(message.getMessageHeader(), message.getMessage(), message.getType());
 	}
+
+	// @MessageMapping("/send")
+	// public void handleMessage(PushNotification message) throws IOException, InterruptedException {
+	// audioFileReader.readAudioFile();
+	// }
 
 }

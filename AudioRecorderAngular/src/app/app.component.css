@@ -305,3 +305,16 @@ svg#clouds {
         visibility: hidden;
     }
 }
+
+/* ::ng-deep.mat-expansion-panel {
+    display: none !important;
+} */
+
+::ng-deep.mat-mdc-card {
+    display: flex;
+    flex-direction: row !important;
+}
+
+.playListAudio{
+    width: 30% !important;
+}

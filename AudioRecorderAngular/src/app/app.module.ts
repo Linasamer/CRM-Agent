@@ -13,6 +13,8 @@ import { ButtonModule } from 'primeng/button';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { WebSocketService } from './websocket.service';
 import { WebRTCService } from './webrtc.service';
+import { AngMusicPlayerModule } from  'ang-music-player';
+import { NgxAudioPlayerModule } from 'ngx-audio-player';
 
 
 
@@ -31,9 +33,10 @@ import { WebRTCService } from './webrtc.service';
     TabViewModule,
     ChipModule,
     ButtonModule,
-    ScrollPanelModule
+    ScrollPanelModule,
+    NgxAudioPlayerModule
   ],
-  providers: [AIEngineIntegrationService],
+  providers: [AIEngineIntegrationService, NgxAudioPlayerModule],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

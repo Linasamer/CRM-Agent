@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { AudioRecordingService } from './audio-recording.service';
 import { AIEngineIntegrationService } from './AIEngineIntegration.service';
 import { CardTransactionRequest } from './model/card-transaction-request.model';
@@ -12,6 +12,10 @@ import { ProfileData } from './model/profileDataModelResponse/profileData-respon
 import { WebSocketService } from './websocket.service';
 import { PushNotification } from "./model/push-notification.model";
 import { WebRTCService } from './webrtc.service';
+import { TransactionResponse } from './model/TransactionsResponse/TransactionResponse.model';
+import { staticMap } from './model/static-map-object.model';
+import { take } from 'rxjs';
+import { Track } from 'ngx-audio-player';
 
 declare var webkitSpeechRecognition: any;
 
@@ -37,11 +41,13 @@ export class AppComponent implements OnInit {
   base46audio: any;
   startFlag:boolean = false;
   userInfo !: ProfileData;
+  accountTransaction !: TransactionResponse;
+  cardTransaction !: TransactionResponse;
   sessionId!: string;
 
-  greeting!: string;
+  greeting!: any;
   nameMessage !:string;
-  greetingVoice !:String;
+  greetingVoice = '';
 
   bankImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb_HeXq0uLKUHF1Hyynl-zXTfBADq8RuPxzgAvnhhG0A&s"
   userImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQnO7QLbgqxCIswhJPOO0750lzSDeSD4k5L_2ahBU9ew&s"
@@ -49,12 +55,33 @@ export class AppComponent implements OnInit {
   @ViewChild('audioPlayer') audioPlayer!: ElementRef<HTMLAudioElement>;
   @ViewChild('msgInput') messageInput!: ElementRef<HTMLInputElement>;
 
+
   cardTransactionRequest!: CardTransactionRequest;
+   staticMapData = new Map<string, staticMap>();
+
+  //  audioFiles = [
+  //   { src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', title: '7 Seconds' },
+  //   { src: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', title: '4 Seconds' },
+  // ];
+
+  mssapDisplayTitle = false;
+mssapDisablePositionSlider = true;
+mssapDisplayRepeatControls = false;
+mssapDisplayVolumeControls = false;
+mssapDisplayVolumeSlider = false;
+   
+// Material Style Simple Audio Player
+mssapPlaylist: Track[] = [];
+mssapPlaylist2: Track[] = [];
+
+   
+  
+   
+  
 
 
+  // @ViewChild('audioElement') audioElement !: ElementRef<HTMLAudioElement>;
 
-
-  @ViewChild('audioPlayer2') audioPlayer2 !: any;
 
   constructor(private webSocketAPI: WebSocketService,private audioRecordingService: AudioRecordingService,
      private cd: ChangeDetectorRef, private aiEngineIntegrationService: AIEngineIntegrationService) {
@@ -64,16 +91,41 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
   this.webSocketAPI.getTitle().subscribe(value => {
+    console.log("my greeting value", this.greeting)
     this.greeting = value;
   });
   this.webSocketAPI.getAudio().subscribe(value => {
-    this.greetingVoice = value;
+    if(value !=''){
+      this.mssapPlaylist.push(
+        {
+            title: 'horse',
+            link: value,
+            artist: 'Audio Artist',
+            duration: 4
+          }
+      )
+      this.mssapPlaylist2= this.mssapPlaylist;
+    }
+    
+    
+
+    if(this.greetingVoice == '' || null)
+      this.greetingVoice = value;
+    else{
+      const blob1 = new Blob([this.greetingVoice]);
+      const blob2 = new Blob([value]);
+      const concatenatedBlob = new Blob([blob1, blob2], { type: 'audio/*' });
+
+
+    // Concatenate Blob URLs
+      this.greetingVoice = URL.createObjectURL(concatenatedBlob);
+      // this.greetingVoice = this.greetingVoice+ '#' + value;
+    }
+      
+
     console.log("my greetingVoice", this.greetingVoice)
   });
 
-//   this.webrtcService.onRemoteStream((stream) => {
-//     this.audioPlayer2.nativeElement.srcObject = stream;
-// });
 
     this.languages = [
       { name: 'English', code: 'en-US' },
@@ -95,7 +147,17 @@ export class AppComponent implements OnInit {
         }
 
       });
+
+      this.staticMapData.set( '123456789', { accountNumber: '126000110006080000000', cardNumber: '789' })
+      this.staticMapData.set( '987654321', { accountNumber: '126000110006080000001', cardNumber: '321' })
+      this.staticMapData.set( '0000000018707728',{ accountNumber: '126000110006080000003', cardNumber: '728' })
+      this.staticMapData.set(  '000022224444' ,{ accountNumber: '126000110006080000002', cardNumber: '444' })
+
   }
+
+  // ngAfterViewInit() {
+  //   this.audioElement.nativeElement.src = this.greetingVoice;
+  // }
 
   startRecording() {
     this.isRecording = true;
@@ -220,6 +282,22 @@ export class AppComponent implements OnInit {
           console.log(response);
           this.userInfo = response;
           console.log("my infooo", this.userInfo)
+
+          this.aiEngineIntegrationService.getAccountTransactions(this.selectedCustomer.CICNumber,
+            this.staticMapData.get(this.selectedCustomer.CICNumber)?.accountNumber).subscribe(
+              (accTranx: TransactionResponse) => {
+                // console.log("acouuuuuunt", accTranx)
+                this.accountTransaction = accTranx
+              }
+             )
+
+             this.aiEngineIntegrationService.getCardTransactions(this.selectedCustomer.CICNumber,
+              this.staticMapData.get(this.selectedCustomer.CICNumber)?.cardNumber).subscribe(
+               (cardTranx: TransactionResponse) => {
+                // console.log("carrrrrrrrd", cardTranx)
+                 this.cardTransaction = cardTranx
+               }
+              )
         },
         (error) => {
           console.log(error);
@@ -272,12 +350,12 @@ handleMessage(message: any){
   console.log("inside hndle:",message);
 }
 
-startStream(): void {
-  const roomName = '/topic/sending'; // Replace with your room name
-  // this.webrtcService.startStream(roomName);
+
+onEnded(event: any) {
+  console.log(event);
+  // your logic which needs to
+  // be triggered once the
+  // track ends goes here.
 }
-
-
-
 
 }
