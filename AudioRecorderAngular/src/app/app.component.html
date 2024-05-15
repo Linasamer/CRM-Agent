@@ -256,9 +256,9 @@
     <div style="margin: auto;" *ngIf="userInfo">
       <p-button label="Start" (click)="onStartChat()"></p-button>
     </div>
-    <!-- <div style="margin: auto;" *ngIf="userInfo">
+    <div style="margin: auto;" *ngIf="userInfo">
       <p-button label="Start With WebSocket" (click)="startStream()"></p-button>
-    </div> -->
+    </div>
     </div>
     </div>
   </div>
@@ -305,6 +305,31 @@
        </div>
       </div>
     </div>
-    <audio #audioPlayer2 controls></audio>   
+    <!-- <audio #audioPlayer2 controls></audio>    -->
+    <!-- <div *ngFor="let audioMetadata of audioMetadataList" class="card">
+      <audio controls class="card-img-top" #audioPlayer2>
+        <source [src]="audioMetadata.streamUrl" [type]="audioMetadata.contentType">
+        Your browser does not support the audio element.
+      </audio>
+      <div class="card-body">
+        <p class="card-text">{{ audioMetadata.description }}</p>
+      </div>
+    </div> -->
+    <div class="card">
+      <div class="controls">
+        <button  class="fa-solid fa-backward" (click)="playPrevious()"></button>
+        <button  class="fa-solid fa-forward" (click)="playNext()"></button>
+        <!-- You can also add buttons for specific indices if desired -->
+        <!-- Example: <button (click)="playAudioByIndex(0)">Play first audio</button> -->
+      </div>
+      <audio controls #audioPlayer2 (ended)="onAudioEnded()">
+        <source>
+        Your browser does not support the audio element.
+      </audio>
+    
+     
+    </div>
+    
+    
   </div>
 

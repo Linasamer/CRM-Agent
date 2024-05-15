@@ -11,11 +11,13 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.code.secretary.models.requests.AIRequest;
 import com.code.secretary.models.requests.AccountTransactionRequest;
 import com.code.secretary.models.requests.AgentRequest;
 import com.code.secretary.models.requests.CardTransactionRequest;
 import com.code.secretary.models.requests.DataRequest;
 import com.code.secretary.models.requests.GreetingDataRequest;
+import com.code.secretary.models.responses.AIResponse;
 import com.code.secretary.models.responses.AccountResponse;
 import com.code.secretary.models.responses.AccountTransactionDetail;
 import com.code.secretary.models.responses.AccountTransactionResponse;
@@ -403,6 +405,12 @@ public class CustomerService {
 				.transactionDetails(transactionDetails).build();
 
 		return AccountTransactionResponse.builder().trxnLstList(trxnLstList).build();
+	}
+
+	public AIResponse callAIDirect(AIRequest agentRequest, String languageId) throws IOException {
+		AIResponse response = RestClientService.getPostObjectForIntegration(agentRequest, languageId);
+
+		return response;
 	}
 
 }

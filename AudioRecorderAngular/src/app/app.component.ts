@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { TransactionResponse } from './model/TransactionsResponse/TransactionResponse.model';
 import { staticMap } from './model/static-map-object.model';
 import { AccountTransactionResponse } from './model/TransactionsResponse/AccountTransactionResponse.model';
+import { AudioMetadata } from './model/AudioMetadata.model';
 
 declare var webkitSpeechRecognition: any;
 
@@ -57,7 +58,10 @@ export class AppComponent implements OnInit {
   @ViewChild('audioPlayer2') audioPlayer2!: ElementRef<HTMLAudioElement>;
   audioSubscription!: Subscription;
   audioUrl: any;
+  // public audioMetadata: AudioMetadata = new AudioMetadata(0, '', '', '', '');
+  public audioMetadataList: AudioMetadata[] = [];
 
+  public currentIndex: number = 0;
 
 
   constructor(private audioRecordingService: AudioRecordingService, private cd: ChangeDetectorRef,
@@ -115,11 +119,11 @@ export class AppComponent implements OnInit {
               byteArrays[sliceIndex] = new Uint8Array(bytes);
             }
             var myBlob = new Blob(byteArrays, { type: contentType });
-
             var blobURL = window.URL.createObjectURL(myBlob);
-             this.audioPlayer2.nativeElement.src = blobURL;
-             this.audioPlayer2.nativeElement.play();
-          this.base64toBlob(audioData.Base46, audioData.Text, 'application/x-www-form-urlencoded')
+            this.audioMetadataList.push(new AudioMetadata(0, '', blobURL, "audio/mpeg", ''));
+            this.playCurrentAudio()
+
+          // this.base64toBlob(audioData.Base46, audioData.Text, 'application/x-www-form-urlencoded')
         } },
         (error) => {
           console.error('Error receiving audio data:', error);
@@ -128,7 +132,48 @@ export class AppComponent implements OnInit {
 
  
 }
-   
+
+playCurrentAudio(): void {
+  const audioPlayer = this.audioPlayer2.nativeElement;
+  const currentAudio = this.audioMetadataList[this.currentIndex];
+
+  if (currentAudio) {
+    audioPlayer.src = currentAudio.streamUrl;
+    // audioPlayer.load();
+
+    // const currentTime = sessionStorage.getItem('currentTime');
+    // if (currentTime) {
+    //   audioPlayer.currentTime = parseFloat(currentTime);
+    // }
+
+    // audioPlayer.ontimeupdate = () => {
+    //   sessionStorage.setItem('currentTime', audioPlayer.currentTime.toString());
+    // };
+    // audioPlayer.play();
+  } else {
+    console.log('Playlist ended.');
+  }
+}
+
+onAudioEnded(): void {
+  this.currentIndex++;
+  this.playCurrentAudio();
+}
+
+playNext(): void {
+  if (this.currentIndex < this.audioMetadataList.length - 1) {
+    this.currentIndex++;
+    this.playCurrentAudio();
+  }
+}
+
+playPrevious(): void {
+  if (this.currentIndex > 0) {
+    this.currentIndex--;
+    this.playCurrentAudio();
+  }
+}
+
   
   startRecording() {
     this.isRecording = true;
@@ -315,5 +360,6 @@ stopStream(): void {
 sendMessage(){
   this.webSocketService.sendMessage();
 }
+
 
 }
