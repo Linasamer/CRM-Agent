@@ -26,7 +26,7 @@ public class AudioStreamController {
 		String audioChunks = audioFileReader.Base46ToString("EN");
 		template.convertAndSend("/topic/receive",
 				DataResponse.builder().base46(audioChunks).text("Lina").sessionId(UUID.randomUUID().toString()).build());
-		Thread.sleep(4000);
+		Thread.sleep(5000);
 		audioChunks = audioFileReader.Base46ToString("AR");
 		template.convertAndSend("/topic/receive",
 				DataResponse.builder().base46(audioChunks).text("Lina").sessionId(UUID.randomUUID().toString()).build());

@@ -272,15 +272,16 @@
       </div>
       <div class="messages" #scrollMe>
         <ul>
-          <li [class]="msg.type" *ngFor="let msg of messages">
+          <li [class]="msg.type" *ngFor="let msg of messages; let i = index">
             <img [src]="msg.type === 'bank' ? bankImage : userImage" alt="" />
             <p >{{msg?.content || ''}}</p>
             <div class="card">
             <div class="controls">
-              <button  class="fa-solid fa-backward" *ngIf="msg.voiceNote" (click)="playPrevious()"></button>
-              <button  class="fa-solid fa-forward" *ngIf="msg.type === 'bank'" (click)="playNext()"></button>
+              <button  class="fa-solid fa-backward" *ngIf="msg.voiceNote" (click)="playPrevious(i)"></button>
+              <button  class="fa-solid fa-forward" *ngIf="msg.voiceNote" (click)="playNext(i)"></button>
+              <button  class="fa-solid fa-play" *ngIf="msg.type === 'bank'" (click)="sendMessage()"></button>
             </div>
-            <audio *ngIf="msg.voiceNote" controls  #audioPlayer2 (ended)="onAudioEnded()">
+            <audio *ngIf="msg.voiceNote" controls  (ended)="onAudioEnded(i)">
               <source [src]="msg.voiceContent">
             </audio>
             </div>

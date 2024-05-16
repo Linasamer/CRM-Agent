@@ -6,4 +6,5 @@ export class AudioMetadata {
         public contentType: string,
         public description: string
     ) { }
+
 }

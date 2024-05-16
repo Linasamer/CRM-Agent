@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { AudioRecordingService } from './audio-recording.service';
 import { AIEngineIntegrationService } from './AIEngineIntegration.service';
 import { CardTransactionRequest } from './model/card-transaction-request.model';
@@ -55,11 +55,13 @@ export class AppComponent implements OnInit {
 
   cardTransactionRequest!: CardTransactionRequest;
   isStreaming = false;
-  @ViewChild('audioPlayer2') audioPlayer2!: ElementRef<HTMLAudioElement>;
+  // @ViewChild('audioPlayer2') audioPlayer2!: ElementRef<HTMLAudioElement>;
+  @ViewChildren('audioPlayer2') audioPlayers2!: QueryList<ElementRef>;
+
   audioSubscription!: Subscription;
   audioUrl: any;
-  // public audioMetadata: AudioMetadata = new AudioMetadata(0, '', '', '', '');
-  public audioMetadataList: AudioMetadata[] = [];
+  public audioMetadataNull: AudioMetadata[] = [];
+  // public audioMetadataList: AudioMetadata[] = [];
 
   public currentIndex: number = 0;
 
@@ -144,7 +146,7 @@ export class AppComponent implements OnInit {
 
   addRecordMessage() {
       if (this.audioMessage) {
-        this.messages.push({ type: 'user', content: '', voiceNote: true, voiceContent: this.voiceBlob })
+        this.messages.push({ type: 'user', content: '', voiceNote: true, voiceContent: this.voiceBlob , audioMetadata: this.audioMetadataNull})
         console.log("my base64: ", this.base46audio)
         const dataRequest = new DataRequestModel(this.base46audio, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
         this.aiEngineIntegrationService.voiceToVoice(dataRequest).subscribe(
@@ -166,7 +168,7 @@ export class AppComponent implements OnInit {
     const val = inputField.value?.trim()
     if (val.length) {
       if (this.audioMessage) {
-        this.messages.push({ type: 'user', content: val, voiceNote: true, voiceContent: this.voiceBlob })
+        this.messages.push({ type: 'user', content: val, voiceNote: true, voiceContent: this.voiceBlob  , audioMetadata: this.audioMetadataNull})
         console.log("my base64: ", this.base46audio)
         var result = '';
         const dataRequest = new DataRequestModel(this.base46audio, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
@@ -181,7 +183,7 @@ export class AppComponent implements OnInit {
         );
         console.log(this.messages)
           } else {
-            this.messages.push({ type: 'user', content: val, voiceNote: false, voiceContent: '' })
+            this.messages.push({ type: 'user', content: val, voiceNote: false, voiceContent: ''  , audioMetadata: this.audioMetadataNull})
             const dataRequest = new DataRequestModel(val, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
             this.aiEngineIntegrationService.textToText(dataRequest).subscribe(
               (response: DataResponseModel) => {
@@ -223,9 +225,9 @@ export class AppComponent implements OnInit {
     var myBlob = new Blob(byteArrays, { type: contentType });
     var blobURL = window.URL.createObjectURL(myBlob);
    
-    this.messages.push({ type: 'bank', content: text, voiceNote: true, voiceContent: blobURL }); }
+    this.messages.push({ type: 'bank', content: text, voiceNote: true, voiceContent: blobURL  , audioMetadata: this.audioMetadataNull}); }
   else{
-    this.messages.push({ type: 'bank', content: text, voiceNote: false, voiceContent: '' });}
+    this.messages.push({ type: 'bank', content: text, voiceNote: false, voiceContent: '' , audioMetadata: this.audioMetadataNull });}
   }
 
   onCustomerChange(event: any) {
@@ -300,27 +302,68 @@ sendMessage(){
   this.webSocketService.sendMessage();
 }
 
-playCurrentAudio(): void {
-  const audioPlayer = this.audioPlayer2.nativeElement;
-  const currentAudio = this.audioMetadataList[this.currentIndex];
-  if (currentAudio) {
-    audioPlayer.src = currentAudio.streamUrl;
-    // audioPlayer.load();
 
-    // const currentTime = sessionStorage.getItem('currentTime');
-    // if (currentTime) {
-    //   audioPlayer.currentTime = parseFloat(currentTime);
-    // }
+private callMock(val: any){
+  const dataRequest = new DataRequestModel(val, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
+  this.aiEngineIntegrationService.textMock(dataRequest).subscribe(
+    (response: DataResponseModel) => {
+      console.log(response);
+      this.base64toblobwebsocket(response.Base46, response.Text, 'application/x-www-form-urlencoded')
+      },
+    (error) => {
+      console.log(error);
+    }
+  );
 
-    // audioPlayer.ontimeupdate = () => {
-    //   sessionStorage.setItem('currentTime', audioPlayer.currentTime.toString());
-    // };
-    audioPlayer.play();
-  } else {
-    console.log('Playlist ended.');
-  }
 }
 
+addNewMessageWebSocket(inputField: any) {
+  const val = inputField.value?.trim()
+  if (val.length) {
+    if (this.audioMessage) {
+      this.messages.push({ type: 'user', content: val, voiceNote: true, voiceContent: this.voiceBlob  , audioMetadata: this.audioMetadataNull })
+        } else {
+          this.messages.push({ type: 'user', content: val, voiceNote: false, voiceContent: '' , audioMetadata: this.audioMetadataNull })
+        }   
+           this.callMock(val)  
+}
+  inputField.value = '';
+  this.audioMessage = false
+
+}
+
+addRecordMessageWebSocket() {
+      this.messages.push({ type: 'user', content: '', voiceNote: true, voiceContent: this.voiceBlob  , audioMetadata: this.audioMetadataNull })
+      this.callMock(null)
+}
+onAudioEnded(index: number): void {
+  // this.currentIndex++;
+  const indexMedia = this.messages[index].audioMetadata.findIndex(audio => audio.streamUrl === this.messages[index].voiceContent);
+  this.playCurrentAudio(index, indexMedia + 1);
+
+}
+
+playNext(index: number): void {
+  const indexMedia = this.messages[index].audioMetadata.findIndex(audio => audio.streamUrl === this.messages[index].voiceContent);
+  this.playCurrentAudio(index, indexMedia + 1);
+
+  // if (this.currentIndex < this.messages[this.messages.length - 1].audioMetadata.length - 1) {
+  //   this.currentIndex++;
+  //   this.playCurrentAudio();
+  // }
+}
+
+playPrevious(index: number): void {
+
+  const indexMedia = this.messages[index].audioMetadata.findIndex(audio => audio.streamUrl === this.messages[index].voiceContent);
+  this.playCurrentAudio(index, indexMedia - 1);
+
+  // if (this.currentIndex > 0) {
+  //   this.currentIndex--;
+  //   this.playCurrentAudio();
+  // }
+
+}
 
 base64toblobwebsocket(base64Data: any, text: any, contentType: any){
   if (!(base64Data == null || base64Data == '')){
@@ -343,68 +386,32 @@ base64toblobwebsocket(base64Data: any, text: any, contentType: any){
     }
     var myBlob = new Blob(byteArrays, { type: contentType });
     var blobURL = window.URL.createObjectURL(myBlob);
-  this.messages[this.messages.length - 1].voiceContent = blobURL
-  this.messages[this.messages.length - 1].voiceNote = true
-
-
- this.audioMetadataList.push(new AudioMetadata(0, '', blobURL, "audio/mpeg", ''));
- this.playCurrentAudio()
+    let index = this.messages.length - 1;
+  this.messages[index].voiceContent = blobURL
+  this.messages[index].voiceNote = true
+  this.messages[index].audioMetadata.push(new AudioMetadata(Math.random(), '', blobURL, "audio/mpeg", ''))
+ this.playCurrentAudio(index, this.messages[index].audioMetadata.length - 1 )
 } else{
-this.messages.push({ type: 'bank', content: text, voiceNote: false, voiceContent: '' });}
+this.messages.push({ type: 'bank', content: text, voiceNote: false, voiceContent: ''  , audioMetadata: this.audioMetadataNull});}
 
 }
 
-
-private callMock(val: any){
-  const dataRequest = new DataRequestModel(val, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
-  this.aiEngineIntegrationService.textMock(dataRequest).subscribe(
-    (response: DataResponseModel) => {
-      console.log(response);
-      this.base64toblobwebsocket(response.Base46, response.Text, 'application/x-www-form-urlencoded')
-      },
-    (error) => {
-      console.log(error);
-    }
-  );
-
-}
-
-addNewMessageWebSocket(inputField: any) {
-  const val = inputField.value?.trim()
-  if (val.length) {
-    if (this.audioMessage) {
-      this.messages.push({ type: 'user', content: val, voiceNote: true, voiceContent: this.voiceBlob })
-        } else {
-          this.messages.push({ type: 'user', content: val, voiceNote: false, voiceContent: '' })
-        }   
-           this.callMock(val)  
-}
-  inputField.value = '';
-  this.audioMessage = false
-
-}
-
-addRecordMessageWebSocket() {
-      this.messages.push({ type: 'user', content: '', voiceNote: true, voiceContent: this.voiceBlob })
-      this.callMock(null)
-}
-onAudioEnded(): void {
-  this.currentIndex++;
-  this.playCurrentAudio();
-}
-
-playNext(): void {
-  // if (this.currentIndex < this.audioMetadataList.length - 1) {
-  //   this.currentIndex++;
-  //   this.playCurrentAudio();
-  // }
-  this.sendMessage();
-}
-
-playPrevious(): void {
-  if (this.currentIndex > 0) {
-    this.currentIndex--;
-    this.playCurrentAudio();
+playCurrentAudio(index: number, indexAudio: number): void {
+  const currentAudio = this.messages[index].audioMetadata[indexAudio];
+  if (currentAudio) {
+    this.messages[index].voiceContent = currentAudio.streamUrl;
+    this.messages[index].voiceNote = true; 
+    // this.messages = [...this.messages]
+    const audioElement = this.audioPlayers2.toArray()[index].nativeElement as HTMLAudioElement;
+    if (audioElement) {
+        audioElement.load();
+        audioElement.play();
+      }
+    } else {
+    console.log('Playlist ended.');
   }
+  this.cd.detectChanges();
 }
+
+
 }
