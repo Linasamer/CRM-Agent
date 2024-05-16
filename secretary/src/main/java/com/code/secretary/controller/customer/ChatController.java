@@ -1,6 +1,7 @@
 package com.code.secretary.controller.customer;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -74,6 +75,17 @@ public class ChatController {
 			@ApiResponse(responseCode = "502", description = "Generic bad gateway error") })
 	public DataResponse textToText(@RequestBody DataRequest text) {
 		return customerService.getDataResponse(text);
+	}
+
+	@PostMapping(value = "/mocktext")
+	@Operation(description = "Retrieve text data")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "terms and conditions retrieved successfully"),
+			@ApiResponse(responseCode = "400", description = "Bad request"), @ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
+			@ApiResponse(responseCode = "503", description = "Service Unavailable"),
+			@ApiResponse(responseCode = "502", description = "Generic bad gateway error") })
+	public DataResponse textMock(@RequestBody DataRequest text) {
+		return DataResponse.builder().text("Ana Zeha2t").sessionId(UUID.randomUUID().toString()).build();
 	}
 
 	@PostMapping(value = "/voiceToVoice")

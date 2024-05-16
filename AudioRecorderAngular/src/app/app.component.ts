@@ -98,33 +98,9 @@ export class AppComponent implements OnInit {
 
       this.audioSubscription = this.webSocketService.audioStream.subscribe(
         (audioData: DataResponseModel) => {
-          console.log('Received audio data:', audioData);
-          let base64Data = audioData.Base46;
-          if (!(base64Data == null || base64Data == '')){
-           let contentType = 'application/x-www-form-urlencoded';
-            const sliceSize = 1024;
-            const byteCharacters = atob(base64Data);
-            const bytesLength = byteCharacters.length;
-            const slicesCount = Math.ceil(bytesLength / sliceSize);
-            const byteArrays = new Array(slicesCount);
-        
-            for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
-              const begin = sliceIndex * sliceSize;
-              const end = Math.min(begin + sliceSize, bytesLength);
-        
-              const bytes = new Array(end - begin);
-              for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
-                bytes[i] = byteCharacters[offset].charCodeAt(0);
-              }
-              byteArrays[sliceIndex] = new Uint8Array(bytes);
-            }
-            var myBlob = new Blob(byteArrays, { type: contentType });
-            var blobURL = window.URL.createObjectURL(myBlob);
-            this.audioMetadataList.push(new AudioMetadata(0, '', blobURL, "audio/mpeg", ''));
-            this.playCurrentAudio()
+        this.base64toblobwebsocket(audioData.Base46, audioData.Text, 'application/x-www-form-urlencoded')
 
-          // this.base64toBlob(audioData.Base46, audioData.Text, 'application/x-www-form-urlencoded')
-        } },
+      },
         (error) => {
           console.error('Error receiving audio data:', error);
         }
@@ -133,48 +109,7 @@ export class AppComponent implements OnInit {
  
 }
 
-playCurrentAudio(): void {
-  const audioPlayer = this.audioPlayer2.nativeElement;
-  const currentAudio = this.audioMetadataList[this.currentIndex];
-
-  if (currentAudio) {
-    audioPlayer.src = currentAudio.streamUrl;
-    // audioPlayer.load();
-
-    // const currentTime = sessionStorage.getItem('currentTime');
-    // if (currentTime) {
-    //   audioPlayer.currentTime = parseFloat(currentTime);
-    // }
-
-    // audioPlayer.ontimeupdate = () => {
-    //   sessionStorage.setItem('currentTime', audioPlayer.currentTime.toString());
-    // };
-    // audioPlayer.play();
-  } else {
-    console.log('Playlist ended.');
-  }
-}
-
-onAudioEnded(): void {
-  this.currentIndex++;
-  this.playCurrentAudio();
-}
-
-playNext(): void {
-  if (this.currentIndex < this.audioMetadataList.length - 1) {
-    this.currentIndex++;
-    this.playCurrentAudio();
-  }
-}
-
-playPrevious(): void {
-  if (this.currentIndex > 0) {
-    this.currentIndex--;
-    this.playCurrentAudio();
-  }
-}
-
-  
+ 
   startRecording() {
     this.isRecording = true;
     this.audioMessage = true;
@@ -202,7 +137,9 @@ playPrevious(): void {
 
       this.vSearch.stop();
     }
-    this.addRecordMessage();
+    if(this.webSocketService){
+      this.addRecordMessageWebSocket();
+    } else{    this.addRecordMessage();}
   }
 
   addRecordMessage() {
@@ -243,23 +180,25 @@ playPrevious(): void {
           }
         );
         console.log(this.messages)
-      } else {
-        this.messages.push({ type: 'user', content: val, voiceNote: false, voiceContent: '' })
-        const dataRequest = new DataRequestModel(val, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
-        this.aiEngineIntegrationService.textToText(dataRequest).subscribe(
-          (response: DataResponseModel) => {
-            console.log(response);
-            this.base64toBlob(response.Base46, response.Text, 'application/x-www-form-urlencoded')
-            },
-          (error) => {
-            console.log(error);
-          }
-        );
+          } else {
+            this.messages.push({ type: 'user', content: val, voiceNote: false, voiceContent: '' })
+            const dataRequest = new DataRequestModel(val, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
+            this.aiEngineIntegrationService.textToText(dataRequest).subscribe(
+              (response: DataResponseModel) => {
+                console.log(response);
+                this.base64toBlob(response.Base46, response.Text, 'application/x-www-form-urlencoded')
+                },
+              (error) => {
+                console.log(error);
+              }
+            );
 
       }
-    }
+  }
+  
     inputField.value = '';
     this.audioMessage = false
+
   }
 
   private base64toBlob(base64Data: any, text: any, contentType: any) {
@@ -283,13 +222,10 @@ playPrevious(): void {
     }
     var myBlob = new Blob(byteArrays, { type: contentType });
     var blobURL = window.URL.createObjectURL(myBlob);
-    console.log("Linaaaaaaaaaaaaaaaaaaaa" , blobURL)
-    this.messages.push({ type: 'bank', content: text, voiceNote: true, voiceContent: blobURL });
-  }
+   
+    this.messages.push({ type: 'bank', content: text, voiceNote: true, voiceContent: blobURL }); }
   else{
-    this.messages.push({ type: 'bank', content: text, voiceNote: false, voiceContent: '' });
-
-  }
+    this.messages.push({ type: 'bank', content: text, voiceNote: false, voiceContent: '' });}
   }
 
   onCustomerChange(event: any) {
@@ -345,7 +281,10 @@ playPrevious(): void {
   return lang
 
 }
+
+//////////////////////////////////////////////////////////////////////////// WebSocket
 startStream(): void {
+  this.sessionId = "randam";
   this.startFlagWebSocket = true
   this.webSocketService.connect();
   this.isStreaming = true;
@@ -361,5 +300,111 @@ sendMessage(){
   this.webSocketService.sendMessage();
 }
 
+playCurrentAudio(): void {
+  const audioPlayer = this.audioPlayer2.nativeElement;
+  const currentAudio = this.audioMetadataList[this.currentIndex];
+  if (currentAudio) {
+    audioPlayer.src = currentAudio.streamUrl;
+    // audioPlayer.load();
 
+    // const currentTime = sessionStorage.getItem('currentTime');
+    // if (currentTime) {
+    //   audioPlayer.currentTime = parseFloat(currentTime);
+    // }
+
+    // audioPlayer.ontimeupdate = () => {
+    //   sessionStorage.setItem('currentTime', audioPlayer.currentTime.toString());
+    // };
+    audioPlayer.play();
+  } else {
+    console.log('Playlist ended.');
+  }
+}
+
+
+base64toblobwebsocket(base64Data: any, text: any, contentType: any){
+  if (!(base64Data == null || base64Data == '')){
+    contentType = contentType || '';
+    const sliceSize = 1024;
+    const byteCharacters = atob(base64Data);
+    const bytesLength = byteCharacters.length;
+    const slicesCount = Math.ceil(bytesLength / sliceSize);
+    const byteArrays = new Array(slicesCount);
+
+    for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+      const begin = sliceIndex * sliceSize;
+      const end = Math.min(begin + sliceSize, bytesLength);
+
+      const bytes = new Array(end - begin);
+      for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
+        bytes[i] = byteCharacters[offset].charCodeAt(0);
+      }
+      byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+    var myBlob = new Blob(byteArrays, { type: contentType });
+    var blobURL = window.URL.createObjectURL(myBlob);
+  this.messages[this.messages.length - 1].voiceContent = blobURL
+  this.messages[this.messages.length - 1].voiceNote = true
+
+
+ this.audioMetadataList.push(new AudioMetadata(0, '', blobURL, "audio/mpeg", ''));
+ this.playCurrentAudio()
+} else{
+this.messages.push({ type: 'bank', content: text, voiceNote: false, voiceContent: '' });}
+
+}
+
+
+private callMock(val: any){
+  const dataRequest = new DataRequestModel(val, this.checkLanguage(), this.selectedCustomer.CICNumber, this.sessionId);
+  this.aiEngineIntegrationService.textMock(dataRequest).subscribe(
+    (response: DataResponseModel) => {
+      console.log(response);
+      this.base64toblobwebsocket(response.Base46, response.Text, 'application/x-www-form-urlencoded')
+      },
+    (error) => {
+      console.log(error);
+    }
+  );
+
+}
+
+addNewMessageWebSocket(inputField: any) {
+  const val = inputField.value?.trim()
+  if (val.length) {
+    if (this.audioMessage) {
+      this.messages.push({ type: 'user', content: val, voiceNote: true, voiceContent: this.voiceBlob })
+        } else {
+          this.messages.push({ type: 'user', content: val, voiceNote: false, voiceContent: '' })
+        }   
+           this.callMock(val)  
+}
+  inputField.value = '';
+  this.audioMessage = false
+
+}
+
+addRecordMessageWebSocket() {
+      this.messages.push({ type: 'user', content: '', voiceNote: true, voiceContent: this.voiceBlob })
+      this.callMock(null)
+}
+onAudioEnded(): void {
+  this.currentIndex++;
+  this.playCurrentAudio();
+}
+
+playNext(): void {
+  // if (this.currentIndex < this.audioMetadataList.length - 1) {
+  //   this.currentIndex++;
+  //   this.playCurrentAudio();
+  // }
+  this.sendMessage();
+}
+
+playPrevious(): void {
+  if (this.currentIndex > 0) {
+    this.currentIndex--;
+    this.playCurrentAudio();
+  }
+}
 }

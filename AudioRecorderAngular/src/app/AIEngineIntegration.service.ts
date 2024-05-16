@@ -90,4 +90,15 @@ export class AIEngineIntegrationService  {
       );
   }
 
+  textMock(body: any): Observable<DataResponseModel> {
+    return this.httpClient.post<DataResponseModel>(RestEndpoints.POST_TEXT_TO_TEXT_Mock, body)
+      .pipe(
+        map((res: DataResponseModel) => res),
+        catchError(error => {
+          console.log(error);
+          return throwError(error); 
+        })
+      );
+  }
+
   }

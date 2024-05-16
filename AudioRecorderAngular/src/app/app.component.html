@@ -17,7 +17,7 @@
 <!-- chat box -->
 
 
-<!-- ------------------------------------------------------------------------------------------- -->
+<!-- ----------------------------------------------Ai Real Response page--------------------------------------------- -->
 
   <div *ngIf="startFlag && !startFlagWebSocket">
     <div id="frame">
@@ -64,18 +64,10 @@
       
    
   </div>
+  <!-----------------------------------------------------------Customer Info-------------------------------- --------->
+
   <div id="infoPart" *ngIf="!startFlag && !startFlagWebSocket">
     <div id="frame">
-      <!-- <div>
-        <h1>Audio Stream</h1>
-        <p>The audio stream will start or stop when you press the button.</p>
-        <button (click)="isStreaming ? stopStream() : startStream()">
-          {{ isStreaming ? 'Stop Stream' : 'Start Stream' }}
-        </button>
-        <audio #audioPlayer2 controls></audio>
-
-        <button (click)="sendMessage()" class="btn btn-default" type="submit">Send</button>
-      </div> -->
       <div class="contact-profile">
         <img [src]="bankImage" alt="bankLogo" />
         <p>alrajhi bank</p>
@@ -262,7 +254,7 @@
     </div>
     </div>
   </div>
-
+<!-----------------------------------------------------------WebSocket Page-------------------------------- --------->
   <div *ngIf="!startFlag && startFlagWebSocket">
     <div id="frame">
       <div class="contact-profile">
@@ -283,16 +275,22 @@
           <li [class]="msg.type" *ngFor="let msg of messages">
             <img [src]="msg.type === 'bank' ? bankImage : userImage" alt="" />
             <p >{{msg?.content || ''}}</p>
-            <audio *ngIf="msg.voiceNote" controls>
+            <div class="card">
+            <div class="controls">
+              <button  class="fa-solid fa-backward" *ngIf="msg.voiceNote" (click)="playPrevious()"></button>
+              <button  class="fa-solid fa-forward" *ngIf="msg.type === 'bank'" (click)="playNext()"></button>
+            </div>
+            <audio *ngIf="msg.voiceNote" controls  #audioPlayer2 (ended)="onAudioEnded()">
               <source [src]="msg.voiceContent">
             </audio>
+            </div>
           </li>
         </ul>
       </div>
       <div class="message-input">
         <div class="wrap">
-          <input type="text" #msgInput placeholder="Write your message..." (keyup.enter)="sendMessage()" />
-          <button class="submit" (click)="sendMessage()">
+          <input type="text" #msgInput placeholder="Write your message..." (keyup.enter)="addNewMessageWebSocket(msgInput)" />
+          <button class="submit" (click)="addNewMessageWebSocket(msgInput)">
             <i class="fa fa-paper-plane" aria-hidden="true"></i>
           </button>
           <button title="Click here to start recording action" (click)="startRecording()"
@@ -305,30 +303,18 @@
        </div>
       </div>
     </div>
-    <!-- <audio #audioPlayer2 controls></audio>    -->
-    <!-- <div *ngFor="let audioMetadata of audioMetadataList" class="card">
-      <audio controls class="card-img-top" #audioPlayer2>
-        <source [src]="audioMetadata.streamUrl" [type]="audioMetadata.contentType">
-        Your browser does not support the audio element.
-      </audio>
-      <div class="card-body">
-        <p class="card-text">{{ audioMetadata.description }}</p>
-      </div>
-    </div> -->
+    <!-- <audio #audioPlayer2 controls></audio>     -->
+<!-- 
     <div class="card">
       <div class="controls">
         <button  class="fa-solid fa-backward" (click)="playPrevious()"></button>
         <button  class="fa-solid fa-forward" (click)="playNext()"></button>
-        <!-- You can also add buttons for specific indices if desired -->
-        <!-- Example: <button (click)="playAudioByIndex(0)">Play first audio</button> -->
       </div>
       <audio controls #audioPlayer2 (ended)="onAudioEnded()">
         <source>
         Your browser does not support the audio element.
       </audio>
-    
-     
-    </div>
+    </div> -->
     
     
   </div>
