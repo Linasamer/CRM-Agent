@@ -248,7 +248,7 @@
     <div style="margin: auto;" *ngIf="userInfo">
       <p-button label="Start" (click)="onStartChat()"></p-button>
     </div>
-    <div style="margin: auto;" *ngIf="userInfo">
+    <div style="margin: auto;" *ngIf="userInfo && enableWebSocket">
       <p-button label="Start With WebSocket" (click)="startStream()"></p-button>
     </div>
     </div>
@@ -275,13 +275,13 @@
           <li [class]="msg.type" *ngFor="let msg of messages; let i = index">
             <img [src]="msg.type === 'bank' ? bankImage : userImage" alt="" />
             <p >{{msg?.content || ''}}</p>
-            <div class="card">
+            <div *ngIf="msg.type === 'bank' || (msg.type === 'user' && msg.voiceNote)" class="card">
             <div class="controls">
               <button  class="fa-solid fa-backward" *ngIf="msg.voiceNote" (click)="playPrevious(i)"></button>
               <button  class="fa-solid fa-forward" *ngIf="msg.voiceNote" (click)="playNext(i)"></button>
-              <button  class="fa-solid fa-play" *ngIf="msg.type === 'bank'" (click)="sendMessage()"></button>
+              <button  class="fa-solid fa-play" *ngIf="msg.type === 'bank' && !msg.voiceContent" (click)="sendMessage()"></button>
             </div>
-            <audio *ngIf="msg.voiceNote" controls  (ended)="onAudioEnded(i)">
+            <audio *ngIf="msg.voiceNote" controls [id]="i" (ended)="onAudioEnded(i)">
               <source [src]="msg.voiceContent">
             </audio>
             </div>

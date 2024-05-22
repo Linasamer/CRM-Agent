@@ -40,6 +40,8 @@ export class AppComponent implements OnInit {
   base46audio: any;
   startFlag:boolean = false;
   startFlagWebSocket:boolean = false;
+  enableWebSocket:boolean = false;
+
 
   userInfo !: ProfileData;
   sessionId!: string;
@@ -55,8 +57,6 @@ export class AppComponent implements OnInit {
 
   cardTransactionRequest!: CardTransactionRequest;
   isStreaming = false;
-  // @ViewChild('audioPlayer2') audioPlayer2!: ElementRef<HTMLAudioElement>;
-  @ViewChildren('audioPlayer2') audioPlayers2!: QueryList<ElementRef>;
 
   audioSubscription!: Subscription;
   audioUrl: any;
@@ -100,8 +100,7 @@ export class AppComponent implements OnInit {
 
       this.audioSubscription = this.webSocketService.audioStream.subscribe(
         (audioData: DataResponseModel) => {
-        this.base64toblobwebsocket(audioData.Base46, audioData.Text, 'application/x-www-form-urlencoded')
-
+          this.base64toblobwebsocket(audioData.Base46, audioData.Text, 'application/x-www-form-urlencoded')
       },
         (error) => {
           console.error('Error receiving audio data:', error);
@@ -139,7 +138,7 @@ export class AppComponent implements OnInit {
 
       this.vSearch.stop();
     }
-    if(this.webSocketService){
+    if(this.startFlagWebSocket){
       this.addRecordMessageWebSocket();
     } else{    this.addRecordMessage();}
   }
@@ -321,50 +320,44 @@ addNewMessageWebSocket(inputField: any) {
   const val = inputField.value?.trim()
   if (val.length) {
     if (this.audioMessage) {
-      this.messages.push({ type: 'user', content: val, voiceNote: true, voiceContent: this.voiceBlob  , audioMetadata: this.audioMetadataNull })
-        } else {
-          this.messages.push({ type: 'user', content: val, voiceNote: false, voiceContent: '' , audioMetadata: this.audioMetadataNull })
-        }   
-           this.callMock(val)  
+      this.messages.push({ type: 'user', content: val, voiceNote: true, voiceContent: this.voiceBlob  , audioMetadata: [] })
+    } else {
+      this.messages.push({ type: 'user', content: val, voiceNote: false, voiceContent: '' , audioMetadata: [] })
+    }   
+    this.callMock(val)  
 }
   inputField.value = '';
   this.audioMessage = false
-
 }
 
 addRecordMessageWebSocket() {
-      this.messages.push({ type: 'user', content: '', voiceNote: true, voiceContent: this.voiceBlob  , audioMetadata: this.audioMetadataNull })
+      this.messages.push({ type: 'user', content: '', voiceNote: true, voiceContent: this.voiceBlob  , audioMetadata: [] })
+      this.audioMessage = false    
       this.callMock(null)
 }
+
 onAudioEnded(index: number): void {
-  // this.currentIndex++;
-  const indexMedia = this.messages[index].audioMetadata.findIndex(audio => audio.streamUrl === this.messages[index].voiceContent);
+  const indexMedia = this.findAudioMetaDataIndex(index);
+  // const indexMedia = this.messages[index].audioMetadata.findIndex(audio => audio.streamUrl === this.messages[index].voiceContent);
   this.playCurrentAudio(index, indexMedia + 1);
 
 }
 
 playNext(index: number): void {
-  const indexMedia = this.messages[index].audioMetadata.findIndex(audio => audio.streamUrl === this.messages[index].voiceContent);
+  const indexMedia = this.findAudioMetaDataIndex(index);
+  // const indexMedia = this.messages[index].audioMetadata.findIndex(audio => audio.streamUrl === this.messages[index].voiceContent);
   this.playCurrentAudio(index, indexMedia + 1);
-
-  // if (this.currentIndex < this.messages[this.messages.length - 1].audioMetadata.length - 1) {
-  //   this.currentIndex++;
-  //   this.playCurrentAudio();
-  // }
 }
 
 playPrevious(index: number): void {
-
-  const indexMedia = this.messages[index].audioMetadata.findIndex(audio => audio.streamUrl === this.messages[index].voiceContent);
+  const indexMedia = this.findAudioMetaDataIndex(index);
+  // const indexMedia = this.messages[index].audioMetadata.findIndex(audio => audio.streamUrl === this.messages[index].voiceContent);
   this.playCurrentAudio(index, indexMedia - 1);
-
-  // if (this.currentIndex > 0) {
-  //   this.currentIndex--;
-  //   this.playCurrentAudio();
-  // }
-
 }
 
+findAudioMetaDataIndex(index: number): any {
+  return this.messages[index].audioMetadata.findIndex(audio => audio.streamUrl === this.messages[index].voiceContent);
+}
 base64toblobwebsocket(base64Data: any, text: any, contentType: any){
   if (!(base64Data == null || base64Data == '')){
     contentType = contentType || '';
@@ -386,14 +379,14 @@ base64toblobwebsocket(base64Data: any, text: any, contentType: any){
     }
     var myBlob = new Blob(byteArrays, { type: contentType });
     var blobURL = window.URL.createObjectURL(myBlob);
+    console.log(blobURL);
     let index = this.messages.length - 1;
-  this.messages[index].voiceContent = blobURL
-  this.messages[index].voiceNote = true
-  this.messages[index].audioMetadata.push(new AudioMetadata(Math.random(), '', blobURL, "audio/mpeg", ''))
- this.playCurrentAudio(index, this.messages[index].audioMetadata.length - 1 )
+    this.messages[index].voiceContent = blobURL;
+    this.messages[index].voiceNote = true;
+    this.messages[index].audioMetadata.push(new AudioMetadata(Math.random(), '', blobURL, "audio/mpeg", ''));
+ this.playCurrentAudio(index, 0);
 } else{
-this.messages.push({ type: 'bank', content: text, voiceNote: false, voiceContent: ''  , audioMetadata: this.audioMetadataNull});}
-
+  this.messages.push({ type: 'bank', content: text, voiceNote: false, voiceContent: ''  , audioMetadata: []});}
 }
 
 playCurrentAudio(index: number, indexAudio: number): void {
@@ -401,8 +394,8 @@ playCurrentAudio(index: number, indexAudio: number): void {
   if (currentAudio) {
     this.messages[index].voiceContent = currentAudio.streamUrl;
     this.messages[index].voiceNote = true; 
-    // this.messages = [...this.messages]
-    const audioElement = this.audioPlayers2.toArray()[index].nativeElement as HTMLAudioElement;
+    console.log(this.messages[index]);
+    const audioElement = document.getElementById(index.toLocaleString()) as HTMLAudioElement;
     if (audioElement) {
         audioElement.load();
         audioElement.play();

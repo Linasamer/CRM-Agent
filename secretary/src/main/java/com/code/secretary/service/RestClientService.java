@@ -38,12 +38,18 @@ public class RestClientService {
 
 	public static <T extends Object> AgentResponse getPostObject(AgentRequest request, String lang) {
 		try {
+			
+			request.setAcceptLanguage("AR");
+			request.setCorrelationId("400");
+			request.setChannelId("1");
+			request.setAuthorization("1");
+
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.set("Accept-Language", lang);
 			HttpEntity<AgentRequest> requestEntity = new HttpEntity<>(request, headers);
 			RestTemplate restTemplate = new RestTemplate();
-			ResponseEntity<AgentResponse> responseEntity = restTemplate.postForEntity("http://18.201.252.113:4010/v1/ai_agent/agent_response",
+			ResponseEntity<AgentResponse> responseEntity = restTemplate.postForEntity("http://41.33.183.2:4010/v1/ai_agent/agent_response",
 					requestEntity, AgentResponse.class);
 
 			if (responseEntity.getStatusCodeValue() != HttpStatus.OK.value())

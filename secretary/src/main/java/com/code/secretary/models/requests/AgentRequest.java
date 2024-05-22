@@ -14,6 +14,18 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class AgentRequest {
 
+	@JsonProperty("Channel_Id")
+	private String channelId;
+	
+	@JsonProperty("Authorization")
+	private String authorization;
+	
+	@JsonProperty("x-correlation-id")
+	private String correlationId;
+	
+	@JsonProperty("Accept-Language")
+	private String acceptLanguage;
+
 	@JsonProperty("CustomerCIC")
 	@NonNull
 	private String customerCic;

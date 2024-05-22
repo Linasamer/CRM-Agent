@@ -21,5 +21,9 @@ public class AIRequest {
 
 	@JsonProperty("conv_id")
 	private String conv_id;
+	
+	@JsonProperty("enable_tts")
+	private String enable_tts;
+
 
 }
