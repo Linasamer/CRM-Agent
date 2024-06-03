@@ -358,6 +358,12 @@ public class CustomerService {
 		dataResponse.setBase46(response.getAgentAudio());
 		return dataResponse;
 	}
+	
+	public AgentResponse callAiAgent(AgentRequest agentRequest) {
+		agentRequest.setUserAudio("data:audio/mp3;base64," + agentRequest.getUserAudio());
+		AgentResponse agentResponse = RestClientService.callAiAgent(agentRequest, agentRequest.getAcceptLanguage());
+		return agentResponse;
+	}
 
 	//////////////////////////// common////////////////////////
 	private String toJsonProperty(Object object) throws JsonProcessingException {

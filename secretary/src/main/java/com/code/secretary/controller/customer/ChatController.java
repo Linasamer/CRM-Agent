@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.code.secretary.exceptions.ErrorResponse;
 import com.code.secretary.models.requests.AccountTransactionRequest;
+import com.code.secretary.models.requests.AgentRequest;
 import com.code.secretary.models.requests.DataRequest;
 import com.code.secretary.models.requests.GreetingDataRequest;
 import com.code.secretary.models.responses.AccountTransactionResponse;
+import com.code.secretary.models.responses.AgentResponse;
 import com.code.secretary.models.responses.CardTransactionResponse;
 import com.code.secretary.models.responses.CustomerDataResponse;
 import com.code.secretary.models.responses.DataResponse;
@@ -155,5 +157,16 @@ public class ChatController {
 			@ApiResponse(responseCode = "502", description = "Generic bad gateway error") })
 	public AccountTransactionResponse getCardInfo(@RequestBody AccountTransactionRequest accountTransactionRequest) {
 		return customerService.getAccountInfo(accountTransactionRequest);
+	}
+	
+	@PostMapping(value = "/ai_agent")
+	@Operation(description = "Wrapped Ai Api to convert from speach to text and vise versa")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Ai agent convert successfully"),
+			@ApiResponse(responseCode = "400", description = "Bad request"), @ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
+			@ApiResponse(responseCode = "503", description = "Service Unavailable"),
+			@ApiResponse(responseCode = "502", description = "Generic bad gateway error") })
+	public AgentResponse aiAgentConversion(@RequestBody AgentRequest request) {
+		return customerService.callAiAgent(request);
 	}
 }
