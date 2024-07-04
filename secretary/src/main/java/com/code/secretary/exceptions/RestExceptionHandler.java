@@ -10,6 +10,7 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -136,11 +137,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
      * @return
      */
     @ExceptionHandler({Exception.class})
-    protected ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request, HandlerMethod handlerMethod) {
+    protected ResponseEntity<Object> handleAllExceptions(HttpClientErrorException  ex, WebRequest request, HandlerMethod handlerMethod) {
         logger.error(ex.getLocalizedMessage(), ex);
-
-        //String msg = "error_" + handlerMethod.getMethod().getName(); //TODO: remove later
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, request.getDescription(false), null);
+        if (ex.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
+            errorResponse.setStatus(HttpStatus.NOT_FOUND);
+        }
+        
+        //String msg = "error_" + handlerMethod.getMethod().getName(); //TODO: remove later
+//        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, request.getDescription(false), null);
         String debugMsg = ex.getClass().getSimpleName() + ": " + (ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage());
         errorResponse.setDebugMessage(debugMsg);
         return buildResponseEntity(errorResponse);
