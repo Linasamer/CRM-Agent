@@ -158,7 +158,7 @@ public class ChatController {
 	public AccountTransactionResponse getCardInfo(@RequestBody AccountTransactionRequest accountTransactionRequest) {
 		return customerService.getAccountInfo(accountTransactionRequest);
 	}
-	
+
 	@PostMapping(value = "/ai_agent")
 	@Operation(description = "Wrapped Ai Api to convert from speach to text and vise versa")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Ai agent convert successfully"),
@@ -169,4 +169,5 @@ public class ChatController {
 	public AgentResponse aiAgentConversion(@RequestBody AgentRequest request) {
 		return customerService.callAiAgent(request);
 	}
+
 }

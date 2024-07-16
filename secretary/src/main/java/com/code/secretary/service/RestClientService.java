@@ -38,7 +38,7 @@ public class RestClientService {
 
 	public static <T extends Object> AgentResponse getPostObject(AgentRequest request, String lang) {
 		try {
-			
+
 			request.setAcceptLanguage("AR");
 			request.setCorrelationId("400");
 			request.setChannelId("1");
@@ -60,10 +60,30 @@ public class RestClientService {
 			throw e;
 		}
 	}
-	
+
 	public static <T extends Object> AgentResponse callAiAgent(AgentRequest request, String lang) {
 		try {
-			
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.set("Accept-Language", lang);
+			HttpEntity<AgentRequest> requestEntity = new HttpEntity<>(request, headers);
+			RestTemplate restTemplate = new RestTemplate();
+			ResponseEntity<AgentResponse> responseEntity = restTemplate.postForEntity("http://41.33.183.2:4060/v1/ai_agent/agent_response",
+					requestEntity, AgentResponse.class);
+
+			if (responseEntity.getStatusCodeValue() != HttpStatus.OK.value())
+				throw new BusinessException("error_webserviceFailed");
+
+			return responseEntity.getBody();
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	public static <T extends Object> AgentResponse callAiAgentWithAccounts(AgentRequest request, String lang) {
+		try {
+
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.set("Accept-Language", lang);

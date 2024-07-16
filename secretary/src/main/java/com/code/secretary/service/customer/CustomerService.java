@@ -11,6 +11,10 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.code.secretary.models.interactive.AgentResponseWithAccount;
+import com.code.secretary.models.interactive.Interactive;
+import com.code.secretary.models.interactive.Option;
+import com.code.secretary.models.interactive.Text;
 import com.code.secretary.models.requests.AIRequest;
 import com.code.secretary.models.requests.AccountTransactionRequest;
 import com.code.secretary.models.requests.AgentRequest;
@@ -50,6 +54,7 @@ import com.code.secretary.service.RestClientService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@SuppressWarnings("static-access")
 @Service
 public class CustomerService {
 	private String sessionId;
@@ -58,6 +63,7 @@ public class CustomerService {
 	private static final HashMap<String, CustomerDataResponse> CUSTOMER_DATA_RESPONSE_MAP = new HashMap<>();
 	private static final Map<String, CardTransactionResponse> CARD_TRANSACTION_RESPONSE_MAP = new HashMap<>();
 	private static final Map<String, AccountTransactionResponse> ACCOUNT_TRANSACTION_RESPONSE_MAP = new HashMap<>();
+	private static final Map<String, AgentResponseWithAccount> AGENT_RESPONSE_WITH_ACCOUNTE_MAP = new HashMap<>();
 
 	static {
 		//////////////////////////////////////////////// Greeting Data Static Response///////////////////////////////////////////////////////
@@ -273,6 +279,41 @@ public class CustomerService {
 		ACCOUNT_TRANSACTION_RESPONSE_MAP.put("0000000018707728:126000110006080000331",
 				AccountTransactionResponse.builder().trxnLstList(accTrxnLst4).build());
 
+		//////////////////////////////////////////////////
+		List<Option> opListButton = new ArrayList<>();
+		List<Option> opListList = new ArrayList<>();
+		List<Option> opListNavigation = new ArrayList<>();
+		Option option1 = Option.builder().title(accountResponse.getAccountNumber()).type("reply").value(accountResponse.getAccountNumber()).build();
+		Option option2 = Option.builder().title(accountResponse2.getAccountNumber()).type("reply").value(accountResponse2.getAccountNumber()).build();
+		Option option3 = Option.builder().title(accountResponse3.getAccountNumber()).type("reply").value(accountResponse3.getAccountNumber()).build();
+		Option option4 = Option.builder().title(accountResponse4.getAccountNumber()).type("reply").value(accountResponse4.getAccountNumber()).build();
+		Option optionNavigate = Option.builder().title("https://www.google.com/").type("navigate").value("https://www.google.com/").build();
+
+		opListButton.add(option1);
+		opListButton.add(option2);
+		opListButton.add(option3);
+		opListList.add(option1);
+		opListList.add(option2);
+		opListList.add(option3);
+		opListList.add(option4);
+		opListNavigation.add(optionNavigate);
+		AGENT_RESPONSE_WITH_ACCOUNTE_MAP.put("123456789",
+				AgentResponseWithAccount.builder().type("interactive").interactive(Interactive.builder()
+						.text(Text.builder().body("select one action from the following").build()).type("button").options(opListButton).build())
+						.build());
+
+		AGENT_RESPONSE_WITH_ACCOUNTE_MAP.put("987654321",
+				AgentResponseWithAccount
+						.builder().type("interactive").interactive(Interactive.builder()
+								.text(Text.builder().body("select one account form the following").build()).type("list").options(opListList).build())
+						.build());
+
+		AGENT_RESPONSE_WITH_ACCOUNTE_MAP.put("000022224444",
+				AgentResponseWithAccount
+						.builder().type("interactive").interactive(Interactive.builder()
+								.text(Text.builder().body("navigate to requets to pay").build()).type("navigate").options(opListNavigation).build())
+						.build());
+
 	}
 
 	/////////////////////////////////////////////////// Static Methods///////////////////////////////////////
@@ -310,6 +351,10 @@ public class CustomerService {
 				.acctName(dataResponse.getFirstNameEn() + " " + dataResponse.getSecondNameEn() + " " + dataResponse.getThirdNameEn())
 				.acctOpeningDate("2022-08-01").acctType(accountTypes).acctBranch("12600")
 				.acctSubcategory("0160 Hassad Digital account monthly profit  minimum balance in month").build();
+	}
+
+	public static AgentResponseWithAccount getAgentResponseWithAccount(String customerCic) {
+		return AGENT_RESPONSE_WITH_ACCOUNTE_MAP.get(customerCic);
 	}
 
 	///////////////////////////////// general method/////////////////////////////
@@ -358,11 +403,19 @@ public class CustomerService {
 		dataResponse.setBase46(response.getAgentAudio());
 		return dataResponse;
 	}
-	
+
 	public AgentResponse callAiAgent(AgentRequest agentRequest) {
 		agentRequest.setUserAudio("data:audio/mp3;base64," + agentRequest.getUserAudio());
 		AgentResponse agentResponse = RestClientService.callAiAgent(agentRequest, agentRequest.getAcceptLanguage());
 		return agentResponse;
+	}
+
+	public AgentResponseWithAccount callAiAgentWithAccounts(AgentRequest agentRequest) {
+		agentRequest.setUserAudio("data:audio/mp3;base64," + agentRequest.getUserAudio());
+		AgentResponse agentResponse = RestClientService.callAiAgentWithAccounts(agentRequest, agentRequest.getAcceptLanguage());
+		AgentResponseWithAccount agentResponseWithAccount = getAgentResponseWithAccount(agentRequest.getCustomerCic());
+		agentResponseWithAccount.setAgentResponse(agentResponse);
+		return agentResponseWithAccount;
 	}
 
 	//////////////////////////// common////////////////////////
@@ -415,7 +468,6 @@ public class CustomerService {
 
 	public AIResponse callAIDirect(AIRequest agentRequest, String languageId) throws IOException {
 		AIResponse response = RestClientService.getPostObjectForIntegration(agentRequest, languageId);
-
 		return response;
 	}
 
