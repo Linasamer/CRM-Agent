@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +31,7 @@ public class AiController {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error"),
 			@ApiResponse(responseCode = "503", description = "Service Unavailable"),
 			@ApiResponse(responseCode = "502", description = "Generic bad gateway error") })
-	public AIResponse getCardInfo(@RequestBody AIRequest agentRequest, @RequestHeader("Accept-Language") String languageId) throws IOException {
-		return customerService.callAIDirect(agentRequest, languageId);
+	public AIResponse essalAIAgentWrapper(@RequestBody AIRequest agentRequest) throws IOException {
+		return customerService.essalAIAgentWrapper(agentRequest);
 	}
 }

@@ -404,15 +404,15 @@ public class CustomerService {
 		return dataResponse;
 	}
 
-	public AgentResponse callAiAgent(AgentRequest agentRequest) {
+	public AgentResponse ivrCrmAiAgent(AgentRequest agentRequest) {
 		agentRequest.setUserAudio("data:audio/mp3;base64," + agentRequest.getUserAudio());
-		AgentResponse agentResponse = RestClientService.callAiAgent(agentRequest, agentRequest.getAcceptLanguage());
+		AgentResponse agentResponse = RestClientService.ivrCrmAiAgent(agentRequest, agentRequest.getAcceptLanguage());
 		return agentResponse;
 	}
 
-	public AgentResponseWithAccount callAiAgentWithAccounts(AgentRequest agentRequest) {
+	public AgentResponseWithAccount interactiveIvr(AgentRequest agentRequest) {
 		agentRequest.setUserAudio("data:audio/mp3;base64," + agentRequest.getUserAudio());
-		AgentResponse agentResponse = RestClientService.callAiAgentWithAccounts(agentRequest, agentRequest.getAcceptLanguage());
+		AgentResponse agentResponse = RestClientService.interactiveIvr(agentRequest, agentRequest.getAcceptLanguage());
 		AgentResponseWithAccount agentResponseWithAccount = getAgentResponseWithAccount(agentRequest.getCustomerCic());
 		agentResponseWithAccount.setAgentResponse(agentResponse);
 		return agentResponseWithAccount;
@@ -466,8 +466,8 @@ public class CustomerService {
 		return AccountTransactionResponse.builder().trxnLstList(trxnLstList).build();
 	}
 
-	public AIResponse callAIDirect(AIRequest agentRequest, String languageId) throws IOException {
-		AIResponse response = RestClientService.getPostObjectForIntegration(agentRequest, languageId);
+	public AIResponse essalAIAgentWrapper(AIRequest agentRequest) throws IOException {
+		AIResponse response = RestClientService.essalAIAgentWrapper(agentRequest);
 		return response;
 	}
 

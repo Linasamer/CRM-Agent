@@ -17,14 +17,13 @@ import com.code.secretary.models.responses.AgentResponse;
 @Component
 public class RestClientService {
 
-	public static <T extends Object> AIResponse getPostObjectForIntegration(AIRequest request, String lang) {
+	public static <T extends Object> AIResponse essalAIAgentWrapper(AIRequest request) {
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
-			headers.set("Accept-Language", lang);
 			HttpEntity<AIRequest> requestEntity = new HttpEntity<>(request, headers);
 			RestTemplate restTemplate = new RestTemplate();
-			ResponseEntity<AIResponse> responseEntity = restTemplate.postForEntity("http://41.33.183.2:4012/ai_agent/agent_response", requestEntity,
+			ResponseEntity<AIResponse> responseEntity = restTemplate.postForEntity("http://41.33.183.2:4062/ai_agent/agent_response", requestEntity,
 					AIResponse.class);
 
 			if (responseEntity.getStatusCodeValue() != HttpStatus.OK.value())
@@ -39,7 +38,7 @@ public class RestClientService {
 	public static <T extends Object> AgentResponse getPostObject(AgentRequest request, String lang) {
 		try {
 
-			request.setAcceptLanguage("AR");
+			request.setAcceptLanguage(lang);
 			request.setCorrelationId("400");
 			request.setChannelId("1");
 			request.setAuthorization("1");
@@ -61,7 +60,7 @@ public class RestClientService {
 		}
 	}
 
-	public static <T extends Object> AgentResponse callAiAgent(AgentRequest request, String lang) {
+	public static <T extends Object> AgentResponse ivrCrmAiAgent(AgentRequest request, String lang) {
 		try {
 
 			HttpHeaders headers = new HttpHeaders();
@@ -81,7 +80,7 @@ public class RestClientService {
 		}
 	}
 
-	public static <T extends Object> AgentResponse callAiAgentWithAccounts(AgentRequest request, String lang) {
+	public static <T extends Object> AgentResponse interactiveIvr(AgentRequest request, String lang) {
 		try {
 
 			HttpHeaders headers = new HttpHeaders();

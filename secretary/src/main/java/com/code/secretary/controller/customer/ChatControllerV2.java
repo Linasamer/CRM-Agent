@@ -31,6 +31,6 @@ public class ChatControllerV2 {
 			@ApiResponse(responseCode = "503", description = "Service Unavailable"),
 			@ApiResponse(responseCode = "502", description = "Generic bad gateway error") })
 	public AgentResponseWithAccount aiAgentConversionwithAccount(@RequestBody AgentRequest request) {
-		return customerService.callAiAgentWithAccounts(request);
+		return customerService.interactiveIvr(request);
 	}
 }
