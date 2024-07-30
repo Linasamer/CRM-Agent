@@ -218,7 +218,22 @@ public class CustomerService {
 				.beneficiaryDetails(BeneficiaryDetails.builder().beneficiaryName("Ali khaled Samer").beneficiaryBankAccount("126000010006086040000")
 						.beneficiaryAmount(BeneficiaryAmount.builder().amount(1000).currency("SAR").build()).build())
 				.transactionBranchCode(12600).build());
-
+		accountTransactionDetails1.add(AccountTransactionDetail.builder().accountNumber("126000110006080000331").transactionId(90000013)
+				.transactionCode(564).transactionDateGregorian("2024-04-15").transactionDateHijri("1445-09-05").transactionTime("11:46:41")
+				.transactionAmount(TransactionAmount.builder().amount(-1500).currency("SAR").build())
+				.transactionBalanceAmount(TransactionAmount.builder().amount(1000.58).currency("SAR").build()).transactionDescription("تحويل")
+				.transactionChannelId("W").transactionRemarks("W-/TOACCT/12600608016042276TOAHMED-").appliedExchangeRate(1)
+				.beneficiaryDetails(BeneficiaryDetails.builder().beneficiaryName("Ali khaled Samer").beneficiaryBankAccount("126000010006086040000")
+						.beneficiaryAmount(BeneficiaryAmount.builder().amount(1000).currency("SAR").build()).build())
+				.transactionBranchCode(12600).build());
+		accountTransactionDetails1.add(AccountTransactionDetail.builder().accountNumber("126000110006080000331").transactionId(90000012)
+				.transactionCode(564).transactionDateGregorian("2024-05-15").transactionDateHijri("1445-09-05").transactionTime("11:46:41")
+				.transactionAmount(TransactionAmount.builder().amount(-150).currency("SAR").build())
+				.transactionBalanceAmount(TransactionAmount.builder().amount(1100.58).currency("SAR").build()).transactionDescription("تحويل")
+				.transactionChannelId("W").transactionRemarks("W-/TOACCT/12600608016042276TOAHMED-").appliedExchangeRate(1)
+				.beneficiaryDetails(BeneficiaryDetails.builder().beneficiaryName("Ali khaled Samer").beneficiaryBankAccount("126000010006086040000")
+						.beneficiaryAmount(BeneficiaryAmount.builder().amount(1000).currency("SAR").build()).build())
+				.transactionBranchCode(12600).build());
 		AccountTrxnLst accTrxnLst1 = AccountTrxnLst.builder().availableBalance(1020.3).cicNumber("123456789").unclearedBalance(100.2)
 				.transactionDetails(accountTransactionDetails1).build();
 
@@ -256,6 +271,16 @@ public class CustomerService {
 								.beneficiaryAmount(BeneficiaryAmount.builder().amount(7000).currency("SAR").build()).build())
 				.transactionBranchCode(12600).build());
 
+		accTransactionDetails3.add(AccountTransactionDetail.builder().accountNumber("126000110006080006423").transactionId(90000031)
+				.transactionCode(564).transactionDateGregorian("2024-01-05").transactionDateHijri("1445-01-24").transactionTime("13:20:37")
+				.transactionAmount(TransactionAmount.builder().amount(-7100).currency("SAR").build())
+				.transactionBalanceAmount(TransactionAmount.builder().amount(3040.58).currency("SAR").build()).transactionDescription("تحويل")
+				.transactionChannelId("W").transactionRemarks("W-/TOACCT/12600608016042276TOAHMED-").appliedExchangeRate(1)
+				.beneficiaryDetails(
+						BeneficiaryDetails.builder().beneficiaryName("AHMED SAID ATTIA ATTIA").beneficiaryBankAccount("126000010006086040000")
+								.beneficiaryAmount(BeneficiaryAmount.builder().amount(7000).currency("SAR").build()).build())
+				.transactionBranchCode(12600).build());
+
 		AccountTrxnLst accTrxnLst3 = AccountTrxnLst.builder().availableBalance(1020.3).cicNumber("000022224444").unclearedBalance(100.2)
 				.transactionDetails(accTransactionDetails3).build();
 
@@ -268,6 +293,30 @@ public class CustomerService {
 				.transactionCode(565).transactionDateGregorian("2024-03-02").transactionDateHijri("1445-08-21").transactionTime("19:07:09")
 				.transactionAmount(TransactionAmount.builder().amount(10000).currency("SAR").build())
 				.transactionBalanceAmount(TransactionAmount.builder().amount(10000.58).currency("SAR").build()).transactionDescription("تحويل")
+				.transactionChannelId("W").transactionRemarks("W-/FRACCT/12600608016042276FRAHMED").appliedExchangeRate(1)
+				.beneficiaryDetails(
+						BeneficiaryDetails.builder().beneficiaryAmount(BeneficiaryAmount.builder().amount(0).currency("SAR").build()).build())
+				.transactionBranchCode(12600).build());
+		accTransactionDetails4.add(AccountTransactionDetail.builder().accountNumber("126000110006080009937").transactionId(90000041)
+				.transactionCode(565).transactionDateGregorian("2022-05-02").transactionDateHijri("1445-05-21").transactionTime("19:07:09")
+				.transactionAmount(TransactionAmount.builder().amount(158000).currency("SAR").build())
+				.transactionBalanceAmount(TransactionAmount.builder().amount(1018500.58).currency("SAR").build()).transactionDescription("تحويل")
+				.transactionChannelId("W").transactionRemarks("W-/FRACCT/12600608016042276FRAHMED").appliedExchangeRate(1)
+				.beneficiaryDetails(
+						BeneficiaryDetails.builder().beneficiaryAmount(BeneficiaryAmount.builder().amount(0).currency("SAR").build()).build())
+				.transactionBranchCode(12600).build());
+		accTransactionDetails4.add(AccountTransactionDetail.builder().accountNumber("126000110006080009937").transactionId(90000042)
+				.transactionCode(565).transactionDateGregorian("2021-03-02").transactionDateHijri("1445-08-21").transactionTime("19:07:09")
+				.transactionAmount(TransactionAmount.builder().amount(14100).currency("SAR").build())
+				.transactionBalanceAmount(TransactionAmount.builder().amount(14100.58).currency("SAR").build()).transactionDescription("تحويل")
+				.transactionChannelId("W").transactionRemarks("W-/FRACCT/12600608016042276FRAHMED").appliedExchangeRate(1)
+				.beneficiaryDetails(
+						BeneficiaryDetails.builder().beneficiaryAmount(BeneficiaryAmount.builder().amount(0).currency("SAR").build()).build())
+				.transactionBranchCode(12600).build());
+		accTransactionDetails4.add(AccountTransactionDetail.builder().accountNumber("126000110006080009937").transactionId(90000043)
+				.transactionCode(565).transactionDateGregorian("2022-03-02").transactionDateHijri("1445-08-21").transactionTime("19:07:09")
+				.transactionAmount(TransactionAmount.builder().amount(4521).currency("SAR").build())
+				.transactionBalanceAmount(TransactionAmount.builder().amount(157000.58).currency("SAR").build()).transactionDescription("تحويل")
 				.transactionChannelId("W").transactionRemarks("W-/FRACCT/12600608016042276FRAHMED").appliedExchangeRate(1)
 				.beneficiaryDetails(
 						BeneficiaryDetails.builder().beneficiaryAmount(BeneficiaryAmount.builder().amount(0).currency("SAR").build()).build())
