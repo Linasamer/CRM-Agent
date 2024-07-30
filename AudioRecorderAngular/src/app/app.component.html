@@ -39,7 +39,7 @@
           <li [class]="msg.type" *ngFor="let msg of messages">
             <img [src]="msg.type === 'bank' ? bankImage : userImage" alt="" />
             <p >{{msg?.content || ''}}</p>
-            <audio *ngIf="msg.voiceNote" controls>
+            <audio *ngIf="msg.voiceNote" controls [attr.autoplay]="msg.type === 'bank' ? true : null" >
               <source [src]="msg.voiceContent">
             </audio>
           </li>
@@ -83,7 +83,7 @@
       <div class="cardSelection">
         <div>
           <label>select a customer:</label>
-          <p-dropdown [options]="Customers" [(ngModel)]="selectedCustomer" optionLabel="CICNumber" 
+          <p-dropdown [options]="Customers" [(ngModel)]="selectedCustomer" optionLabel="customerName" 
         [showClear]="true" placeholder="Select a Customer" (onChange)="onCustomerChange($event)"></p-dropdown>
         </div>
         <div>
@@ -205,7 +205,7 @@
           <ul class="list-none p-0 m-0">
             <li>
               <label><span style="font-weight: bold;">Account Number: </span>
-                <span>{{accountTransaction.TrxnLst.TrxnDtls[0].AcctNum}}</span></label>
+                <span>{{staticMapData.get(this.selectedCustomer.CICNumber)?.accountNumber}}</span></label>
             </li>
             <li>
               <label><span style="font-weight: bold;">Bill Amount: </span>

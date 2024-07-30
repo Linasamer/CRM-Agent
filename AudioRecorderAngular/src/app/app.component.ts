@@ -80,10 +80,10 @@ export class AppComponent implements OnInit {
       { name: 'Arabic', code: 'ar-EG' }
     ];
     this.Customers = [
-      { CICNumber: '123456789',  },
-      { CICNumber: '0000000018707728' },
-      { CICNumber: '000022224444' },
-      { CICNumber: '987654321' }
+      { CICNumber: '123456789', customerName: 'Waleed Samer Saied' },
+      { CICNumber: '0000000018707728', customerName: 'Ahmed Mohamed Mahmoud'  },
+      { CICNumber: '000022224444', customerName: 'Sara Mohamed Ashraf' },
+      { CICNumber: '987654321', customerName: 'Munira Nasser Fouad' }
 
     ];
     this.audioRecordingService.audioBlob$.subscribe(blob => {
@@ -94,9 +94,9 @@ export class AppComponent implements OnInit {
 
     });
     this.staticMapData.set( '123456789', { accountNumber: '126000110006080006423', cardNumber: '2321' })
-      this.staticMapData.set( '987654321', { accountNumber: '126000110006080009937', cardNumber: '2789' })
-      this.staticMapData.set( '0000000018707728',{ accountNumber: '126000110006080000331', cardNumber: '2728' })
-      this.staticMapData.set(  '000022224444' ,{ accountNumber: '126000110006080008552', cardNumber: '2444' })
+      this.staticMapData.set( '987654321', { accountNumber: '126000110006080009937', cardNumber: '2789'})
+      this.staticMapData.set( '0000000018707728',{ accountNumber: '126000110006080000331', cardNumber: '2728'})
+      this.staticMapData.set(  '000022224444' ,{ accountNumber: '126000110006080008552', cardNumber: '2444'})
 
       this.audioSubscription = this.webSocketService.audioStream.subscribe(
         (audioData: DataResponseModel) => {
