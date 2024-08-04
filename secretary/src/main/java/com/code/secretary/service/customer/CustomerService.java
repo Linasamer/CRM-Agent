@@ -455,13 +455,13 @@ public class CustomerService {
 
 	public AgentResponse ivrCrmAiAgent(AgentRequest agentRequest) {
 		agentRequest.setUserAudio("data:audio/mp3;base64," + agentRequest.getUserAudio());
-		AgentResponse agentResponse = RestClientService.ivrCrmAiAgent(agentRequest, agentRequest.getAcceptLanguage());
+		AgentResponse agentResponse = RestClientService.ivrCrmAiAgent(agentRequest, agentRequest.getAcceptLanguage(), false);
 		return agentResponse;
 	}
 
 	public AgentResponseWithAccount interactiveIvr(AgentRequest agentRequest) {
 		agentRequest.setUserAudio("data:audio/mp3;base64," + agentRequest.getUserAudio());
-		AgentResponse agentResponse = RestClientService.interactiveIvr(agentRequest, agentRequest.getAcceptLanguage());
+		AgentResponse agentResponse = RestClientService.interactiveIvr(agentRequest, agentRequest.getAcceptLanguage(), false);
 		AgentResponseWithAccount agentResponseWithAccount = getAgentResponseWithAccount(agentRequest.getCustomerCic());
 		agentResponseWithAccount.setAgentResponse(agentResponse);
 		return agentResponseWithAccount;
